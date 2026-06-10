@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import {
   IonContent,
-  IonText,
+  // IonText,
   IonSpinner,
   IonIcon,
   NavController,
@@ -20,6 +20,7 @@ import {
 
 import { ApiService } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ import { StorageService } from '../../../core/services/storage';
     CommonModule,
     FormsModule,
     IonContent,
-    IonText,
+    // IonText,
     IonSpinner,
     IonIcon,
   ],
@@ -48,6 +49,7 @@ export class LoginPage {
   constructor(
     private readonly apiService: ApiService,
     private readonly storageService: StorageService,
+    private readonly toastService: ToastService,
     private readonly navCtrl: NavController
   ) {
     addIcons({
@@ -58,10 +60,10 @@ export class LoginPage {
     });
   }
 
-goToRegister(): void {
-  (document.activeElement as HTMLElement)?.blur();
-  this.navCtrl.navigateRoot('/register');
-}
+  goToRegister(): void {
+    (document.activeElement as HTMLElement)?.blur();
+    this.navCtrl.navigateRoot('/register');
+  }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -72,11 +74,13 @@ goToRegister(): void {
 
     if (!this.email.trim()) {
       this.errorMessage = 'Please enter your email';
+      this.toastService.warning('Please enter your email');
       return;
     }
 
     if (!this.password.trim()) {
       this.errorMessage = 'Please enter your password';
+      this.toastService.warning('Please enter your password');
       return;
     }
 
@@ -89,33 +93,29 @@ goToRegister(): void {
       })
       .subscribe({
         next: async (response) => {
-          await this.storageService.setAccessToken(
-            response.data.accessToken
-          );
-
-          await this.storageService.setRefreshToken(
-            response.data.refreshToken
-          );
-
-          await this.storageService.setUser(
-            response.data.user
-          );
+          await this.storageService.setAccessToken(response.data.accessToken);
+          await this.storageService.setRefreshToken(response.data.refreshToken);
+          await this.storageService.setUser(response.data.user);
 
           this.loading = false;
+
+          this.toastService.success('Login successful');
 
           (document.activeElement as HTMLElement)?.blur();
 
           setTimeout(() => {
             this.navCtrl.navigateRoot('/dashboard');
-          }, 10);
+          }, 500);
         },
 
         error: (error) => {
           this.loading = false;
 
-          this.errorMessage =
-            error?.error?.message ||
-            'Invalid email or password';
+          const message =
+            error?.error?.message || 'Invalid email or password';
+
+          this.errorMessage = message;
+          this.toastService.error(message);
         },
       });
   }

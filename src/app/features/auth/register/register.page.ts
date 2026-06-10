@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import {
   IonContent,
-  IonText,
   IonSpinner,
   IonIcon,
   NavController,
@@ -19,6 +18,7 @@ import {
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../core/services/api';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +29,6 @@ import { ApiService } from '../../../core/services/api';
     CommonModule,
     FormsModule,
     IonContent,
-    IonText,
     IonSpinner,
     IonIcon,
   ],
@@ -46,10 +45,10 @@ export class RegisterPage {
   showConfirmPassword = false;
 
   loading = false;
-  errorMessage = '';
 
   constructor(
     private readonly apiService: ApiService,
+    private readonly toastService: ToastService,
     private readonly navCtrl: NavController
   ) {
     addIcons({
@@ -110,8 +109,6 @@ export class RegisterPage {
   }
 
   register(): void {
-    this.errorMessage = '';
-
     if (
       !this.firstName.trim() ||
       !this.lastName.trim() ||
@@ -120,28 +117,29 @@ export class RegisterPage {
       !this.password.trim() ||
       !this.confirmPassword.trim()
     ) {
-      this.errorMessage = 'Please fill all fields';
+      this.toastService.warning('Please fill all fields');
       return;
     }
 
     if (!this.isValidEmail(this.email.trim())) {
-      this.errorMessage = 'Please enter a valid email address';
+      this.toastService.warning('Please enter a valid email address');
       return;
     }
 
     if (!/^[0-9]{10}$/.test(this.phoneNumber.trim())) {
-      this.errorMessage = 'Please enter a valid 10 digit phone number';
+      this.toastService.warning('Please enter a valid 10 digit phone number');
       return;
     }
 
     if (!this.isStrongPassword(this.password)) {
-      this.errorMessage =
-        'Password must include uppercase, lowercase, number and special character';
+      this.toastService.warning(
+        'Password must include uppercase, lowercase, number and special character'
+      );
       return;
     }
 
     if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Password and confirm password do not match';
+      this.toastService.warning('Password and confirm password do not match');
       return;
     }
 
@@ -158,14 +156,25 @@ export class RegisterPage {
       .subscribe({
         next: () => {
           this.loading = false;
+
+          this.toastService.success(
+            'Account created successfully. Please login.'
+          );
+
           (document.activeElement as HTMLElement)?.blur();
-          this.navCtrl.navigateRoot('/login');
+
+          setTimeout(() => {
+            this.navCtrl.navigateRoot('/login');
+          }, 700);
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage =
+
+          const message =
             error?.error?.message ||
             'Registration failed. Please try again.';
+
+          this.toastService.error(message);
         },
       });
   }

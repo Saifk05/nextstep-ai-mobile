@@ -1,0 +1,23 @@
+<div
+  class="toast-wrapper"
+  *ngIf="toast$ | async as toast"
+  [class.show]="toast.visible"
+  [class.success]="toast.type === 'success'"
+  [class.error]="toast.type === 'error'"
+  [class.warning]="toast.type === 'warning'"
+  [class.info]="toast.type === 'info'"
+>
+  <div class="toast-card" *ngIf="toast.visible">
+    <div class="toast-icon">
+      <ion-icon [name]="getIcon(toast.type)"></ion-icon>
+    </div>
+
+    <p>
+      {{ toast.message }}
+    </p>
+
+    <button type="button" (click)="close()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </div>
+</div>
