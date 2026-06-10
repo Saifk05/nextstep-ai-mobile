@@ -1,13 +1,159 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="auth-content" fullscreen>
+  <div class="auth-screen">
+    <section class="hero">
+      <h1>
+        Create your<br />
+        NextStep account
+      </h1>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <p>
+        Start planning your goals, tasks and daily progress.
+      </p>
+    </section>
+
+    <section class="form-card">
+      <div class="auth-toggle">
+        <button type="button" (click)="goToLogin()">
+          Login
+        </button>
+
+        <button class="active" type="button">
+          Sign Up
+        </button>
+      </div>
+
+      <div class="name-row">
+        <div class="field-group">
+          <label>First Name</label>
+
+          <div class="input-box">
+            <input
+              type="text"
+              placeholder="First name"
+              autocomplete="off"
+              [(ngModel)]="firstName"
+            />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Last Name</label>
+
+          <div class="input-box">
+            <input
+              type="text"
+              placeholder="Last name"
+              autocomplete="off"
+              [(ngModel)]="lastName"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Email</label>
+
+        <div class="input-box">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            autocomplete="off"
+            [(ngModel)]="email"
+          />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Phone Number</label>
+
+        <div class="input-box">
+          <input
+            type="tel"
+            placeholder="Enter phone number"
+            autocomplete="off"
+            maxlength="10"
+            [(ngModel)]="phoneNumber"
+          />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Password</label>
+
+        <div class="input-box">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Create password"
+            autocomplete="off"
+            [(ngModel)]="password"
+          />
+
+          <button
+            class="icon-btn"
+            type="button"
+            (click)="togglePassword()"
+          >
+            <ion-icon
+              [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            ></ion-icon>
+          </button>
+        </div>
+
+        <div class="strength-wrapper" *ngIf="password">
+          <div class="strength-track">
+            <span [class]="passwordStrengthClass"></span>
+          </div>
+
+          <p [class]="passwordStrengthClass">
+            {{ passwordStrength }} password
+          </p>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Confirm Password</label>
+
+        <div class="input-box">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            placeholder="Confirm password"
+            autocomplete="off"
+            [(ngModel)]="confirmPassword"
+          />
+
+          <button
+            class="icon-btn"
+            type="button"
+            (click)="toggleConfirmPassword()"
+          >
+            <ion-icon
+              [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+            ></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <ion-text color="danger" *ngIf="errorMessage">
+        <p class="error-text">
+          {{ errorMessage }}
+        </p>
+      </ion-text>
+
+      <button
+        class="primary-btn"
+        type="button"
+        (click)="register()"
+        [disabled]="loading"
+      >
+        <ion-spinner
+          *ngIf="loading"
+          name="crescent"
+        ></ion-spinner>
+
+        <span *ngIf="!loading">
+          Create Account
+        </span>
+      </button>
+    </section>
+  </div>
 </ion-content>

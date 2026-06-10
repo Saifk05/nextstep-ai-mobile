@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "baseUrl": "./",
-    "ignoreDeprecations": "6.0",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
@@ -21,13 +20,7 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "skipLibCheck": true,
-    "useDefineForClassFields": false,
-    "paths": {
-      "@core/*": ["app/core/*"],
-      "@features/*": ["app/features/*"],
-      "@shared/*": ["app/shared/*"],
-      "@models/*": ["app/core/models/*"]
-    }
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
