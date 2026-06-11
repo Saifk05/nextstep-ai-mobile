@@ -39,5 +39,13 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login',
+  },  {
+    path: 'settings',
+    loadComponent: () => import('./features/pages/settings/settings.page').then( m => m.SettingsPage)
   },
+  {
+    path: 'profile',
+    loadComponent: () => import('./features/pages/settings/profile/profile.page').then( m => m.ProfilePage)
+  },
+
 ];
