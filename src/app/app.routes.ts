@@ -8,25 +8,18 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login/login.page').then(
-        (m) => m.LoginPage
-      ),
+      import('./features/auth/login/login.page').then((m) => m.LoginPage),
     canActivate: [guestGuard],
   },
-
   {
     path: 'register',
     loadComponent: () =>
-      import('./features/auth/register/register.page').then(
-        (m) => m.RegisterPage
-      ),
+      import('./features/auth/register/register.page').then((m) => m.RegisterPage),
     canActivate: [guestGuard],
   },
-
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -35,17 +28,24 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./features/pages/settings/settings.page').then(
+        (m) => m.SettingsPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings/profile',
+    loadComponent: () =>
+      import('./features/pages/settings/profile/profile.page').then(
+        (m) => m.ProfilePage
+      ),
+    canActivate: [authGuard],
+  },
   {
     path: '**',
     redirectTo: 'login',
-  },  {
-    path: 'settings',
-    loadComponent: () => import('./features/pages/settings/settings.page').then( m => m.SettingsPage)
   },
-  {
-    path: 'profile',
-    loadComponent: () => import('./features/pages/settings/profile/profile.page').then( m => m.ProfilePage)
-  },
-
 ];

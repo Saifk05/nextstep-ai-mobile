@@ -8,7 +8,7 @@ import {
   mailOutline,
   add,
   walletOutline,
-  personOutline,
+  settingsOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -27,7 +27,7 @@ export class AppFooterComponent {
       mailOutline,
       add,
       walletOutline,
-      personOutline,
+      settingsOutline,
     });
   }
 
@@ -38,7 +38,7 @@ export class AppFooterComponent {
       home: '/dashboard',
       inbox: '/inbox',
       finance: '/finance',
-      profile: '/profile',
+      settings: '/settings',
     };
 
     this.navCtrl.navigateRoot(routes[tab]);

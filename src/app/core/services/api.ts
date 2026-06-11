@@ -3,6 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardResponse } from '../models/dashboard.model';
 import { environment } from '../../../environments/environment';
+import {
+  ProfileResponse,
+  UpdateProfilePayload,
+  AddressSuggestionsResponse,
+  UpdateAddressPayload,
+} from '../models/profile.model';
 
 export interface RegisterPayload {
   firstName: string;
@@ -108,5 +114,40 @@ export class ApiService {
     return this.http.get<DashboardResponse>(
       `${this.clientUrl}/dashboard/overview`
     );
-  }  
+  } 
+  
+  /*
+   * User Profile
+   */
+  getProfile(): Observable<ProfileResponse> {
+    return this.http.get<ProfileResponse>(
+      `${this.clientUrl}/users/profile`
+    );
+  }
+
+  updateProfile(
+    payload: UpdateProfilePayload
+  ): Observable<ProfileResponse> {
+    return this.http.patch<ProfileResponse>(
+      `${this.clientUrl}/users/profile`,
+      payload
+    );
+  }
+
+  getAddressSuggestions(
+    query: string
+  ): Observable<AddressSuggestionsResponse> {
+    return this.http.get<AddressSuggestionsResponse>(
+      `${this.clientUrl}/users/address/suggestions?query=${query}`
+    );
+  }
+
+  updateAddress(
+    payload: UpdateAddressPayload
+  ): Observable<any> {
+    return this.http.patch(
+      `${this.clientUrl}/users/address`,
+      payload
+    );
+  }
 }

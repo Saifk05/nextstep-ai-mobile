@@ -1,0 +1,328 @@
+.settings-content {
+  --background: #edf4ff;
+}
+
+.page {
+  min-height: 100%;
+  padding: 0 16px 120px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 35%),
+    linear-gradient(180deg, #edf4ff 0%, #ffffff 60%);
+}
+
+/* ==========================
+   HERO SECTION
+========================== */
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  margin: 0 -16px 22px;
+  padding: 24px 20px 22px;
+  border-radius: 0 0 32px 32px;
+
+  background: linear-gradient(
+    135deg,
+    #3b82f6 0%,
+    #2563eb 55%,
+    #1d4ed8 100%
+  );
+
+  box-shadow: 0 24px 45px rgba(37, 99, 235, 0.28);
+}
+
+.hero-bg-circle {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.circle-one {
+  width: 180px;
+  height: 180px;
+  top: -60px;
+  right: -50px;
+}
+
+.circle-two {
+  width: 100px;
+  height: 100px;
+  bottom: 10px;
+  left: -40px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hero-card h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 230px;
+}
+
+.hero-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+
+  display: grid;
+  place-items: center;
+
+  ion-icon {
+    color: #ffffff;
+    font-size: 28px;
+  }
+}
+
+/* ==========================
+   USER CARD
+========================== */
+
+.user-strip {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 24px;
+  padding: 14px;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+
+  background: #ffffff;
+  color: #2563eb;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.user-strip h3 {
+  margin: 0 0 4px;
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.user-strip p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+/* ==========================
+   SUMMARY CARDS
+========================== */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  border: none;
+  border-radius: 24px;
+  padding: 18px;
+
+  background: white;
+
+  text-align: left;
+
+  box-shadow:
+    0 15px 30px rgba(37, 99, 235, 0.08),
+    0 3px 10px rgba(0, 0, 0, 0.04);
+
+  h3 {
+    margin: 12px 0 4px;
+    color: #0f172a;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 12px;
+  }
+}
+
+.icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+
+  background: #eef4ff;
+  color: #2563eb;
+
+  display: grid;
+  place-items: center;
+
+  ion-icon {
+    font-size: 22px;
+  }
+}
+
+/* ==========================
+   MENU SECTIONS
+========================== */
+
+.menu-section {
+  margin-bottom: 22px;
+}
+
+.menu-section h2 {
+  margin: 0 0 10px 6px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.menu-card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #ffffff;
+
+  box-shadow:
+    0 15px 30px rgba(37, 99, 235, 0.08),
+    0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.menu-item {
+  width: 100%;
+  min-height: 72px;
+
+  border: none;
+  background: white;
+
+  padding: 16px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid #eef2ff;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  > ion-icon {
+    color: #94a3b8;
+    font-size: 18px;
+  }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.menu-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+
+  display: grid;
+  place-items: center;
+
+  background: #eef4ff;
+  color: #2563eb;
+
+  ion-icon {
+    font-size: 22px;
+  }
+}
+
+strong {
+  display: block;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* ==========================
+   LOGOUT
+========================== */
+
+.logout-btn {
+  width: 100%;
+  height: 54px;
+
+  border: none;
+  border-radius: 20px;
+
+  background: #fff1f2;
+  color: #dc2626;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 800;
+  font-size: 15px;
+
+  margin-top: 6px;
+}
+
+.version {
+  text-align: center;
+  margin-top: 16px;
+
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+}

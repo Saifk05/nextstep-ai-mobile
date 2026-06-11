@@ -1,13 +1,194 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>settings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="settings-content">
+  <div class="page">
+    <section class="hero-card">
+      <div class="hero-bg-circle circle-one"></div>
+      <div class="hero-bg-circle circle-two"></div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <div class="hero-content">
+        <div>
+          <p class="eyebrow">NextStep AI</p>
+          <h1>Settings</h1>
+          <p class="subtitle">
+            Manage your profile, preferences and app experience.
+          </p>
+        </div>
+
+        <div class="hero-icon">
+          <ion-icon name="settings-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div
+        class="user-strip"
+        role="button"
+        tabindex="0"
+        (click)="goToProfile($event)"
+        (keydown.enter)="goToProfile($event)"
+      >
+        <div class="avatar">
+          {{ userName.charAt(0) }}
+        </div>
+
+        <div class="user-meta">
+          <h3>{{ userName }}</h3>
+          <p>{{ userEmail }}</p>
+        </div>
+
+        <ion-icon
+          class="profile-arrow"
+          name="chevron-forward-outline"
+        ></ion-icon>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <button
+        type="button"
+        class="summary-card"
+        (click)="comingSoon('Productivity')"
+      >
+        <div class="icon-box blue">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+
+        <h3>Productivity</h3>
+        <p>{{ productivityScore }} Score</p>
+      </button>
+
+      <button
+        type="button"
+        class="summary-card"
+        (click)="comingSoon('Daily Goal')"
+      >
+        <div class="icon-box">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </div>
+
+        <h3>Daily Goal</h3>
+        <p>Coming soon</p>
+      </button>
+    </section>
+
+    <section class="menu-section">
+      <h2>Account</h2>
+
+      <div class="menu-card">
+        <button
+          type="button"
+          class="menu-item"
+          (click)="goToProfile($event)"
+        >
+          <span class="left">
+            <span class="menu-icon">
+              <ion-icon name="person-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>My Profile</strong>
+              <small>View and update profile details</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <h2>Preferences</h2>
+
+      <div class="menu-card">
+        <button
+          type="button"
+          class="menu-item"
+          (click)="comingSoon('Notifications')"
+        >
+          <span class="left">
+            <span class="menu-icon purple">
+              <ion-icon name="notifications-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Notifications</strong>
+              <small>Task and goal reminders</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
+        <button
+          type="button"
+          class="menu-item"
+          (click)="comingSoon('Appearance')"
+        >
+          <span class="left">
+            <span class="menu-icon orange">
+              <ion-icon name="color-palette-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Appearance</strong>
+              <small>Theme and display settings</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <h2>Support</h2>
+
+      <div class="menu-card">
+        <button
+          type="button"
+          class="menu-item"
+          (click)="comingSoon('Help & Support')"
+        >
+          <span class="left">
+            <span class="menu-icon green">
+              <ion-icon name="help-circle-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Help & Support</strong>
+              <small>Get help with NextStep AI</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
+        <button
+          type="button"
+          class="menu-item"
+          (click)="comingSoon('About App')"
+        >
+          <span class="left">
+            <span class="menu-icon gray">
+              <ion-icon name="information-circle-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>About App</strong>
+              <small>Version 1.0.0</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </section>
+
+    <button type="button" class="logout-btn" (click)="logout()">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <span>Logout</span>
+    </button>
+
+    <p class="version">NextStep AI v1.0.0</p>
+  </div>
+
+  <app-footer></app-footer>
 </ion-content>
