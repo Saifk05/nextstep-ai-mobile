@@ -16,6 +16,14 @@
       </div>
     } @else if (profile) {
       <section class="avatar-section">
+        <input
+          #profileImageInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+          (change)="onProfilePictureSelected($event)"
+        />
+
         <div class="avatar">
           @if (profile.profilePicture) {
             <img [src]="profile.profilePicture" alt="Profile" />
@@ -24,11 +32,20 @@
           }
 
           @if (isEditMode) {
-            <button type="button" class="camera-btn">
+            <button
+              type="button"
+              class="camera-btn"
+              (click)="triggerFileInput(profileImageInput)"
+              [disabled]="isUploadingPhoto"
+            >
               <ion-icon name="camera-outline"></ion-icon>
             </button>
           }
         </div>
+
+        @if (isUploadingPhoto) {
+          <p class="uploading-text">Uploading photo...</p>
+        }
       </section>
 
       <section class="form-section">
@@ -176,7 +193,7 @@
           type="button"
           class="primary-btn"
           (click)="saveProfile()"
-          [disabled]="isSaving"
+          [disabled]="isSaving || isUploadingPhoto"
         >
           {{ isSaving ? 'Saving...' : 'Save Changes' }}
         </button>
@@ -185,7 +202,7 @@
           type="button"
           class="cancel-btn"
           (click)="toggleEdit()"
-          [disabled]="isSaving"
+          [disabled]="isSaving || isUploadingPhoto"
         >
           Cancel
         </button>

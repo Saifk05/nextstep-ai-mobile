@@ -61,6 +61,8 @@ ion-content {
 
 .avatar-section {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-bottom: 28px;
 }
@@ -100,10 +102,24 @@ ion-content {
   color: #ffffff;
   display: grid;
   place-items: center;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.26);
 
   ion-icon {
     font-size: 14px;
   }
+
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.uploading-text {
+  margin: 10px 0 0;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .form-section {
@@ -152,7 +168,8 @@ ion-content {
     font-family: inherit;
   }
 
-  textarea::placeholder {
+  textarea::placeholder,
+  input::placeholder {
     color: #94a3b8;
     font-weight: 500;
   }
@@ -242,6 +259,12 @@ ion-content {
   font-size: 14px;
   font-weight: 900;
   box-shadow: 0 16px 32px rgba(37, 99, 235, 0.22);
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 }
 
 .cancel-btn {
@@ -254,6 +277,11 @@ ion-content {
   color: #2563eb;
   font-size: 14px;
   font-weight: 900;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 }
 
 .loading-card {

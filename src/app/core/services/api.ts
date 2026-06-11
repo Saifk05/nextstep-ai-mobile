@@ -150,4 +150,13 @@ export class ApiService {
       payload
     );
   }
+
+  updateProfilePicture(
+    payload: FormData
+  ): Observable<ProfileResponse> {
+    return this.http.patch<ProfileResponse>(
+      `${this.clientUrl}/users/profile-picture`,
+      payload
+    );
+  }
 }

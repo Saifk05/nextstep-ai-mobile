@@ -49,6 +49,7 @@ export class ProfilePage implements OnInit {
   isLoading = false;
   isSaving = false;
   isEditMode = false;
+  isUploadingPhoto = false;
 
   profile: UserProfile | null = null;
 
@@ -110,6 +111,10 @@ export class ProfilePage implements OnInit {
   }
 
   toggleEdit(): void {
+    if (this.isUploadingPhoto) {
+      return;
+    }
+
     this.isEditMode = !this.isEditMode;
 
     if (!this.isEditMode) {
@@ -119,6 +124,75 @@ export class ProfilePage implements OnInit {
     }
 
     this.cdr.detectChanges();
+  }
+
+  triggerFileInput(fileInput: HTMLInputElement): void {
+    if (!this.isEditMode || this.isUploadingPhoto) {
+      return;
+    }
+
+    fileInput.click();
+  }
+
+  async onProfilePictureSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const allowedTypes = [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/webp',
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      await this.showToast('Only JPG, PNG, or WEBP images are allowed');
+      input.value = '';
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      await this.showToast('Image size should be less than 5MB');
+      input.value = '';
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.isUploadingPhoto = true;
+
+    this.apiService.updateProfilePicture(formData).subscribe({
+      next: async (response) => {
+        this.ngZone.run(() => {
+          this.profile = response.data;
+          this.setFormFromProfile();
+
+          this.isUploadingPhoto = false;
+          this.cdr.detectChanges();
+        });
+
+        input.value = '';
+        await this.showToast('Profile picture updated successfully');
+      },
+      error: async (error: unknown) => {
+        console.error('PROFILE PICTURE UPLOAD ERROR', error);
+
+        this.ngZone.run(() => {
+          this.isUploadingPhoto = false;
+          this.cdr.detectChanges();
+        });
+
+        input.value = '';
+        await this.showToast('Failed to upload profile picture');
+      },
+    });
   }
 
   onAddressSearch(): void {
@@ -163,7 +237,7 @@ export class ProfilePage implements OnInit {
   }
 
   saveProfile(): void {
-    if (this.isSaving) {
+    if (this.isSaving || this.isUploadingPhoto) {
       return;
     }
 
@@ -253,11 +327,7 @@ export class ProfilePage implements OnInit {
       return 'Address not added';
     }
 
-    return (
-      // this.profile.address.mainText ||
-      this.profile.address.description ||
-      'Address not added'
-    );
+    return this.profile.address.description || 'Address not added';
   }
 
   private async showToast(message: string): Promise<void> {
