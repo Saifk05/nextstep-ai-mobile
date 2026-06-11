@@ -61,8 +61,10 @@ export class StorageService {
   }
 
   async isLoggedIn(): Promise<boolean> {
-    const token = await this.getAccessToken();
-    return !!token;
+    const accessToken = await this.getAccessToken();
+    const refreshToken = await this.getRefreshToken();
+
+    return !!accessToken && !!refreshToken;
   }
 
   async clearAuthStorage(): Promise<void> {
@@ -77,5 +79,11 @@ export class StorageService {
     await Preferences.remove({
       key: this.USER_KEY,
     });
+  }
+
+  async setAuthData( accessToken: string, refreshToken: string, user: User): Promise<void> {
+  await this.setAccessToken(accessToken);
+    await this.setRefreshToken(refreshToken);
+     await this.setUser(user);
   }
 }

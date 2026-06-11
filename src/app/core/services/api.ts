@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { DashboardResponse } from '../models/dashboard.model';
 import { environment } from '../../../environments/environment';
 
 export interface RegisterPayload {
@@ -40,6 +40,19 @@ export interface AuthResponse {
   };
 }
 
+export interface RefreshTokenPayload {
+  refreshToken: string;
+}
+
+export interface RefreshTokenResponse {
+  success: boolean;
+  message: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,6 +82,16 @@ export class ApiService {
   }
 
   /**
+   * Refresh Access Token
+   */
+  refreshToken(payload: RefreshTokenPayload): Observable<RefreshTokenResponse> {
+    return this.http.post<RefreshTokenResponse>(
+      `${this.clientUrl}/auth/refresh-token`,
+      payload
+    );
+  }
+
+  /**
    * Logout User
    */
   logout(payload: LogoutPayload): Observable<any> {
@@ -77,4 +100,13 @@ export class ApiService {
       payload
     );
   }
+
+  /*
+   * Dashboard Overview
+   */
+  getDashboardOverview(): Observable<DashboardResponse> {
+    return this.http.get<DashboardResponse>(
+      `${this.clientUrl}/dashboard/overview`
+    );
+  }  
 }

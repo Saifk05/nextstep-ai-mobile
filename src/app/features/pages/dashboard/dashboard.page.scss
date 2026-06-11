@@ -1,0 +1,453 @@
+.dashboard-content {
+  --background: #f4f8ff;
+}
+
+.page {
+  min-height: 100%;
+  padding: 24px 18px 40px;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(47, 122, 237, 0.18),
+      transparent 35%),
+    linear-gradient(
+      180deg,
+      #eef5ff 0%,
+      #f8fbff 30%,
+      #ffffff 100%
+    );
+}
+
+/* =========================
+   Header
+========================= */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.date {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #2f7aed,
+    #1f5fd6
+  );
+
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+
+  box-shadow: 0 14px 28px rgba(47, 122, 237, 0.25);
+
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================
+   Shared Cards
+========================= */
+
+.focus-card,
+.productivity-card,
+.empty-card,
+.stat-card {
+  background: rgba(255, 255, 255, 0.92);
+
+  border: 1px solid rgba(
+    47,
+    122,
+    237,
+    0.08
+  );
+
+  box-shadow:
+    0 20px 40px rgba(47, 122, 237, 0.08);
+
+  backdrop-filter: blur(12px);
+}
+
+/* =========================
+   Focus Card
+========================= */
+
+.focus-card {
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 18px;
+}
+
+.focus-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.pill {
+  background: #eaf2ff;
+
+  color: #2f7aed;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.spark {
+  font-size: 22px;
+  color: #2f7aed;
+}
+
+.focus-card h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 28px;
+  line-height: 1.15;
+
+  font-weight: 800;
+}
+
+.focus-card p {
+  margin: 12px 0 22px;
+
+  color: #6b7280;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    #2f7aed,
+    #1f5fd6
+  );
+
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  box-shadow:
+    0 14px 28px rgba(47, 122, 237, 0.25);
+}
+
+/* =========================
+   Stats
+========================= */
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.stat-card span {
+  display: block;
+
+  color: #6b7280;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  margin-bottom: 10px;
+}
+
+.stat-card strong {
+  color: #111827;
+
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.stat-card.highlight {
+  background: linear-gradient(
+    135deg,
+    #2f7aed,
+    #1f5fd6
+  );
+}
+
+.stat-card.highlight span,
+.stat-card.highlight strong {
+  color: #fff;
+}
+
+/* =========================
+   Productivity
+========================= */
+
+.productivity-card {
+  border-radius: 28px;
+
+  padding: 22px;
+
+  margin-bottom: 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.productivity-card p {
+  margin: 0 0 8px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.productivity-card h3 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.progress-ring {
+  width: 88px;
+  height: 88px;
+
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    conic-gradient(
+      #2f7aed 0deg,
+      #eaf2ff 0deg
+    );
+}
+
+.progress-ring span {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.progress-ring small {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+/* =========================
+   Quick Actions
+========================= */
+
+.section-header h3 {
+  margin: 0 0 14px;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.actions {
+  display: grid;
+  gap: 12px;
+
+  margin-bottom: 24px;
+}
+
+.action-btn {
+  min-height: 58px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  background: #fff;
+
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #111827;
+
+  box-shadow:
+    0 10px 25px rgba(47, 122, 237, 0.08);
+}
+
+.action-btn span {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf2ff;
+
+  color: #2f7aed;
+
+  font-weight: 700;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-card {
+  border-radius: 28px;
+
+  padding: 24px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  margin: 0 auto 16px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf2ff;
+
+  color: #2f7aed;
+
+  font-size: 28px;
+}
+
+.empty-card h3 {
+  margin: 0 0 10px;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.empty-card p {
+  margin: 0;
+
+  color: #6b7280;
+
+  line-height: 1.5;
+}
+
+/* =========================
+   Loading Skeleton
+========================= */
+
+.skeleton {
+  border-radius: 22px;
+
+  background: linear-gradient(
+    90deg,
+    #eaf2ff,
+    #ffffff,
+    #eaf2ff
+  );
+
+  background-size: 200% 100%;
+
+  animation: shimmer 1.2s infinite;
+}
+
+.header-skeleton {
+  height: 90px;
+  margin-bottom: 18px;
+}
+
+.focus-skeleton {
+  height: 180px;
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.stat-skeleton {
+  height: 110px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

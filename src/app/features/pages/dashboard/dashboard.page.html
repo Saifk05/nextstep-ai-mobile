@@ -1,0 +1,105 @@
+<ion-content [fullscreen]="true" class="dashboard-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (loading) {
+    <div class="page">
+      <div class="skeleton header-skeleton"></div>
+      <div class="skeleton focus-skeleton"></div>
+      <div class="grid">
+        <div class="skeleton stat-skeleton"></div>
+        <div class="skeleton stat-skeleton"></div>
+        <div class="skeleton stat-skeleton"></div>
+        <div class="skeleton stat-skeleton"></div>
+      </div>
+    </div>
+  }
+
+  @if (!loading && dashboard) {
+    <div class="page">
+      <section class="hero">
+        <div>
+          <p class="date">{{ dashboard.greeting.day }} • {{ dashboard.greeting.date }}</p>
+          <h1>{{ dashboard.greeting.message }}, {{ dashboard.user.firstName }}</h1>
+          <p class="subtitle">Ready to take your next step today?</p>
+        </div>
+
+        <div class="avatar">
+          @if (dashboard.user.profilePicture) {
+            <img [src]="dashboard.user.profilePicture" alt="Profile" />
+          } @else {
+            <span>{{ dashboard.user.firstName.charAt(0) }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="focus-card">
+        <div class="focus-top">
+          <span class="pill">Today’s Focus</span>
+          <span class="spark">✦</span>
+        </div>
+
+        <h2>{{ dashboard.todayFocus.title }}</h2>
+        <p>{{ dashboard.todayFocus.description }}</p>
+
+        <button class="primary-btn">Start Planning</button>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span>Total Tasks</span>
+          <strong>{{ dashboard.summary.totalTasks }}</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Active Goals</span>
+          <strong>{{ dashboard.summary.activeGoals }}</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Expense</span>
+          <strong>₹{{ dashboard.summary.monthlyExpense }}</strong>
+        </div>
+
+        <div class="stat-card highlight">
+          <span>Score</span>
+          <strong>{{ dashboard.summary.productivityScore }}</strong>
+        </div>
+      </section>
+
+      <section class="productivity-card">
+        <div>
+          <p>Productivity</p>
+          <h3>{{ dashboard.productivity.todayScore }}%</h3>
+        </div>
+
+        <div class="progress-ring">
+          <span>{{ dashboard.productivity.currentStreak }}</span>
+          <small>day streak</small>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h3>Quick Actions</h3>
+        </div>
+
+        <div class="actions">
+          @for (action of dashboard.quickActions; track action.type) {
+            <button class="action-btn">
+              <span>＋</span>
+              {{ action.title }}
+            </button>
+          }
+        </div>
+      </section>
+
+      <section class="empty-card">
+        <div class="empty-icon">☁</div>
+        <h3>No activity yet</h3>
+        <p>Add your first task or goal to start building your daily progress.</p>
+      </section>
+    </div>
+  }
+</ion-content>

@@ -19,6 +19,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./features/pages/dashboard/dashboard.page').then(
+        (m) => m.DashboardPage
+      ),
+  },
+  {
     path: '**',
     redirectTo: 'login',
   },
