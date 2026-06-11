@@ -81,9 +81,13 @@ export class StorageService {
     });
   }
 
-  async setAuthData( accessToken: string, refreshToken: string, user: User): Promise<void> {
-  await this.setAccessToken(accessToken);
+  async setAuthData(
+    accessToken: string,
+    refreshToken: string,
+    user: User
+  ): Promise<void> {
+    await this.setAccessToken(accessToken);
     await this.setRefreshToken(refreshToken);
-     await this.setUser(user);
+    await this.setUser(user);
   }
 }

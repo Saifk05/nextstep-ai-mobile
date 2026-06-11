@@ -4,76 +4,68 @@
 
 .page {
   min-height: 100%;
-  padding: 24px 18px 40px;
+  padding: calc(env(safe-area-inset-top) + 28px) 20px 44px;
 
   background:
-    radial-gradient(circle at top left,
-      rgba(47, 122, 237, 0.18),
-      transparent 35%),
-    linear-gradient(
-      180deg,
-      #eef5ff 0%,
-      #f8fbff 30%,
-      #ffffff 100%
-    );
+    radial-gradient(circle at top left, rgba(47, 122, 237, 0.18), transparent 34%),
+    linear-gradient(180deg, #eef5ff 0%, #f8fbff 45%, #ffffff 100%);
 }
 
-/* =========================
-   Header
-========================= */
+/* Header */
 
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.hero-copy {
+  flex: 1;
+  min-width: 0;
 }
 
 .date {
   margin: 0 0 8px;
   font-size: 13px;
-  font-weight: 600;
-  color: #6b7280;
+  font-weight: 700;
+  color: #64748b;
 }
 
 h1 {
   margin: 0;
-  color: #111827;
-  font-size: 32px;
-  line-height: 1.1;
-  font-weight: 800;
+  color: #071733;
+  font-size: 29px;
+  line-height: 1.08;
+  font-weight: 900;
   letter-spacing: -1px;
 }
 
 .subtitle {
-  margin-top: 10px;
-  color: #6b7280;
+  margin: 12px 0 0;
+  color: #64748b;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.45;
+  max-width: 230px;
 }
 
 .avatar {
   width: 58px;
   height: 58px;
-  border-radius: 18px;
+  min-width: 58px;
+  border-radius: 20px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: linear-gradient(
-    135deg,
-    #2f7aed,
-    #1f5fd6
-  );
-
+  background: linear-gradient(135deg, #347cf6, #1f5fd6);
   color: #fff;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
 
-  box-shadow: 0 14px 28px rgba(47, 122, 237, 0.25);
-
+  box-shadow: 0 16px 30px rgba(47, 122, 237, 0.28);
   overflow: hidden;
 }
 
@@ -83,58 +75,41 @@ h1 {
   object-fit: cover;
 }
 
-/* =========================
-   Shared Cards
-========================= */
+/* Cards */
 
 .focus-card,
 .productivity-card,
 .empty-card,
-.stat-card {
-  background: rgba(255, 255, 255, 0.92);
-
-  border: 1px solid rgba(
-    47,
-    122,
-    237,
-    0.08
-  );
-
-  box-shadow:
-    0 20px 40px rgba(47, 122, 237, 0.08);
-
-  backdrop-filter: blur(12px);
+.stat-card,
+.error-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(47, 122, 237, 0.08);
+  box-shadow: 0 18px 38px rgba(47, 122, 237, 0.09);
+  backdrop-filter: blur(14px);
 }
 
-/* =========================
-   Focus Card
-========================= */
+/* Focus */
 
 .focus-card {
-  border-radius: 28px;
+  border-radius: 30px;
   padding: 24px;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .focus-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 18px;
 }
 
 .pill {
   background: #eaf2ff;
-
   color: #2f7aed;
-
   padding: 8px 14px;
-
   border-radius: 999px;
-
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .spark {
@@ -144,90 +119,66 @@ h1 {
 
 .focus-card h2 {
   margin: 0;
-
   color: #111827;
-
-  font-size: 28px;
-  line-height: 1.15;
-
-  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.18;
+  font-weight: 900;
+  letter-spacing: -0.5px;
 }
 
 .focus-card p {
-  margin: 12px 0 22px;
-
-  color: #6b7280;
-
+  margin: 14px 0 24px;
+  color: #64748b;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .primary-btn {
   width: 100%;
   height: 52px;
-
   border: none;
-
   border-radius: 16px;
-
-  background: linear-gradient(
-    135deg,
-    #2f7aed,
-    #1f5fd6
-  );
-
+  background: linear-gradient(135deg, #347cf6, #1f5fd6);
   color: #fff;
-
   font-size: 15px;
-  font-weight: 700;
-
-  box-shadow:
-    0 14px 28px rgba(47, 122, 237, 0.25);
+  font-weight: 800;
+  box-shadow: 0 14px 28px rgba(47, 122, 237, 0.25);
 }
 
-/* =========================
-   Stats
-========================= */
+/* Stats */
 
 .stats-grid {
   display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 14px;
-
-  margin-bottom: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .stat-card {
-  border-radius: 22px;
+  min-height: 102px;
+  border-radius: 24px;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stat-card span {
-  display: block;
-
-  color: #6b7280;
-
+  color: #64748b;
   font-size: 13px;
-  font-weight: 600;
-
+  font-weight: 800;
   margin-bottom: 10px;
 }
 
 .stat-card strong {
   color: #111827;
-
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 900;
 }
 
 .stat-card.highlight {
-  background: linear-gradient(
-    135deg,
-    #2f7aed,
-    #1f5fd6
-  );
+  background: linear-gradient(135deg, #347cf6, #1f5fd6);
 }
 
 .stat-card.highlight span,
@@ -235,15 +186,11 @@ h1 {
   color: #fff;
 }
 
-/* =========================
-   Productivity
-========================= */
+/* Productivity */
 
 .productivity-card {
-  border-radius: 28px;
-
+  border-radius: 30px;
   padding: 22px;
-
   margin-bottom: 24px;
 
   display: flex;
@@ -253,26 +200,21 @@ h1 {
 
 .productivity-card p {
   margin: 0 0 8px;
-
-  color: #6b7280;
-
+  color: #64748b;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .productivity-card h3 {
   margin: 0;
-
   color: #111827;
-
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 34px;
+  font-weight: 900;
 }
 
 .progress-ring {
-  width: 88px;
-  height: 88px;
-
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
 
   display: flex;
@@ -280,53 +222,40 @@ h1 {
   align-items: center;
   justify-content: center;
 
-  background:
-    conic-gradient(
-      #2f7aed 0deg,
-      #eaf2ff 0deg
-    );
+  background: conic-gradient(#2f7aed 0deg, #eaf2ff 0deg);
 }
 
 .progress-ring span {
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 900;
   color: #111827;
 }
 
 .progress-ring small {
   font-size: 10px;
-  color: #6b7280;
+  color: #64748b;
 }
 
-/* =========================
-   Quick Actions
-========================= */
+/* Quick Actions */
 
 .section-header h3 {
   margin: 0 0 14px;
-
   color: #111827;
-
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .actions {
   display: grid;
   gap: 12px;
-
   margin-bottom: 24px;
 }
 
 .action-btn {
   min-height: 58px;
-
   border: none;
-
   border-radius: 20px;
-
   background: #fff;
-
   padding: 0 18px;
 
   display: flex;
@@ -334,18 +263,14 @@ h1 {
   gap: 12px;
 
   font-size: 15px;
-  font-weight: 700;
-
+  font-weight: 800;
   color: #111827;
-
-  box-shadow:
-    0 10px 25px rgba(47, 122, 237, 0.08);
+  box-shadow: 0 10px 25px rgba(47, 122, 237, 0.08);
 }
 
 .action-btn span {
   width: 32px;
   height: 32px;
-
   border-radius: 10px;
 
   display: flex;
@@ -353,30 +278,22 @@ h1 {
   justify-content: center;
 
   background: #eaf2ff;
-
   color: #2f7aed;
-
-  font-weight: 700;
 }
 
-/* =========================
-   Empty State
-========================= */
+/* Empty/Error */
 
-.empty-card {
-  border-radius: 28px;
-
+.empty-card,
+.error-card {
+  border-radius: 30px;
   padding: 24px;
-
   text-align: center;
 }
 
 .empty-icon {
-  width: 60px;
-  height: 60px;
-
+  width: 58px;
+  height: 58px;
   margin: 0 auto 16px;
-
   border-radius: 18px;
 
   display: flex;
@@ -384,70 +301,155 @@ h1 {
   justify-content: center;
 
   background: #eaf2ff;
-
   color: #2f7aed;
-
-  font-size: 28px;
+  font-size: 26px;
+  font-weight: 900;
 }
 
-.empty-card h3 {
+.empty-card h3,
+.error-card h3 {
   margin: 0 0 10px;
-
   color: #111827;
-
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
-.empty-card p {
-  margin: 0;
-
-  color: #6b7280;
-
+.empty-card p,
+.error-card p {
+  margin: 0 0 18px;
+  color: #64748b;
   line-height: 1.5;
 }
 
-/* =========================
-   Loading Skeleton
-========================= */
+.center-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Skeleton */
+
+.hero-skeleton {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 26px;
+}
 
 .skeleton {
   border-radius: 22px;
-
-  background: linear-gradient(
-    90deg,
-    #eaf2ff,
-    #ffffff,
-    #eaf2ff
-  );
-
+  background: linear-gradient(90deg, #eaf2ff, #ffffff, #eaf2ff);
   background-size: 200% 100%;
-
   animation: shimmer 1.2s infinite;
 }
 
-.header-skeleton {
-  height: 90px;
-  margin-bottom: 18px;
+.text-sm {
+  width: 150px;
+  height: 14px;
+  margin-bottom: 12px;
+}
+
+.text-lg {
+  width: 220px;
+  height: 62px;
+  margin-bottom: 14px;
+}
+
+.text-md {
+  width: 190px;
+  height: 18px;
+}
+
+.avatar-skeleton {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 20px;
 }
 
 .focus-skeleton {
-  height: 180px;
-  margin-bottom: 18px;
+  height: 292px;
+  margin-bottom: 20px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
 
 .stat-skeleton {
-  height: 110px;
+  height: 102px;
 }
 
 @keyframes shimmer {
   to {
     background-position: -200% 0;
   }
+}
+
+/* Small phones */
+
+@media (max-width: 370px) {
+  .page {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+
+  .focus-card h2 {
+    font-size: 24px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+}
+.loader-page {
+  min-height: 100%;
+  padding: 24px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle at top left, rgba(47, 122, 237, 0.18), transparent 34%),
+    linear-gradient(180deg, #eef5ff 0%, #f8fbff 45%, #ffffff 100%);
+}
+
+.loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loader-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 5px solid #eaf2ff;
+  border-top-color: #2f7aed;
+  animation: spin 0.8s linear infinite;
+}
+
+.loader-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page {
+  padding-bottom: 120px;
 }

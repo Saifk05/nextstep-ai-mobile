@@ -1,27 +1,37 @@
-<ion-content [fullscreen]="true" class="dashboard-content">
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+<!-- <ion-content [fullscreen]="true" class="dashboard-content"> -->
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
+  </ion-refresher> -->
+<ion-content class="dashboard-content">
   @if (loading) {
-    <div class="page">
-      <div class="skeleton header-skeleton"></div>
-      <div class="skeleton focus-skeleton"></div>
-      <div class="grid">
-        <div class="skeleton stat-skeleton"></div>
-        <div class="skeleton stat-skeleton"></div>
-        <div class="skeleton stat-skeleton"></div>
-        <div class="skeleton stat-skeleton"></div>
+    <div class="loader-page">
+      <div class="loader-card">
+        <div class="loader-ring"></div>
+        <p>Loading your dashboard...</p>
       </div>
     </div>
-  }
-
-  @if (!loading && dashboard) {
+  } @else if (errorMessage) {
+    <div class="page center-state">
+      <div class="error-card">
+        <div class="empty-icon">!</div>
+        <h3>Unable to load dashboard</h3>
+        <p>{{ errorMessage }}</p>
+        <button class="primary-btn" (click)="loadDashboard()">Retry</button>
+      </div>
+    </div>
+  } @else if (dashboard) {
     <div class="page">
       <section class="hero">
-        <div>
-          <p class="date">{{ dashboard.greeting.day }} • {{ dashboard.greeting.date }}</p>
-          <h1>{{ dashboard.greeting.message }}, {{ dashboard.user.firstName }}</h1>
+        <div class="hero-copy">
+          <p class="date">
+            {{ dashboard.greeting.day }} • {{ dashboard.greeting.date }}
+          </p>
+
+          <h1>
+            {{ dashboard.greeting.message }},<br />
+            {{ dashboard.user.firstName }}
+          </h1>
+
           <p class="subtitle">Ready to take your next step today?</p>
         </div>
 
@@ -103,3 +113,4 @@
     </div>
   }
 </ion-content>
+<app-footer></app-footer>

@@ -1,0 +1,44 @@
+<footer class="app-footer">
+  <button
+    class="footer-item"
+    [class.active]="activeTab === 'home'"
+    (click)="goTo('home')"
+  >
+    <ion-icon name="home"></ion-icon>
+    <span>Home</span>
+  </button>
+
+  <button
+    class="footer-item"
+    [class.active]="activeTab === 'inbox'"
+    (click)="goTo('inbox')"
+  >
+    <div class="icon-wrap">
+      <ion-icon name="mail-outline"></ion-icon>
+      <small>2</small>
+    </div>
+    <span>Inbox</span>
+  </button>
+
+  <button class="add-btn" (click)="openCreate()">
+    <ion-icon name="add"></ion-icon>
+  </button>
+
+  <button
+    class="footer-item"
+    [class.active]="activeTab === 'finance'"
+    (click)="goTo('finance')"
+  >
+    <ion-icon name="wallet-outline"></ion-icon>
+    <span>Finance</span>
+  </button>
+
+  <button
+    class="footer-item"
+    [class.active]="activeTab === 'profile'"
+    (click)="goTo('profile')"
+  >
+    <ion-icon name="person-outline"></ion-icon>
+    <span>Profile</span>
+  </button>
+</footer>

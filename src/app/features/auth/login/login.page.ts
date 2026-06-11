@@ -93,9 +93,22 @@ export class LoginPage {
       })
       .subscribe({
         next: async (response) => {
-          await this.storageService.setAccessToken(response.data.accessToken);
-          await this.storageService.setRefreshToken(response.data.refreshToken);
-          await this.storageService.setUser(response.data.user);
+          console.log('Login Response:', response);
+
+          await this.storageService.setAuthData(
+            response.data.accessToken,
+            response.data.refreshToken,
+            response.data.user
+          );
+
+          const savedAccessToken =
+            await this.storageService.getAccessToken();
+
+          const savedRefreshToken =
+            await this.storageService.getRefreshToken();
+
+          console.log('Saved Access Token:', savedAccessToken);
+          console.log('Saved Refresh Token:', savedRefreshToken);
 
           this.loading = false;
 
@@ -103,9 +116,7 @@ export class LoginPage {
 
           (document.activeElement as HTMLElement)?.blur();
 
-          setTimeout(() => {
-            this.navCtrl.navigateRoot('/dashboard');
-          }, 500);
+          await this.navCtrl.navigateRoot('/dashboard');
         },
 
         error: (error) => {
