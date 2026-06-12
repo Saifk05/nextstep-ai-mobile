@@ -13,6 +13,12 @@ import {
 } from '../models/task.model';
 
 import {
+  GoogleConnectResponse,
+  GoogleStatusResponse,
+  GoogleCalendarEventsResponse,
+} from '../models/integration.model';
+
+import {
   ProfileResponse,
   UpdateProfilePayload,
   AddressSuggestionsResponse,
@@ -237,4 +243,26 @@ export class ApiService {
       `${this.clientUrl}/tasks/summary`
     );
   }
+
+    /*
+   * Google Calendar Integration
+   */
+  getGoogleConnectUrl(): Observable<GoogleConnectResponse> {
+    return this.http.get<GoogleConnectResponse>(
+      `${this.clientUrl}/integrations/google/connect`
+    );
+  }
+
+  getGoogleStatus(): Observable<GoogleStatusResponse> {
+    return this.http.get<GoogleStatusResponse>(
+      `${this.clientUrl}/integrations/google/status`
+    );
+  }
+
+  getGoogleCalendarEvents(): Observable<GoogleCalendarEventsResponse> {
+    return this.http.get<GoogleCalendarEventsResponse>(
+      `${this.clientUrl}/integrations/google/calendar/events`
+    );
+  }
+
 }

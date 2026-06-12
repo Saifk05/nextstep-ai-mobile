@@ -21,6 +21,9 @@ import {
   chevronForwardOutline,
   sparklesOutline,
   settingsOutline,
+  calendarOutline,
+  checkmarkCircleOutline,
+  linkOutline,
 } from 'ionicons/icons';
 
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
@@ -41,6 +44,10 @@ export class SettingsPage implements OnInit {
   userEmail = 'user@example.com';
   productivityScore = 0;
 
+  isGoogleConnected = false;
+  googleEmail: string | null = null;
+  isGoogleLoading = false;
+
   constructor(
     private readonly navCtrl: NavController,
     private readonly apiService: ApiService,
@@ -60,15 +67,20 @@ export class SettingsPage implements OnInit {
       chevronForwardOutline,
       sparklesOutline,
       settingsOutline,
+      calendarOutline,
+      checkmarkCircleOutline,
+      linkOutline,
     });
   }
 
   async ngOnInit(): Promise<void> {
     await this.loadUserFromStorage();
+    this.checkGoogleStatus();
   }
 
   async ionViewWillEnter(): Promise<void> {
     await this.loadUserFromStorage();
+    this.checkGoogleStatus();
   }
 
   private async loadUserFromStorage(): Promise<void> {
@@ -87,18 +99,52 @@ export class SettingsPage implements OnInit {
     this.userEmail = this.user.email || 'user@example.com';
   }
 
+  checkGoogleStatus(): void {
+    this.apiService.getGoogleStatus().subscribe({
+      next: (response) => {
+        this.isGoogleConnected = response.data.isConnected;
+        this.googleEmail = response.data.email;
+      },
+      error: () => {
+        this.isGoogleConnected = false;
+        this.googleEmail = null;
+      },
+    });
+  }
+
+  connectGoogleCalendar(): void {
+    if (this.isGoogleLoading || this.isGoogleConnected) {
+      return;
+    }
+
+    this.isGoogleLoading = true;
+
+    this.apiService.getGoogleConnectUrl().subscribe({
+      next: (response) => {
+        this.isGoogleLoading = false;
+        window.location.href = response.data.url;
+      },
+      error: async (error) => {
+        this.isGoogleLoading = false;
+        await this.showToast(
+          error?.error?.message || 'Unable to connect Google Calendar'
+        );
+      },
+    });
+  }
+
   goBack(): void {
     this.blurActiveElement();
     this.navCtrl.navigateBack('/dashboard');
   }
 
-    goToProfile(event?: Event): void {
-      this.blurActiveElement(event);
+  goToProfile(event?: Event): void {
+    this.blurActiveElement(event);
 
-      this.router.navigate(['/settings/profile'], {
-        replaceUrl: true,
-      });
-    }
+    this.router.navigate(['/settings/profile'], {
+      replaceUrl: true,
+    });
+  }
 
   comingSoon(label: string): void {
     this.showToast(`${label} coming soon`);
