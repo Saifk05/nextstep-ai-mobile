@@ -38,6 +38,9 @@ export interface CreateTaskRequest {
 
 export interface UpdateTaskRequest extends Partial<CreateTaskRequest> {
   status?: TaskStatus;
+  completionNote?: string;
+  completedAt?: string;
+  proofImage?: string;
 }
 
 export interface TaskSummary {

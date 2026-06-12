@@ -8,9 +8,9 @@ import { addIcons } from 'ionicons';
 import {
   home,
   mailOutline,
-  add,
   walletOutline,
   settingsOutline,
+  checkmarkCircleOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -32,9 +32,9 @@ export class AppFooterComponent implements OnInit, OnDestroy {
     addIcons({
       home,
       mailOutline,
-      add,
       walletOutline,
       settingsOutline,
+      checkmarkCircleOutline,
     });
   }
 
@@ -57,15 +57,12 @@ export class AppFooterComponent implements OnInit, OnDestroy {
     const routes: Record<string, string> = {
       home: '/dashboard',
       inbox: '/inbox',
+      tasks: '/tasks',
       finance: '/finance',
       settings: '/settings',
     };
 
     this.navCtrl.navigateRoot(routes[tab]);
-  }
-
-  openCreate(): void {
-    this.navCtrl.navigateForward('/create');
   }
 
   private setActiveTab(url: string): void {
@@ -76,6 +73,11 @@ export class AppFooterComponent implements OnInit, OnDestroy {
 
     if (url.startsWith('/inbox')) {
       this.activeTab = 'inbox';
+      return;
+    }
+
+    if (url.startsWith('/tasks')) {
+      this.activeTab = 'tasks';
       return;
     }
 

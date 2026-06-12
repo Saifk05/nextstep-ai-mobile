@@ -17,7 +17,9 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () =>
-      import('./features/auth/register/register.page').then((m) => m.RegisterPage),
+      import('./features/auth/register/register.page').then(
+        (m) => m.RegisterPage
+      ),
     canActivate: [guestGuard],
   },
   {
@@ -41,6 +43,38 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/pages/settings/profile/profile.page').then(
         (m) => m.ProfilePage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-list/task-list.component').then(
+        (m) => m.TaskListComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/add',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-create/task-create.component').then(
+        (m) => m.TaskCreateComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/:id/complete',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-complete/task-complete.component').then(
+        (m) => m.TaskCompleteComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/:id',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-details/task-details.component').then(
+        (m) => m.TaskDetailsComponent
       ),
     canActivate: [authGuard],
   },

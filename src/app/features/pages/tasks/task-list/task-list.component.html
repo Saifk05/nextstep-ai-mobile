@@ -1,3 +1,157 @@
-<p>
-  task-list works!
-</p>
+<ion-content class="tasks-content">
+  <main class="page">
+    <section class="hero">
+      <div>
+        <p class="greeting">Task Manager</p>
+
+        <h1>Your Tasks</h1>
+
+        <p class="subtitle">
+          {{ totalTasks }} tasks found. Stay consistent and complete your goals.
+        </p>
+      </div>
+
+      <button class="add-btn" type="button" (click)="goToAddTask()">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+    </section>
+
+    <section class="stats-card">
+      <div class="stat">
+        <div class="stat-icon purple">
+          <ion-icon name="clipboard-outline"></ion-icon>
+        </div>
+
+        <strong>{{ totalTasks }}</strong>
+        <span>Total</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon green">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+
+        <strong>{{ completedTasks }}</strong>
+        <span>Completed</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon orange">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+
+        <strong>{{ pendingTasks }}</strong>
+        <span>Pending</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon red">
+          <ion-icon name="flame-outline"></ion-icon>
+        </div>
+
+        <strong>{{ overdueTasks }}</strong>
+        <span>Overdue</span>
+      </div>
+    </section>
+
+    <section class="search-row">
+      <div class="search-box">
+        <ion-icon name="search-outline"></ion-icon>
+        <span>Search tasks...</span>
+      </div>
+
+      <button class="filter-btn" type="button">
+        <ion-icon name="funnel-outline"></ion-icon>
+      </button>
+    </section>
+
+    @if (isLoading) {
+      <section class="skeleton-list">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div class="skeleton-card"></div>
+        }
+      </section>
+    } @else if (errorMessage) {
+      <section class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="clipboard-outline"></ion-icon>
+        </div>
+
+        <h2>Something went wrong</h2>
+        <p>{{ errorMessage }}</p>
+
+        <button type="button" (click)="loadTasks()">Try Again</button>
+      </section>
+    } @else if (!tasks.length) {
+      <section class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+
+        <h2>No tasks yet</h2>
+        <p>Create your first task and start building your streak.</p>
+
+        <button type="button" (click)="goToAddTask()">Create Task</button>
+      </section>
+    } @else {
+      <section class="task-list">
+        @for (task of tasks; track trackByTaskId($index, task)) {
+          <article class="task-card" (click)="openTask(task)">
+            <div class="task-icon">
+              <ion-icon name="clipboard-outline"></ion-icon>
+            </div>
+
+            <div class="task-main">
+              <div class="task-header">
+                <div>
+                  <h2>{{ task.title }}</h2>
+                  <p>{{ formatLabel(task.category || 'GENERAL') }}</p>
+                </div>
+
+                <ion-icon
+                  class="arrow"
+                  name="chevron-forward-outline"
+                ></ion-icon>
+              </div>
+
+              <div class="task-date">
+                <ion-icon name="calendar-outline"></ion-icon>
+
+                @if (task.dueDate) {
+                  <span>{{ task.dueDate | date: 'dd MMM yyyy' }}</span>
+                } @else {
+                  <span>No due date</span>
+                }
+              </div>
+
+              <div class="badges">
+                <span
+                  class="badge"
+                  [ngClass]="getPriorityClass(task.priority)"
+                >
+                  {{ formatLabel(task.priority) }}
+                </span>
+
+                <span
+                  class="badge"
+                  [ngClass]="getStatusClass(task.status)"
+                >
+                  {{ formatLabel(task.status) }}
+                </span>
+
+                @if (task.completionType === 'PHOTO_PROOF') {
+                  <span class="badge proof-badge">Photo Proof</span>
+                }
+
+                @if (task.completionType === 'SELF_CONFIRM') {
+                  <span class="badge self-badge">Self Confirm</span>
+                }
+              </div>
+            </div>
+          </article>
+        }
+      </section>
+    }
+  </main>
+  <app-footer></app-footer>
+</ion-content>

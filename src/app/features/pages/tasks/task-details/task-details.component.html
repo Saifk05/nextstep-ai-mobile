@@ -1,3 +1,116 @@
-<p>
-  task-details works!
-</p>
+<ion-content class="task-details-content">
+  <main class="page">
+    <section class="top-bar">
+      <button type="button" class="icon-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+
+      <h2>Task Details</h2>
+
+      <div class="header-spacer"></div>
+    </section>
+
+    @if (isLoading) {
+      <section class="info-card">
+        <p>Loading task details...</p>
+      </section>
+    } @else if (task) {
+      <section class="task-card">
+        <div class="status-badge">
+          {{ task.status }}
+        </div>
+
+        <h1>{{ task.title }}</h1>
+
+        <p>
+          {{ task.description || 'No description added.' }}
+        </p>
+      </section>
+
+      <section class="info-card">
+        <h3>Task Information</h3>
+
+        <div class="info-row">
+          <span>Category</span>
+          <strong>{{ formatLabel(task.category) }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Priority</span>
+          <strong>{{ formatLabel(task.priority) }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Due Date</span>
+          <strong>
+            @if (task.dueDate) {
+              {{ task.dueDate | date:'dd MMM yyyy' }}
+            } @else {
+              No due date
+            }
+          </strong>
+        </div>
+
+        <div class="info-row">
+          <span>Completion Type</span>
+          <strong>{{ formatLabel(task.completionType) }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Minimum Minutes</span>
+          <strong>
+            {{ task.minimumCompletionMinutes || 0 }} mins
+          </strong>
+        </div>
+      </section>
+
+      <section class="info-card">
+        <h3>Progress</h3>
+
+        <div class="info-row">
+          <span>Created At</span>
+          <strong>{{ task.createdAt | date:'dd MMM yyyy' }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Status</span>
+          <strong>{{ formatLabel(task.status) }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Completed At</span>
+          <strong>
+            @if (task.completedAt) {
+              {{ task.completedAt | date:'dd MMM yyyy' }}
+            } @else {
+              Not completed yet
+            }
+          </strong>
+        </div>
+      </section>
+
+      @if (task.proofImage) {
+        <section class="info-card">
+          <h3>Proof Image</h3>
+
+          <img
+            class="proof-image"
+            [src]="task.proofImage"
+            alt="Task proof"
+          />
+        </section>
+      }
+
+      @if (task.status !== 'COMPLETED') {
+        <button class="complete-btn" (click)="completeTask()">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          Complete Task
+        </button>
+      }
+    } @else {
+      <section class="info-card">
+        <p>Task not found.</p>
+      </section>
+    }
+  </main>
+</ion-content>

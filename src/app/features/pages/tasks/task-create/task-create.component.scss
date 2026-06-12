@@ -1,0 +1,298 @@
+.task-create-content {
+  --background: #f5f9ff;
+}
+
+.page {
+  min-height: 100%;
+  padding: 24px 18px 120px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 36%),
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 32%),
+    linear-gradient(180deg, #f6f9ff 0%, #ffffff 62%);
+}
+
+.top-bar {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  margin-bottom: 22px;
+
+  h2 {
+    margin: 0;
+    text-align: center;
+    color: #0f172a;
+    font-size: 18px;
+    font-weight: 800;
+  }
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    color: #0f172a;
+    font-size: 22px;
+  }
+}
+
+.header-spacer {
+  width: 44px;
+  height: 44px;
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.28), transparent 34%),
+    linear-gradient(135deg, #1d4ed8 0%, #2563eb 48%, #60a5fa 100%);
+  box-shadow: 0 20px 44px rgba(37, 99, 235, 0.28);
+
+  h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 27px;
+    font-weight: 850;
+    letter-spacing: -0.7px;
+  }
+
+  p {
+    margin: 10px 0 0;
+    max-width: 290px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+}
+
+.form-card {
+  padding: 18px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+  backdrop-filter: blur(18px);
+}
+
+.form-group {
+  margin-bottom: 18px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 750;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    border: 1px solid #dbeafe;
+    border-radius: 17px;
+    outline: none;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.04);
+    transition: 0.2s ease;
+  }
+
+  input,
+  select {
+    height: 54px;
+    padding: 0 15px;
+  }
+
+  textarea {
+    min-height: 108px;
+    padding: 15px;
+    resize: none;
+    line-height: 1.5;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #2563eb;
+    box-shadow:
+      0 0 0 4px rgba(37, 99, 235, 0.1),
+      0 8px 22px rgba(15, 23, 42, 0.05);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+}
+
+.material-date-field {
+  width: 100%;
+}
+
+::ng-deep .material-date-field .mat-mdc-text-field-wrapper {
+  height: 54px;
+  border-radius: 17px !important;
+  background: #ffffff !important;
+  box-shadow: 0 7px 18px rgba(15, 23, 42, 0.04);
+}
+
+::ng-deep .material-date-field .mat-mdc-form-field-flex {
+  height: 54px;
+  align-items: center;
+}
+
+::ng-deep .material-date-field .mat-mdc-form-field-infix {
+  min-height: 54px;
+  padding-top: 15px !important;
+  padding-bottom: 0 !important;
+}
+
+::ng-deep .material-date-field .mdc-notched-outline__leading,
+::ng-deep .material-date-field .mdc-notched-outline__notch,
+::ng-deep .material-date-field .mdc-notched-outline__trailing {
+  border-color: #dbeafe !important;
+}
+
+::ng-deep .material-date-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .material-date-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .material-date-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #2563eb !important;
+}
+
+::ng-deep .material-date-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+::ng-deep .material-date-field .mat-datepicker-toggle {
+  color: #2563eb !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: #2563eb !important;
+}
+
+.priority-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.priority-chip {
+  height: 45px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  transition: 0.2s ease;
+
+  &.active {
+    border-color: #2563eb;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    box-shadow: 0 13px 28px rgba(37, 99, 235, 0.24);
+  }
+}
+
+.completion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.completion-card {
+  min-height: 136px;
+  padding: 15px;
+  border: 1px solid #dbeafe;
+  border-radius: 22px;
+  text-align: left;
+  background: #ffffff;
+  transition: 0.2s ease;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.035);
+
+  ion-icon {
+    color: #2563eb;
+    font-size: 27px;
+  }
+
+  h4 {
+    margin: 10px 0 6px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  &.active {
+    border-color: #2563eb;
+    background: linear-gradient(180deg, #eff6ff, #ffffff);
+    box-shadow:
+      inset 0 0 0 1px rgba(37, 99, 235, 0.2),
+      0 10px 24px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.submit-btn {
+  width: 100%;
+  height: 58px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 20px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb, #60a5fa);
+  box-shadow: 0 18px 38px rgba(37, 99, 235, 0.28);
+  font-size: 15px;
+  font-weight: 850;
+  transition: 0.2s ease;
+
+  &:disabled {
+    opacity: 0.65;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@media (max-width: 380px) {
+  .page {
+    padding-inline: 14px;
+  }
+
+  .completion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card h1 {
+    font-size: 24px;
+  }
+}

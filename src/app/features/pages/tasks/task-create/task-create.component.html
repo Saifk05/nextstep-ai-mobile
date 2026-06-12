@@ -1,3 +1,166 @@
-<p>
-  task-create works!
-</p>
+<ion-content class="task-create-content">
+  <main class="page">
+    <section class="top-bar">
+      <button type="button" class="icon-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+
+      <h2>Create Task</h2>
+
+      <div class="header-spacer"></div>
+    </section>
+
+    <section class="hero-card">
+      <h1>Build Better Habits</h1>
+
+      <p>
+        Create a task, stay consistent, and grow your streak.
+      </p>
+    </section>
+
+    <section class="form-card">
+      <div class="form-group">
+        <label>Task Title *</label>
+
+        <input
+          type="text"
+          [(ngModel)]="title"
+          placeholder="Enter task title"
+          maxlength="100"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+
+        <textarea
+          rows="4"
+          [(ngModel)]="description"
+          placeholder="Describe your task"
+        ></textarea>
+      </div>
+
+      <!-- Due Date -->
+      <div class="form-group">
+        <label>Due Date</label>
+
+        <mat-form-field
+          appearance="outline"
+          class="material-date-field"
+        >
+          <mat-label>Select Due Date</mat-label>
+
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="dueDate"
+            placeholder="Choose a date"
+          />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          >
+          </mat-datepicker-toggle>
+
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <label>Category *</label>
+
+        <select [(ngModel)]="category">
+          <option value="">Select Category</option>
+
+          @for (item of categories; track item) {
+            <option [value]="item">
+              {{ formatLabel(item) }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Priority</label>
+
+        <div class="priority-group">
+          @for (item of priorities; track item) {
+            <button
+              type="button"
+              class="priority-chip"
+              [class.active]="priority === item"
+              (click)="selectPriority(item)"
+            >
+              {{ formatLabel(item) }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Completion Type</label>
+
+        <div class="completion-grid">
+          <button
+            type="button"
+            class="completion-card"
+            [class.active]="completionType === 'SELF_CONFIRM'"
+            (click)="selectCompletionType('SELF_CONFIRM')"
+          >
+            <ion-icon
+              name="checkmark-circle-outline"
+            ></ion-icon>
+
+            <h4>Self Confirm</h4>
+
+            <p>
+              Mark task as completed manually
+            </p>
+          </button>
+
+          <button
+            type="button"
+            class="completion-card"
+            [class.active]="completionType === 'PHOTO_PROOF'"
+            (click)="selectCompletionType('PHOTO_PROOF')"
+          >
+            <ion-icon
+              name="camera-outline"
+            ></ion-icon>
+
+            <h4>Photo Proof</h4>
+
+            <p>
+              Require image proof to complete
+            </p>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Minimum Completion Minutes</label>
+
+        <input
+          type="number"
+          min="0"
+          [(ngModel)]="minimumCompletionMinutes"
+          placeholder="Example: 30"
+        />
+      </div>
+    </section>
+
+    <button
+      class="submit-btn"
+      type="button"
+      [disabled]="isSubmitting"
+      (click)="createTask()"
+    >
+      @if (isSubmitting) {
+        <span>Creating Task...</span>
+      } @else {
+        <span>Create Task</span>
+      }
+    </button>
+  </main>
+</ion-content>
