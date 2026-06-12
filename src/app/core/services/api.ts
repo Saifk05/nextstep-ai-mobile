@@ -3,6 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardResponse } from '../models/dashboard.model';
 import { environment } from '../../../environments/environment';
+
+import {
+  ApiResponse,
+  CreateTaskRequest,
+  Task,
+  TaskSummary,
+  UpdateTaskRequest,
+} from '../models/task.model';
+
 import {
   ProfileResponse,
   UpdateProfilePayload,
@@ -157,6 +166,75 @@ export class ApiService {
     return this.http.patch<ProfileResponse>(
       `${this.clientUrl}/users/profile-picture`,
       payload
+    );
+  }
+
+  /*
+   * Tasks
+   */
+  getTasks(): Observable<ApiResponse<Task[]>> {
+    return this.http.get<ApiResponse<Task[]>>(
+      `${this.clientUrl}/tasks`
+    );
+  }
+
+  getTodayTasks(): Observable<ApiResponse<Task[]>> {
+    return this.http.get<ApiResponse<Task[]>>(
+      `${this.clientUrl}/tasks/today`
+    );
+  }
+
+  getTaskById(taskId: string): Observable<ApiResponse<Task>> {
+    return this.http.get<ApiResponse<Task>>(
+      `${this.clientUrl}/tasks/${taskId}`
+    );
+  }
+
+  createTask(
+    payload: CreateTaskRequest
+  ): Observable<ApiResponse<Task>> {
+    return this.http.post<ApiResponse<Task>>(
+      `${this.clientUrl}/tasks`,
+      payload
+    );
+  }
+
+  updateTask(
+    taskId: string,
+    payload: UpdateTaskRequest
+  ): Observable<ApiResponse<Task>> {
+    return this.http.patch<ApiResponse<Task>>(
+      `${this.clientUrl}/tasks/${taskId}`,
+      payload
+    );
+  }
+
+  deleteTask(taskId: string): Observable<ApiResponse<null>> {
+    return this.http.delete<ApiResponse<null>>(
+      `${this.clientUrl}/tasks/${taskId}`
+    );
+  }
+
+  completeTask(taskId: string): Observable<ApiResponse<Task>> {
+    return this.http.patch<ApiResponse<Task>>(
+      `${this.clientUrl}/tasks/${taskId}/complete`,
+      {}
+    );
+  }
+
+  completeTaskWithProof(
+    taskId: string,
+    payload: FormData
+  ): Observable<ApiResponse<Task>> {
+    return this.http.patch<ApiResponse<Task>>(
+      `${this.clientUrl}/tasks/${taskId}/complete-with-proof`,
+      payload
+    );
+  }
+
+  getTaskSummary(): Observable<ApiResponse<TaskSummary>> {
+    return this.http.get<ApiResponse<TaskSummary>>(
+      `${this.clientUrl}/tasks/summary`
     );
   }
 }
