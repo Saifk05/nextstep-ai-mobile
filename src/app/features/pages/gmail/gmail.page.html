@@ -1,0 +1,179 @@
+<ion-content class="gmail-content" [fullscreen]="true">
+  <div class="page">
+    <div class="hero-card">
+      <div class="hero-bg-circle circle-one"></div>
+      <div class="hero-bg-circle circle-two"></div>
+
+      <div class="hero-top">
+        <button class="back-btn" type="button" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
+
+        <div class="hero-copy">
+          <p class="eyebrow">Google Workspace</p>
+          <h1>Gmail Inbox</h1>
+          <p class="subtitle">Manage emails from all connected accounts</p>
+        </div>
+
+        <button class="refresh-btn" type="button" (click)="refreshInbox()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <div *ngIf="!loading && errorMessage" class="state-card error-card">
+      <ion-icon class="state-icon" name="alert-circle-outline"></ion-icon>
+      <h3>Unable to load Gmail</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <ng-container *ngIf="!loading && !errorMessage">
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Accounts</p>
+            <h2>Connected Gmail Accounts</h2>
+          </div>
+        </div>
+
+        <div class="accounts-list">
+          <div
+            *ngFor="let account of accounts"
+            class="account-card"
+            [class.active]="selectedAccountId === account.id"
+            (click)="selectAccount(account.id)"
+          >
+            <div class="account-avatar">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </div>
+
+            <div class="account-info">
+              <h4>{{ account.email }}</h4>
+              <p>Google Account</p>
+            </div>
+
+            <ion-icon
+              *ngIf="selectedAccountId === account.id"
+              class="selected-icon"
+              name="checkmark-circle-outline"
+            ></ion-icon>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <div class="summary-card">
+          <h3>{{ summary.totalEmails }}</h3>
+          <p>Total Emails</p>
+        </div>
+
+        <div class="summary-card">
+          <h3>{{ summary.unreadEmails }}</h3>
+          <p>Unread</p>
+        </div>
+
+        <div class="summary-card">
+          <h3>{{ summary.importantEmails }}</h3>
+          <p>Important</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Inbox</p>
+            <h2>Recent Emails</h2>
+          </div>
+        </div>
+
+        <div *ngIf="messages.length === 0" class="state-card empty-state">
+          <ion-icon class="state-icon" name="mail-outline"></ion-icon>
+          <h3>No Emails Found</h3>
+          <p>No emails are available for this account.</p>
+        </div>
+
+        <button
+          *ngFor="let message of messages; trackBy: trackByMessage"
+          class="email-card"
+          type="button"
+          (click)="openMessage(message)"
+        >
+          <div class="email-header">
+            <div class="email-from">{{ message.from }}</div>
+
+            <div class="email-time">
+              {{ message.receivedAt | date: 'dd MMM, hh:mm a' }}
+            </div>
+          </div>
+
+          <h3 class="email-subject">{{ message.subject }}</h3>
+
+          <p class="email-snippet">{{ message.snippet }}</p>
+
+          <div class="email-footer">
+            <span
+              class="category-badge"
+              [class.work]="message.category === 'WORK'"
+              [class.personal]="message.category === 'PERSONAL'"
+            >
+              {{ message.category || 'INBOX' }}
+            </span>
+
+            <span *ngIf="message.isUnread" class="unread-badge">
+              Unread
+            </span>
+          </div>
+        </button>
+      </section>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ion-modal
+  [isOpen]="isMessageModalOpen"
+  (didDismiss)="closeMessage()"
+>
+  <ng-template>
+    <ion-content class="modal-content-shell" [fullscreen]="true">
+      <div class="message-modal">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeMessage()"
+          >
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+
+          <h2>Email Details</h2>
+        </div>
+
+        <div *ngIf="selectedMessage" class="modal-body">
+          <div class="modal-from">
+            {{ selectedMessage.from }}
+          </div>
+
+          <h1>{{ selectedMessage.subject }}</h1>
+
+          <div class="modal-time">
+            {{ selectedMessage.receivedAt | date: 'dd MMM yyyy, hh:mm a' }}
+          </div>
+
+          <div class="modal-category">
+            {{ selectedMessage.category || 'INBOX' }}
+          </div>
+
+          <div class="modal-message">
+            {{ selectedMessage.snippet }}
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

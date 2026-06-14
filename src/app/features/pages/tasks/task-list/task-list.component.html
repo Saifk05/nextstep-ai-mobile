@@ -11,7 +11,7 @@
         </p>
       </div>
 
-      <button class="add-btn" type="button" (click)="goToAddTask()">
+      <button class="add-btn" type="button" (click)="goToAddTask($event)">
         <ion-icon name="add-outline"></ion-icon>
       </button>
     </section>
@@ -91,12 +91,14 @@
         <h2>No tasks yet</h2>
         <p>Create your first task and start building your streak.</p>
 
-        <button type="button" (click)="goToAddTask()">Create Task</button>
+        <button type="button" (click)="goToAddTask($event)">
+          Create Task
+        </button>
       </section>
     } @else {
       <section class="task-list">
         @for (task of tasks; track trackByTaskId($index, task)) {
-          <article class="task-card" (click)="openTask(task)">
+          <article class="task-card" (click)="openTask(task, $event)">
             <div class="task-icon">
               <ion-icon name="clipboard-outline"></ion-icon>
             </div>
@@ -153,5 +155,6 @@
       </section>
     }
   </main>
+
   <app-footer></app-footer>
 </ion-content>

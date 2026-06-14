@@ -31,6 +31,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'gmail',
+    loadComponent: () =>
+      import('./features/pages/gmail/gmail.page').then(
+        (m) => m.GmailPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./features/pages/settings/settings.page').then(
