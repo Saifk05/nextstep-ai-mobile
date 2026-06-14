@@ -16,6 +16,9 @@ import {
   GoogleConnectResponse,
   GoogleStatusResponse,
   GoogleCalendarEventsResponse,
+  GmailStatusResponse,
+  GmailMessagesResponse,
+  GmailSummaryResponse,
 } from '../models/integration.model';
 
 import {
@@ -264,5 +267,29 @@ export class ApiService {
       `${this.clientUrl}/integrations/google/calendar/events`
     );
   }
+
+  getGoogleGmailStatus(): Observable<GmailStatusResponse> {
+  return this.http.get<GmailStatusResponse>(
+    `${this.clientUrl}/integrations/google/gmail/status`
+  );
+}
+
+getGoogleGmailMessages(): Observable<GmailMessagesResponse> {
+  return this.http.get<GmailMessagesResponse>(
+    `${this.clientUrl}/integrations/google/gmail/messages`
+  );
+}
+
+getGoogleUnreadMessages(): Observable<GmailMessagesResponse> {
+  return this.http.get<GmailMessagesResponse>(
+    `${this.clientUrl}/integrations/google/gmail/unread`
+  );
+}
+
+getGoogleGmailSummary(): Observable<GmailSummaryResponse> {
+  return this.http.get<GmailSummaryResponse>(
+    `${this.clientUrl}/integrations/google/gmail/summary`
+  );
+}
 
 }

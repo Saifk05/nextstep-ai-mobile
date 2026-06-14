@@ -6,20 +6,42 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, from, switchMap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  filter,
+  finalize,
+  from,
+  switchMap,
+  take,
+  throwError,
+} from 'rxjs';
 
 import { ApiService } from '../services/api';
 import { StorageService } from '../services/storage';
 
+let isRefreshing = false;
+const refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
 function isTokenExpired(token: string): boolean {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    const expiryTime = payload.exp * 1000;
-
-    return Date.now() >= expiryTime;
+    return Date.now() >= payload.exp * 1000;
   } catch {
     return true;
   }
+}
+
+function addToken(
+  req: HttpRequest<unknown>,
+  token: string
+): HttpRequest<unknown> {
+  return req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 function refreshAndRetry(
@@ -28,13 +50,22 @@ function refreshAndRetry(
   apiService: ApiService,
   storageService: StorageService
 ): Observable<HttpEvent<unknown>> {
+  if (isRefreshing) {
+    return refreshTokenSubject.pipe(
+      filter((token): token is string => token !== null),
+      take(1),
+      switchMap((token) => next(addToken(req, token)))
+    );
+  }
+
+  isRefreshing = true;
+  refreshTokenSubject.next(null);
+
   return from(storageService.getRefreshToken()).pipe(
     switchMap((refreshToken) => {
       if (!refreshToken) {
         return from(storageService.clearAuthStorage()).pipe(
-          switchMap(() =>
-            throwError(() => new Error('Refresh token not found'))
-          )
+          switchMap(() => throwError(() => new Error('Refresh token not found')))
         );
       }
 
@@ -50,20 +81,20 @@ function refreshAndRetry(
             ])
           ).pipe(
             switchMap(() => {
-              const retryReq = req.clone({
-                setHeaders: {
-                  Authorization: `Bearer ${newAccessToken}`,
-                },
-              });
-
-              return next(retryReq);
+              refreshTokenSubject.next(newAccessToken);
+              return next(addToken(req, newAccessToken));
             })
           );
         }),
-        catchError((refreshError: HttpErrorResponse) => {
+        catchError((error: HttpErrorResponse) => {
+          refreshTokenSubject.next(null);
+
           return from(storageService.clearAuthStorage()).pipe(
-            switchMap(() => throwError(() => refreshError))
+            switchMap(() => throwError(() => error))
           );
+        }),
+        finalize(() => {
+          isRefreshing = false;
         })
       );
     })
@@ -82,36 +113,31 @@ export const authInterceptor: HttpInterceptorFn = (
     req.url.includes('/auth/register') ||
     req.url.includes('/auth/refresh-token');
 
+  const isGoogleIntegrationApi = req.url.includes('/integrations/google');
+
   if (isAuthApi) {
     return next(req);
   }
 
   return from(storageService.getAccessToken()).pipe(
     switchMap((accessToken) => {
-      if (accessToken && !isTokenExpired(accessToken)) {
-        const authReq = req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        return next(authReq).pipe(
-          catchError((error: HttpErrorResponse) => {
-            if (error.status !== 401) {
-              return throwError(() => error);
-            }
-
-            return refreshAndRetry(
-              req,
-              next,
-              apiService,
-              storageService
-            );
-          })
-        );
+      if (!accessToken || isTokenExpired(accessToken)) {
+        return refreshAndRetry(req, next, apiService, storageService);
       }
 
-      return refreshAndRetry(req, next, apiService, storageService);
+      return next(addToken(req, accessToken)).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status !== 401) {
+            return throwError(() => error);
+          }
+
+          if (isGoogleIntegrationApi) {
+            return throwError(() => error);
+          }
+
+          return refreshAndRetry(req, next, apiService, storageService);
+        })
+      );
     })
   );
 };

@@ -93,7 +93,7 @@
         </button>
       </div>
     </section>
-
+<!-- 
     <section class="menu-section">
       <h2>Connected Accounts</h2>
 
@@ -136,7 +136,77 @@
           }
         </button>
       </div>
-    </section>
+    </section> -->
+<section class="menu-section">
+  <h2>Connected Accounts</h2>
+
+  <div class="menu-card">
+    <button
+      type="button"
+      class="menu-item connected-account-item"
+      [class.connected]="isGoogleConnected"
+      [disabled]="isGoogleLoading || isGoogleConnected"
+      (click)="connectGoogleCalendar()"
+    >
+      <span class="left">
+        <span class="menu-icon google">
+          <ion-icon
+            [name]="isGoogleConnected ? 'checkmark-circle-outline' : 'calendar-outline'"
+          ></ion-icon>
+        </span>
+
+        <span>
+          <strong>Google Workspace</strong>
+
+          @if (isGoogleConnected) {
+            <small>
+              Connected Gmail & Calendar
+              {{ googleEmail ? ' • ' + googleEmail : '' }}
+            </small>
+          } @else {
+            <small>
+              {{
+                isGoogleLoading
+                  ? 'Connecting...'
+                  : 'Connect Gmail & Calendar'
+              }}
+            </small>
+          }
+        </span>
+      </span>
+
+      @if (!isGoogleConnected) {
+        <ion-icon name="link-outline"></ion-icon>
+      }
+    </button>
+
+    @if (calendarConnected || gmailConnected) {
+      <div class="integration-status">
+        <div class="status-item">
+          <ion-icon
+            [name]="calendarConnected ? 'checkmark-circle-outline' : 'link-outline'"
+          ></ion-icon>
+
+          <span>
+            Calendar
+            {{ calendarConnected ? 'Connected' : 'Not Connected' }}
+          </span>
+        </div>
+
+        <div class="status-item">
+          <ion-icon
+            [name]="gmailConnected ? 'checkmark-circle-outline' : 'link-outline'"
+          ></ion-icon>
+
+          <span>
+            Gmail
+            {{ gmailConnected ? 'Connected' : 'Not Connected' }}
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+</section>
 
     <section class="menu-section">
       <h2>Preferences</h2>

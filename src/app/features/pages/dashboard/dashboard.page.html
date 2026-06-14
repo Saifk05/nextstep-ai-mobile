@@ -1,7 +1,3 @@
-<!-- <ion-content [fullscreen]="true" class="dashboard-content"> -->
-  <!-- <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher> -->
 <ion-content class="dashboard-content">
   @if (loading) {
     <div class="loader-page">
@@ -68,8 +64,8 @@
         </div>
 
         <div class="stat-card">
-          <span>Expense</span>
-          <strong>₹{{ dashboard.summary.monthlyExpense }}</strong>
+          <span>Unread Emails</span>
+          <strong>{{ gmailSummary?.unreadEmails || 0 }}</strong>
         </div>
 
         <div class="stat-card highlight">
@@ -88,6 +84,111 @@
           <span>{{ dashboard.productivity.currentStreak }}</span>
           <small>day streak</small>
         </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h3>Inbox Summary</h3>
+        </div>
+
+        @if (gmailLoading) {
+          <section class="empty-card">
+            <div class="empty-icon">⌛</div>
+            <h3>Loading inbox...</h3>
+            <p>Fetching your latest Gmail updates.</p>
+          </section>
+        } @else if (!isGmailConnected) {
+          <section class="empty-card">
+            <div class="empty-icon">✉️</div>
+            <h3>Gmail not connected</h3>
+            <p>Connect Google Workspace from settings to see your inbox summary.</p>
+          </section>
+        } @else {
+          <div class="gmail-summary-grid">
+            <div class="gmail-summary-card">
+              <span>Total</span>
+              <strong>{{ gmailSummary?.totalEmails || 0 }}</strong>
+            </div>
+
+            <div class="gmail-summary-card">
+              <span>Unread</span>
+              <strong>{{ gmailSummary?.unreadEmails || 0 }}</strong>
+            </div>
+
+            <div class="gmail-summary-card">
+              <span>Important</span>
+              <strong>{{ gmailSummary?.importantEmails || 0 }}</strong>
+            </div>
+          </div>
+
+          @if (!gmailMessages.length) {
+            <section class="empty-card small-empty">
+              <div class="empty-icon">✅</div>
+              <h3>No recent emails</h3>
+              <p>Your inbox looks clear for now.</p>
+            </section>
+          } @else {
+            <div class="gmail-list">
+              @for (email of gmailMessages.slice(0, 3); track email.id) {
+                <article class="gmail-card" [class.unread]="email.isUnread">
+                  <div class="gmail-top">
+                    <div>
+                      <h4>{{ email.subject }}</h4>
+                      <p>{{ getSenderName(email.from) }}</p>
+                    </div>
+
+                    @if (email.isUnread) {
+                      <span class="unread-dot"></span>
+                    }
+                  </div>
+
+                  <p class="gmail-snippet">{{ email.snippet }}</p>
+
+                  <small>{{ formatEmailTime(email.receivedAt) }}</small>
+                </article>
+              }
+            </div>
+          }
+        }
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h3>Upcoming Calendar</h3>
+        </div>
+
+        @if (calendarLoading) {
+          <section class="empty-card">
+            <div class="empty-icon">⌛</div>
+            <h3>Loading calendar...</h3>
+            <p>Fetching your upcoming Google Calendar events.</p>
+          </section>
+        } @else if (!isGoogleCalendarConnected) {
+          <section class="empty-card">
+            <div class="empty-icon">📅</div>
+            <h3>Calendar not connected</h3>
+            <p>Connect Google Workspace from settings to see your upcoming events.</p>
+          </section>
+        } @else if (!calendarEvents.length) {
+          <section class="empty-card">
+            <div class="empty-icon">✅</div>
+            <h3>No upcoming events</h3>
+            <p>Your calendar is clear for now.</p>
+          </section>
+        } @else {
+          <div class="calendar-list">
+            @for (event of calendarEvents.slice(0, 3); track event.id) {
+              <article class="calendar-card">
+                <div>
+                  <h4>{{ event.title }}</h4>
+                  <p>{{ formatCalendarTime(event.start) }}</p>
+                </div>
+
+                <span>{{ event.status }}</span>
+              </article>
+            }
+          </div>
+        }
       </section>
 
       <section class="section">
@@ -112,5 +213,6 @@
       </section>
     </div>
   }
-<app-footer></app-footer>
+
+  <app-footer></app-footer>
 </ion-content>

@@ -48,6 +48,9 @@ export class SettingsPage implements OnInit {
   googleEmail: string | null = null;
   isGoogleLoading = false;
 
+  calendarConnected = false;
+  gmailConnected = false;
+
   constructor(
     private readonly navCtrl: NavController,
     private readonly apiService: ApiService,
@@ -102,11 +105,18 @@ export class SettingsPage implements OnInit {
   checkGoogleStatus(): void {
     this.apiService.getGoogleStatus().subscribe({
       next: (response) => {
-        this.isGoogleConnected = response.data.isConnected;
+        this.calendarConnected = response.data.calendarConnected;
+        this.gmailConnected = response.data.gmailConnected;
+
+        this.isGoogleConnected =
+          response.data.calendarConnected && response.data.gmailConnected;
+
         this.googleEmail = response.data.email;
       },
       error: () => {
         this.isGoogleConnected = false;
+        this.calendarConnected = false;
+        this.gmailConnected = false;
         this.googleEmail = null;
       },
     });
@@ -127,7 +137,7 @@ export class SettingsPage implements OnInit {
       error: async (error) => {
         this.isGoogleLoading = false;
         await this.showToast(
-          error?.error?.message || 'Unable to connect Google Calendar'
+          error?.error?.message || 'Unable to connect Google Workspace'
         );
       },
     });
