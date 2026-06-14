@@ -54,6 +54,7 @@ export class TaskListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('TaskListComponent Loaded:', this.router.url);
     this.loadTasks();
   }
 
@@ -74,18 +75,30 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  goToAddTask(): void {
-    this.router.navigate(['/tasks/add']);
+  goToAddTask(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    console.log('Clicked Add Task');
+    console.log('Current URL Before:', this.router.url);
+
+    this.router.navigateByUrl('/tasks/add').then((success) => {
+      console.log('Navigation Success:', success);
+      console.log('Current URL After:', this.router.url);
+    });
   }
 
-  openTask(task: Task): void {
+  openTask(task: Task, event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
     const taskId = task._id || task.id;
 
     if (!taskId) {
       return;
     }
 
-    this.router.navigate(['/tasks', taskId]);
+    this.router.navigateByUrl(`/tasks/${taskId}`);
   }
 
   get totalTasks(): number {

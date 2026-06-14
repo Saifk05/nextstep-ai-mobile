@@ -1,17 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { IonIcon, NavController } from '@ionic/angular/standalone';
-import { Router, NavigationEnd } from '@angular/router';
-import { Subscription, filter } from 'rxjs';
-
 import { addIcons } from 'ionicons';
 import {
+  checkmarkCircleOutline,
   home,
   mailOutline,
-  walletOutline,
   settingsOutline,
-  checkmarkCircleOutline,
+  walletOutline,
 } from 'ionicons/icons';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
@@ -44,8 +43,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
     this.routerSub = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        const navEvent = event as NavigationEnd;
-        this.setActiveTab(navEvent.urlAfterRedirects);
+        this.setActiveTab((event as NavigationEnd).urlAfterRedirects);
       });
   }
 
@@ -56,7 +54,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
   goTo(tab: string): void {
     const routes: Record<string, string> = {
       home: '/dashboard',
-      inbox: '/inbox',
+      inbox: '/gmail',
       tasks: '/tasks',
       finance: '/finance',
       settings: '/settings',
@@ -71,7 +69,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (url.startsWith('/inbox')) {
+    if (url.startsWith('/gmail')) {
       this.activeTab = 'inbox';
       return;
     }
