@@ -1,3 +1,6 @@
+export type GoogleAccountType = 'PERSONAL' | 'WORKSPACE';
+
+
 export interface GoogleConnectResponse {
   success: boolean;
   message: string;
@@ -14,7 +17,7 @@ export interface GoogleConnectedAccount {
   isPrimary?: boolean;
   isDefault?: boolean;
   enabledServices?: string[];
-  accountType?: string;
+  accountType?: GoogleAccountType;
   calendarConnected?: boolean;
   gmailConnected?: boolean;
   connectedAt?: string | null;

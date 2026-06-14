@@ -26,6 +26,7 @@ import {
   linkOutline,
   mailOutline,
   trashOutline,
+  addCircleOutline,
 } from 'ionicons/icons';
 
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
@@ -78,13 +79,13 @@ export class SettingsPage implements OnInit {
       linkOutline,
       mailOutline,
       trashOutline,
+      addCircleOutline,
     });
   }
 
   async ngOnInit(): Promise<void> {
     await this.loadUserFromStorage();
     this.loadSelectedGoogleAccount();
-    this.checkGoogleStatus();
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -117,29 +118,32 @@ export class SettingsPage implements OnInit {
   checkGoogleStatus(): void {
     this.apiService.getGoogleStatus().subscribe({
       next: (response) => {
-        this.connectedAccounts = response.data.accounts || [];
+        const accounts = response.data?.accounts || [];
 
-        this.isGoogleConnected = this.connectedAccounts.length > 0;
+        this.connectedAccounts = accounts;
+        this.isGoogleConnected = accounts.length > 0;
 
-        if (this.connectedAccounts.length === 0) {
+        if (accounts.length === 0) {
           this.selectedAccountId = '';
           localStorage.removeItem('selectedGoogleAccountId');
           return;
         }
 
-        const selectedExists = this.connectedAccounts.some(
+        const selectedExists = accounts.some(
           (account) => account.id === this.selectedAccountId
         );
 
         if (!this.selectedAccountId || !selectedExists) {
-          this.selectAccount(this.connectedAccounts[0].id);
+          this.selectAccount(accounts[0].id);
         }
       },
-      error: () => {
+      error: async () => {
         this.connectedAccounts = [];
         this.isGoogleConnected = false;
         this.selectedAccountId = '';
         localStorage.removeItem('selectedGoogleAccountId');
+
+        await this.showToast('Unable to fetch Google connection status');
       },
     });
   }
@@ -211,19 +215,35 @@ export class SettingsPage implements OnInit {
   }
 
   getAccountStatusLabel(account: GoogleConnectedAccount): string {
-    if (account.gmailConnected && account.calendarConnected) {
-      return 'Gmail and Calendar connected';
-    }
+    const services: string[] = [];
 
     if (account.gmailConnected) {
-      return 'Gmail connected';
+      services.push('Gmail');
     }
 
     if (account.calendarConnected) {
-      return 'Calendar connected';
+      services.push('Calendar');
     }
 
-    return 'Connected';
+    if (services.length === 0) {
+      return 'Connected';
+    }
+
+    return `${services.join(' & ')} connected`;
+  }
+
+  getAccountTypeLabel(account: GoogleConnectedAccount): string {
+    if (account.accountType === 'WORKSPACE') {
+      return 'Workspace';
+    }
+
+    return 'Personal';
+  }
+
+  getAccountServiceLabel(account: GoogleConnectedAccount): string {
+    return `${this.getAccountStatusLabel(account)} · ${this.getAccountTypeLabel(
+      account
+    )}`;
   }
 
   goBack(): void {

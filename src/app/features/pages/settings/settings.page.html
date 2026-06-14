@@ -138,34 +138,24 @@
           </span>
 
           <ion-icon
-            [name]="isGoogleConnected ? 'checkmark-circle-outline' : 'link-outline'"
+            [name]="isGoogleConnected ? 'add-circle-outline' : 'link-outline'"
           ></ion-icon>
         </button>
 
         @if (isGoogleConnected) {
-          <div class="integration-status">
-            <div class="status-item" [class.active]="hasGmailConnected">
-              <ion-icon
-                [name]="hasGmailConnected ? 'checkmark-circle-outline' : 'link-outline'"
-              ></ion-icon>
+          <button
+            type="button"
+            class="add-account-box"
+            [disabled]="isGoogleLoading"
+            (click)="connectGoogleCalendar()"
+          >
+            <span>
+              <ion-icon name="add-circle-outline"></ion-icon>
+              Add another Google account
+            </span>
 
-              <span>
-                Gmail
-                {{ hasGmailConnected ? 'Connected' : 'Not Connected' }}
-              </span>
-            </div>
-
-            <div class="status-item" [class.active]="hasCalendarConnected">
-              <ion-icon
-                [name]="hasCalendarConnected ? 'checkmark-circle-outline' : 'link-outline'"
-              ></ion-icon>
-
-              <span>
-                Calendar
-                {{ hasCalendarConnected ? 'Connected' : 'Not Connected' }}
-              </span>
-            </div>
-          </div>
+            <small>Connect another Gmail or Calendar account</small>
+          </button>
         }
 
         @if (!connectedAccounts.length) {
@@ -194,7 +184,7 @@
 
                   <span class="account-content">
                     <strong>{{ account.email }}</strong>
-                    <small>{{ getAccountStatusLabel(account) }}</small>
+                    <small>{{ getAccountServiceLabel(account) }}</small>
                   </span>
 
                   @if (selectedAccountId === account.id) {

@@ -230,10 +230,6 @@
     0 3px 10px rgba(0, 0, 0, 0.04);
 }
 
-.integrations-card {
-  overflow: hidden;
-}
-
 .menu-item {
   width: 100%;
   min-height: 72px;
@@ -328,35 +324,39 @@ small {
   line-height: 1.4;
 }
 
-/* GOOGLE INTEGRATION */
-
-.integration-status {
-  padding: 14px 16px 16px;
-  border-top: 1px solid #eef2ff;
-  display: grid;
-  gap: 10px;
-}
-
-.status-item {
-  min-height: 42px;
-  border-radius: 15px;
-  background: #f8fafc;
-  padding: 10px 12px;
+.add-account-box {
+  width: calc(100% - 32px);
+  margin: 14px 16px 16px;
+  padding: 14px 16px;
+  border: 1px dashed #bfdbfe;
+  border-radius: 18px;
+  background: #f8fbff;
+  text-align: left;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 800;
+  flex-direction: column;
+  gap: 4px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  ion-icon {
+    font-size: 18px;
+  }
+
+  small {
+    color: #64748b;
+    font-size: 12px;
+  }
 }
 
-.status-item.active {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.status-item ion-icon {
-  font-size: 18px;
+.add-account-box:disabled {
+  opacity: 0.7;
 }
 
 .empty-integration {
@@ -494,11 +494,6 @@ small {
 
 .account-services ion-icon {
   font-size: 15px;
-}
-
-.account-actions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .disconnect-btn {
