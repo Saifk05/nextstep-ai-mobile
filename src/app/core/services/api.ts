@@ -19,6 +19,9 @@ import {
   GmailStatusResponse,
   GmailMessagesResponse,
   GmailSummaryResponse,
+  GoogleOtpSendPayload,
+  GoogleOtpVerifyPayload,
+  GoogleOtpResponse,
 } from '../models/integration.model';
 
 import {
@@ -247,48 +250,108 @@ export class ApiService {
     );
   }
 
-    /*
-   * Google Calendar Integration
-   */
-  getGoogleConnectUrl(): Observable<GoogleConnectResponse> {
-    return this.http.get<GoogleConnectResponse>(
-      `${this.clientUrl}/integrations/google/connect`
-    );
-  }
+  /*
+ * Google Integrations
+ */
+getGoogleConnectUrl(): Observable<GoogleConnectResponse> {
+  return this.http.get<GoogleConnectResponse>(
+    `${this.clientUrl}/integrations/google/connect`
+  );
+}
 
-  getGoogleStatus(): Observable<GoogleStatusResponse> {
-    return this.http.get<GoogleStatusResponse>(
-      `${this.clientUrl}/integrations/google/status`
-    );
-  }
+getGoogleStatus(): Observable<GoogleStatusResponse> {
+  return this.http.get<GoogleStatusResponse>(
+    `${this.clientUrl}/integrations/google/status`
+  );
+}
 
-  getGoogleCalendarEvents(): Observable<GoogleCalendarEventsResponse> {
-    return this.http.get<GoogleCalendarEventsResponse>(
-      `${this.clientUrl}/integrations/google/calendar/events`
-    );
-  }
+sendGoogleConnectOtp(
+  payload: GoogleOtpSendPayload
+): Observable<GoogleOtpResponse> {
+  return this.http.post<GoogleOtpResponse>(
+    `${this.clientUrl}/integrations/google/send-otp`,
+    payload
+  );
+}
 
-  getGoogleGmailStatus(): Observable<GmailStatusResponse> {
+verifyGoogleConnectOtp(
+  payload: GoogleOtpVerifyPayload
+): Observable<GoogleOtpResponse> {
+  return this.http.post<GoogleOtpResponse>(
+    `${this.clientUrl}/integrations/google/verify-otp`,
+    payload
+  );
+}
+
+resendGoogleConnectOtp(
+  payload: GoogleOtpSendPayload
+): Observable<GoogleOtpResponse> {
+  return this.http.post<GoogleOtpResponse>(
+    `${this.clientUrl}/integrations/google/resend-otp`,
+    payload
+  );
+}
+
+disconnectGoogleAccount(accountId: string): Observable<any> {
+  return this.http.delete(
+    `${this.clientUrl}/integrations/google/accounts/${accountId}`
+  );
+}
+
+getGoogleCalendarEvents(
+  accountId?: string
+): Observable<GoogleCalendarEventsResponse> {
+  const query = accountId ? `?accountId=${accountId}` : '';
+
+  return this.http.get<GoogleCalendarEventsResponse>(
+    `${this.clientUrl}/integrations/google/calendar/events${query}`
+  );
+}
+
+getGoogleGmailStatus(): Observable<GmailStatusResponse> {
   return this.http.get<GmailStatusResponse>(
     `${this.clientUrl}/integrations/google/gmail/status`
   );
 }
 
-getGoogleGmailMessages(): Observable<GmailMessagesResponse> {
+getGoogleGmailMessages(
+  accountId?: string,
+  category?: string
+): Observable<GmailMessagesResponse> {
+  const params: string[] = [];
+
+  if (accountId) {
+    params.push(`accountId=${accountId}`);
+  }
+
+  if (category) {
+    params.push(`category=${category}`);
+  }
+
+  const query = params.length ? `?${params.join('&')}` : '';
+
   return this.http.get<GmailMessagesResponse>(
-    `${this.clientUrl}/integrations/google/gmail/messages`
+    `${this.clientUrl}/integrations/google/gmail/messages${query}`
   );
 }
 
-getGoogleUnreadMessages(): Observable<GmailMessagesResponse> {
+getGoogleUnreadMessages(
+  accountId?: string
+): Observable<GmailMessagesResponse> {
+  const query = accountId ? `?accountId=${accountId}` : '';
+
   return this.http.get<GmailMessagesResponse>(
-    `${this.clientUrl}/integrations/google/gmail/unread`
+    `${this.clientUrl}/integrations/google/gmail/unread${query}`
   );
 }
 
-getGoogleGmailSummary(): Observable<GmailSummaryResponse> {
+getGoogleGmailSummary(
+  accountId?: string
+): Observable<GmailSummaryResponse> {
+  const query = accountId ? `?accountId=${accountId}` : '';
+
   return this.http.get<GmailSummaryResponse>(
-    `${this.clientUrl}/integrations/google/gmail/summary`
+    `${this.clientUrl}/integrations/google/gmail/summary${query}`
   );
 }
 

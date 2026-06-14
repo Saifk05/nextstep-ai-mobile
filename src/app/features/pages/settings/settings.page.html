@@ -9,7 +9,7 @@
           <p class="eyebrow">NextStep AI</p>
           <h1>Settings</h1>
           <p class="subtitle">
-            Manage your profile, preferences and app experience.
+            Manage your profile, preferences and connected accounts.
           </p>
         </div>
 
@@ -93,16 +93,24 @@
         </button>
       </div>
     </section>
-<!-- 
-    <section class="menu-section">
-      <h2>Connected Accounts</h2>
 
-      <div class="menu-card">
+    <section class="menu-section">
+      <div class="section-title-row">
+        <h2>Connected Accounts</h2>
+
+        @if (connectedAccountsCount) {
+          <span class="count-badge">
+            {{ connectedAccountsCount }}
+          </span>
+        }
+      </div>
+
+      <div class="menu-card integrations-card">
         <button
           type="button"
           class="menu-item connected-account-item"
           [class.connected]="isGoogleConnected"
-          [disabled]="isGoogleLoading || isGoogleConnected"
+          [disabled]="isGoogleLoading"
           (click)="connectGoogleCalendar()"
         >
           <span class="left">
@@ -113,100 +121,118 @@
             </span>
 
             <span>
-              <strong>Google Calendar</strong>
+              <strong>Google Workspace</strong>
 
-              @if (isGoogleConnected) {
+              @if (isGoogleLoading) {
+                <small>Opening Google connection...</small>
+              } @else if (isGoogleConnected) {
                 <small>
-                  Connected {{ googleEmail ? 'as ' + googleEmail : '' }}
+                  {{ connectedAccountsCount }}
+                  connected
+                  {{ connectedAccountsCount === 1 ? 'account' : 'accounts' }}
                 </small>
               } @else {
-                <small>
-                  {{
-                    isGoogleLoading
-                      ? 'Connecting...'
-                      : 'Connect calendar to sync events'
-                  }}
-                </small>
+                <small>Connect Gmail & Calendar</small>
               }
             </span>
           </span>
 
-          @if (!isGoogleConnected) {
-            <ion-icon name="link-outline"></ion-icon>
-          }
+          <ion-icon
+            [name]="isGoogleConnected ? 'checkmark-circle-outline' : 'link-outline'"
+          ></ion-icon>
         </button>
+
+        @if (isGoogleConnected) {
+          <div class="integration-status">
+            <div class="status-item" [class.active]="hasGmailConnected">
+              <ion-icon
+                [name]="hasGmailConnected ? 'checkmark-circle-outline' : 'link-outline'"
+              ></ion-icon>
+
+              <span>
+                Gmail
+                {{ hasGmailConnected ? 'Connected' : 'Not Connected' }}
+              </span>
+            </div>
+
+            <div class="status-item" [class.active]="hasCalendarConnected">
+              <ion-icon
+                [name]="hasCalendarConnected ? 'checkmark-circle-outline' : 'link-outline'"
+              ></ion-icon>
+
+              <span>
+                Calendar
+                {{ hasCalendarConnected ? 'Connected' : 'Not Connected' }}
+              </span>
+            </div>
+          </div>
+        }
+
+        @if (!connectedAccounts.length) {
+          <div class="empty-integration">
+            <h3>No Google account connected</h3>
+            <p>
+              Connect your Google account to sync Gmail messages and calendar
+              events with NextStep AI.
+            </p>
+          </div>
+        } @else {
+          <div class="connected-list">
+            @for (account of connectedAccounts; track account.id) {
+              <article
+                class="connected-account-card"
+                [class.selected]="selectedAccountId === account.id"
+              >
+                <button
+                  type="button"
+                  class="account-select-btn"
+                  (click)="selectAccount(account.id)"
+                >
+                  <span class="account-avatar">
+                    {{ account.email.charAt(0).toUpperCase() }}
+                  </span>
+
+                  <span class="account-content">
+                    <strong>{{ account.email }}</strong>
+                    <small>{{ getAccountStatusLabel(account) }}</small>
+                  </span>
+
+                  @if (selectedAccountId === account.id) {
+                    <span class="active-pill">Active</span>
+                  }
+                </button>
+
+                <div class="account-services">
+                  <span [class.enabled]="account.gmailConnected">
+                    <ion-icon
+                      [name]="account.gmailConnected ? 'checkmark-circle-outline' : 'mail-outline'"
+                    ></ion-icon>
+                    Gmail
+                  </span>
+
+                  <span [class.enabled]="account.calendarConnected">
+                    <ion-icon
+                      [name]="account.calendarConnected ? 'checkmark-circle-outline' : 'calendar-outline'"
+                    ></ion-icon>
+                    Calendar
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  class="disconnect-btn"
+                  [disabled]="isDisconnecting"
+                  (click)="disconnectAccount(account.id)"
+                >
+                  <ion-icon name="trash-outline"></ion-icon>
+                  Disconnect
+                </button>
+              </article>
+            }
+          </div>
+        }
       </div>
-    </section> -->
-<section class="menu-section">
-  <h2>Connected Accounts</h2>
-
-  <div class="menu-card">
-    <button
-      type="button"
-      class="menu-item connected-account-item"
-      [class.connected]="isGoogleConnected"
-      [disabled]="isGoogleLoading || isGoogleConnected"
-      (click)="connectGoogleCalendar()"
-    >
-      <span class="left">
-        <span class="menu-icon google">
-          <ion-icon
-            [name]="isGoogleConnected ? 'checkmark-circle-outline' : 'calendar-outline'"
-          ></ion-icon>
-        </span>
-
-        <span>
-          <strong>Google Workspace</strong>
-
-          @if (isGoogleConnected) {
-            <small>
-              Connected Gmail & Calendar
-              {{ googleEmail ? ' • ' + googleEmail : '' }}
-            </small>
-          } @else {
-            <small>
-              {{
-                isGoogleLoading
-                  ? 'Connecting...'
-                  : 'Connect Gmail & Calendar'
-              }}
-            </small>
-          }
-        </span>
-      </span>
-
-      @if (!isGoogleConnected) {
-        <ion-icon name="link-outline"></ion-icon>
-      }
-    </button>
-
-    @if (calendarConnected || gmailConnected) {
-      <div class="integration-status">
-        <div class="status-item">
-          <ion-icon
-            [name]="calendarConnected ? 'checkmark-circle-outline' : 'link-outline'"
-          ></ion-icon>
-
-          <span>
-            Calendar
-            {{ calendarConnected ? 'Connected' : 'Not Connected' }}
-          </span>
-        </div>
-
-        <div class="status-item">
-          <ion-icon
-            [name]="gmailConnected ? 'checkmark-circle-outline' : 'link-outline'"
-          ></ion-icon>
-
-          <span>
-            Gmail
-            {{ gmailConnected ? 'Connected' : 'Not Connected' }}
-          </span>
-        </div>
-      </div>
-    }
-  </div>
-</section>
+    </section>
 
     <section class="menu-section">
       <h2>Preferences</h2>

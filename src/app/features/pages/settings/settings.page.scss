@@ -10,24 +10,13 @@
     linear-gradient(180deg, #edf4ff 0%, #ffffff 60%);
 }
 
-/* ==========================
-   HERO SECTION
-========================== */
-
 .hero-card {
   position: relative;
   overflow: hidden;
   margin: 0 -16px 22px;
   padding: 24px 20px 22px;
   border-radius: 0 0 32px 32px;
-
-  background: linear-gradient(
-    135deg,
-    #3b82f6 0%,
-    #2563eb 55%,
-    #1d4ed8 100%
-  );
-
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%);
   box-shadow: 0 24px 45px rgba(37, 99, 235, 0.28);
 }
 
@@ -54,7 +43,6 @@
 .hero-content {
   position: relative;
   z-index: 2;
-
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -88,10 +76,8 @@
   width: 58px;
   height: 58px;
   border-radius: 20px;
-
   background: rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(10px);
-
   display: grid;
   place-items: center;
 
@@ -101,24 +87,15 @@
   }
 }
 
-/* ==========================
-   USER CARD
-========================== */
-
 .user-strip {
   position: relative;
   z-index: 2;
-
   margin-top: 24px;
   padding: 14px;
-
   border-radius: 24px;
-
   background: rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(14px);
-
   border: 1px solid rgba(255, 255, 255, 0.16);
-
   display: flex;
   align-items: center;
   gap: 14px;
@@ -127,16 +104,19 @@
 .avatar {
   width: 52px;
   height: 52px;
+  min-width: 52px;
   border-radius: 18px;
-
   background: #ffffff;
   color: #2563eb;
-
   display: grid;
   place-items: center;
-
   font-size: 22px;
   font-weight: 900;
+}
+
+.user-meta {
+  flex: 1;
+  min-width: 0;
 }
 
 .user-strip h3 {
@@ -150,11 +130,14 @@
   margin: 0;
   color: rgba(255, 255, 255, 0.8);
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* ==========================
-   SUMMARY CARDS
-========================== */
+.profile-arrow {
+  color: rgba(255, 255, 255, 0.82);
+}
 
 .summary-grid {
   display: grid;
@@ -167,11 +150,8 @@
   border: none;
   border-radius: 24px;
   padding: 18px;
-
   background: white;
-
   text-align: left;
-
   box-shadow:
     0 15px 30px rgba(37, 99, 235, 0.08),
     0 3px 10px rgba(0, 0, 0, 0.04);
@@ -194,10 +174,8 @@
   width: 42px;
   height: 42px;
   border-radius: 16px;
-
   background: #eef4ff;
   color: #2563eb;
-
   display: grid;
   place-items: center;
 
@@ -205,10 +183,6 @@
     font-size: 22px;
   }
 }
-
-/* ==========================
-   MENU SECTIONS
-========================== */
 
 .menu-section {
   margin-bottom: 22px;
@@ -223,29 +197,52 @@
   text-transform: uppercase;
 }
 
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 6px 10px;
+}
+
+.section-title-row h2 {
+  margin: 0;
+}
+
+.count-badge {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .menu-card {
   overflow: hidden;
   border-radius: 24px;
   background: #ffffff;
-
   box-shadow:
     0 15px 30px rgba(37, 99, 235, 0.08),
     0 3px 10px rgba(0, 0, 0, 0.04);
 }
 
+.integrations-card {
+  overflow: hidden;
+}
+
 .menu-item {
   width: 100%;
   min-height: 72px;
-
   border: none;
   background: white;
-
   padding: 16px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   border-bottom: 1px solid #eef2ff;
 
   &:last-child {
@@ -258,26 +255,63 @@
   }
 }
 
+.menu-item:disabled {
+  opacity: 0.8;
+}
+
+.connected-account-item.connected {
+  background: linear-gradient(135deg, #f8fbff, #ffffff);
+}
+
 .left {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
+}
+
+.left > span:last-child {
+  min-width: 0;
 }
 
 .menu-icon {
   width: 44px;
   height: 44px;
+  min-width: 44px;
   border-radius: 16px;
-
   display: grid;
   place-items: center;
-
   background: #eef4ff;
   color: #2563eb;
 
   ion-icon {
     font-size: 22px;
   }
+}
+
+.menu-icon.google {
+  background: #eaf2ff;
+  color: #2563eb;
+}
+
+.menu-icon.purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.menu-icon.orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.menu-icon.green {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+.menu-icon.gray {
+  background: #f1f5f9;
+  color: #475569;
 }
 
 strong {
@@ -291,59 +325,226 @@ strong {
 small {
   color: #64748b;
   font-size: 12px;
+  line-height: 1.4;
 }
 
-/* ==========================
-   LOGOUT
-========================== */
+/* GOOGLE INTEGRATION */
+
+.integration-status {
+  padding: 14px 16px 16px;
+  border-top: 1px solid #eef2ff;
+  display: grid;
+  gap: 10px;
+}
+
+.status-item {
+  min-height: 42px;
+  border-radius: 15px;
+  background: #f8fafc;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status-item.active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.status-item ion-icon {
+  font-size: 18px;
+}
+
+.empty-integration {
+  margin: 0 16px 16px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #f8fbff;
+  border: 1px dashed #bfdbfe;
+}
+
+.empty-integration h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.empty-integration p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.connected-list {
+  display: grid;
+  gap: 12px;
+  padding: 0 16px 16px;
+}
+
+.connected-account-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.connected-account-card.selected {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.05),
+    rgba(255, 255, 255, 1)
+  );
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.08);
+}
+
+.account-select-btn {
+  width: 100%;
+  max-width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.account-avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.account-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.account-content strong {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-content small {
+  display: block;
+  margin-top: 3px;
+}
+
+.active-pill {
+  min-width: fit-content;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.account-services {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0 12px;
+}
+
+.account-services span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.account-services span.enabled {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.account-services ion-icon {
+  font-size: 15px;
+}
+
+.account-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.disconnect-btn {
+  width: fit-content;
+  height: 38px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.disconnect-btn ion-icon {
+  font-size: 15px;
+}
+
+.disconnect-btn:disabled {
+  opacity: 0.6;
+}
 
 .logout-btn {
   width: 100%;
   height: 54px;
-
   border: none;
   border-radius: 20px;
-
   background: #fff1f2;
   color: #dc2626;
-
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-
   font-weight: 800;
   font-size: 15px;
-
   margin-top: 6px;
 }
 
 .version {
   text-align: center;
   margin-top: 16px;
-
   color: #94a3b8;
   font-size: 12px;
   font-weight: 600;
-}
-
-.integration-status {
-  padding: 12px 20px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.status-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--ion-color-medium);
-}
-
-.status-item ion-icon {
-  font-size: 18px;
-  color: #22c55e;
 }

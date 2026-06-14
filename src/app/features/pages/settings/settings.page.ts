@@ -24,11 +24,14 @@ import {
   calendarOutline,
   checkmarkCircleOutline,
   linkOutline,
+  mailOutline,
+  trashOutline,
 } from 'ionicons/icons';
 
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
 import { ApiService, User } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
+import { GoogleConnectedAccount } from '../../../core/models/integration.model';
 
 @Component({
   selector: 'app-settings',
@@ -44,12 +47,12 @@ export class SettingsPage implements OnInit {
   userEmail = 'user@example.com';
   productivityScore = 0;
 
-  isGoogleConnected = false;
-  googleEmail: string | null = null;
-  isGoogleLoading = false;
+  connectedAccounts: GoogleConnectedAccount[] = [];
+  selectedAccountId = '';
 
-  calendarConnected = false;
-  gmailConnected = false;
+  isGoogleConnected = false;
+  isGoogleLoading = false;
+  isDisconnecting = false;
 
   constructor(
     private readonly navCtrl: NavController,
@@ -73,16 +76,20 @@ export class SettingsPage implements OnInit {
       calendarOutline,
       checkmarkCircleOutline,
       linkOutline,
+      mailOutline,
+      trashOutline,
     });
   }
 
   async ngOnInit(): Promise<void> {
     await this.loadUserFromStorage();
+    this.loadSelectedGoogleAccount();
     this.checkGoogleStatus();
   }
 
   async ionViewWillEnter(): Promise<void> {
     await this.loadUserFromStorage();
+    this.loadSelectedGoogleAccount();
     this.checkGoogleStatus();
   }
 
@@ -102,28 +109,43 @@ export class SettingsPage implements OnInit {
     this.userEmail = this.user.email || 'user@example.com';
   }
 
+  private loadSelectedGoogleAccount(): void {
+    this.selectedAccountId =
+      localStorage.getItem('selectedGoogleAccountId') || '';
+  }
+
   checkGoogleStatus(): void {
     this.apiService.getGoogleStatus().subscribe({
       next: (response) => {
-        this.calendarConnected = response.data.calendarConnected;
-        this.gmailConnected = response.data.gmailConnected;
+        this.connectedAccounts = response.data.accounts || [];
 
-        this.isGoogleConnected =
-          response.data.calendarConnected && response.data.gmailConnected;
+        this.isGoogleConnected = this.connectedAccounts.length > 0;
 
-        this.googleEmail = response.data.email;
+        if (this.connectedAccounts.length === 0) {
+          this.selectedAccountId = '';
+          localStorage.removeItem('selectedGoogleAccountId');
+          return;
+        }
+
+        const selectedExists = this.connectedAccounts.some(
+          (account) => account.id === this.selectedAccountId
+        );
+
+        if (!this.selectedAccountId || !selectedExists) {
+          this.selectAccount(this.connectedAccounts[0].id);
+        }
       },
       error: () => {
+        this.connectedAccounts = [];
         this.isGoogleConnected = false;
-        this.calendarConnected = false;
-        this.gmailConnected = false;
-        this.googleEmail = null;
+        this.selectedAccountId = '';
+        localStorage.removeItem('selectedGoogleAccountId');
       },
     });
   }
 
   connectGoogleCalendar(): void {
-    if (this.isGoogleLoading || this.isGoogleConnected) {
+    if (this.isGoogleLoading) {
       return;
     }
 
@@ -141,6 +163,67 @@ export class SettingsPage implements OnInit {
         );
       },
     });
+  }
+
+  selectAccount(accountId: string): void {
+    this.selectedAccountId = accountId;
+    localStorage.setItem('selectedGoogleAccountId', accountId);
+  }
+
+  disconnectAccount(accountId: string): void {
+    if (this.isDisconnecting) {
+      return;
+    }
+
+    this.isDisconnecting = true;
+
+    this.apiService.disconnectGoogleAccount(accountId).subscribe({
+      next: async () => {
+        this.isDisconnecting = false;
+        await this.showToast('Google account disconnected');
+        this.checkGoogleStatus();
+      },
+      error: async (error) => {
+        this.isDisconnecting = false;
+        await this.showToast(
+          error?.error?.message || 'Unable to disconnect account'
+        );
+      },
+    });
+  }
+
+  get selectedAccount(): GoogleConnectedAccount | undefined {
+    return this.connectedAccounts.find(
+      (account) => account.id === this.selectedAccountId
+    );
+  }
+
+  get connectedAccountsCount(): number {
+    return this.connectedAccounts.length;
+  }
+
+  get hasCalendarConnected(): boolean {
+    return this.connectedAccounts.some((account) => account.calendarConnected);
+  }
+
+  get hasGmailConnected(): boolean {
+    return this.connectedAccounts.some((account) => account.gmailConnected);
+  }
+
+  getAccountStatusLabel(account: GoogleConnectedAccount): string {
+    if (account.gmailConnected && account.calendarConnected) {
+      return 'Gmail and Calendar connected';
+    }
+
+    if (account.gmailConnected) {
+      return 'Gmail connected';
+    }
+
+    if (account.calendarConnected) {
+      return 'Calendar connected';
+    }
+
+    return 'Connected';
   }
 
   goBack(): void {
@@ -191,6 +274,7 @@ export class SettingsPage implements OnInit {
 
   private async clearAndRedirectToLogin(): Promise<void> {
     await this.storageService.clearAuthStorage();
+    localStorage.removeItem('selectedGoogleAccountId');
     this.navCtrl.navigateRoot('/login');
   }
 

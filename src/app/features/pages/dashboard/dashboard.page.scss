@@ -76,7 +76,9 @@ h1 {
 .error-card,
 .calendar-card,
 .gmail-summary-card,
-.gmail-card {
+.gmail-card,
+.account-card,
+.category-chip {
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(47, 122, 237, 0.08);
   box-shadow: 0 18px 38px rgba(47, 122, 237, 0.09);
@@ -231,6 +233,80 @@ h1 {
   color: #111827;
   font-size: 20px;
   font-weight: 900;
+  line-height: 1.35;
+}
+
+/* Connected Accounts */
+
+.accounts-list {
+  display: grid;
+  gap: 12px;
+}
+
+.account-card {
+  width: 100%;
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.account-card.active {
+  border-color: rgba(47, 122, 237, 0.38);
+  background: linear-gradient(
+    135deg,
+    rgba(47, 122, 237, 0.12),
+    rgba(255, 255, 255, 0.96)
+  );
+}
+
+.account-info {
+  min-width: 0;
+}
+
+.account-info h4 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 900;
+  word-break: break-all;
+}
+
+.account-info p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.selected-badge {
+  min-width: fit-content;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #2f7aed;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(47, 122, 237, 0.22);
+}
+
+.account-tag {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eaf2ff;
+  color: #2f7aed;
+  font-size: 11px;
+  font-weight: 900;
+  vertical-align: middle;
+  word-break: break-all;
 }
 
 /* Gmail */
@@ -260,6 +336,33 @@ h1 {
   color: #111827;
   font-size: 24px;
   font-weight: 900;
+}
+
+.category-grid {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 14px;
+  margin-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.category-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.category-chip {
+  min-width: fit-content;
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.category-chip strong {
+  color: #2f7aed;
+  margin-left: 5px;
 }
 
 .gmail-list {
@@ -312,6 +415,18 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 230px;
+}
+
+.email-category {
+  display: inline-block;
+  margin-top: 9px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eaf2ff;
+  color: #2f7aed;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
 }
 
 .unread-dot {
@@ -444,7 +559,8 @@ h1 {
 }
 
 .calendar-card:hover,
-.gmail-card:hover {
+.gmail-card:hover,
+.account-card:hover {
   transform: translateY(-2px);
 }
 
@@ -590,5 +706,14 @@ h1 {
 
   .gmail-top p {
     max-width: 180px;
+  }
+
+  .account-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .selected-badge {
+    align-self: flex-start;
   }
 }

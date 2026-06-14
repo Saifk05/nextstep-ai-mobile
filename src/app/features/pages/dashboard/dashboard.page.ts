@@ -9,10 +9,12 @@ import {
   DashboardData,
   DashboardResponse,
 } from '../../../core/models/dashboard.model';
+
 import {
   GmailMessage,
   GmailSummary,
   GoogleCalendarEvent,
+  GoogleConnectedAccount,
 } from '../../../core/models/integration.model';
 
 @Component({
@@ -27,6 +29,9 @@ export class DashboardPage implements OnInit {
   dashboard: DashboardData | null = null;
   errorMessage = '';
 
+  connectedAccounts: GoogleConnectedAccount[] = [];
+  selectedAccountId = '';
+
   calendarEvents: GoogleCalendarEvent[] = [];
   isGoogleCalendarConnected = false;
   calendarLoading = false;
@@ -39,8 +44,14 @@ export class DashboardPage implements OnInit {
   constructor(private readonly apiService: ApiService) {}
 
   ngOnInit(): void {
+    this.loadSelectedGoogleAccount();
     this.loadDashboard();
     this.loadGoogleWorkspaceData();
+  }
+
+  private loadSelectedGoogleAccount(): void {
+    this.selectedAccountId =
+      localStorage.getItem('selectedGoogleAccountId') || '';
   }
 
   loadDashboard(): void {
@@ -67,56 +78,63 @@ export class DashboardPage implements OnInit {
     this.gmailLoading = true;
 
     this.apiService.getGoogleStatus().subscribe({
-      // next: (statusResponse) => {
-      //   this.isGoogleCalendarConnected =
-      //     statusResponse.data.calendarConnected || false;
-
-      //   this.isGmailConnected = statusResponse.data.gmailConnected || false;
-
-      //   if (this.isGoogleCalendarConnected) {
-      //     this.loadGoogleCalendarEvents();
-      //   } else {
-      //     this.calendarEvents = [];
-      //     this.calendarLoading = false;
-      //   }
-
-      //   if (this.isGmailConnected) {
-      //     this.loadGmailDashboardData();
-      //   } else {
-      //     this.gmailSummary = null;
-      //     this.gmailMessages = [];
-      //     this.gmailLoading = false;
-      //   }
-      // },
       next: (statusResponse) => {
-  console.log('GOOGLE STATUS RESPONSE:', statusResponse);
+        this.connectedAccounts = statusResponse.data.accounts || [];
 
-  this.isGoogleCalendarConnected =
-    statusResponse.data.calendarConnected || false;
+        if (this.connectedAccounts.length === 0) {
+          this.selectedAccountId = '';
+          localStorage.removeItem('selectedGoogleAccountId');
 
-  this.isGmailConnected = statusResponse.data.gmailConnected || false;
+          this.isGoogleCalendarConnected = false;
+          this.isGmailConnected = false;
+          this.calendarEvents = [];
+          this.gmailSummary = null;
+          this.gmailMessages = [];
+          this.calendarLoading = false;
+          this.gmailLoading = false;
+          return;
+        }
 
-  console.log('CALENDAR CONNECTED:', this.isGoogleCalendarConnected);
-  console.log('GMAIL CONNECTED:', this.isGmailConnected);
+        const selectedExists = this.connectedAccounts.some(
+          (account) => account.id === this.selectedAccountId
+        );
 
-  if (this.isGoogleCalendarConnected) {
-    this.loadGoogleCalendarEvents();
-  } else {
-    this.calendarEvents = [];
-    this.calendarLoading = false;
-  }
+        if (!this.selectedAccountId || !selectedExists) {
+          this.selectGoogleAccount(this.connectedAccounts[0].id);
+        }
 
-  if (this.isGmailConnected) {
-    console.log('CALLING GMAIL DASHBOARD DATA');
-    this.loadGmailDashboardData();
-  } else {
-    console.log('GMAIL NOT CONNECTED FROM STATUS API');
-    this.gmailSummary = null;
-    this.gmailMessages = [];
-    this.gmailLoading = false;
-  }
-},
+        const selectedAccount = this.selectedAccount;
+
+        this.isGoogleCalendarConnected =
+          selectedAccount?.calendarConnected ||
+          selectedAccount?.enabledServices?.includes('CALENDAR') ||
+          false;
+
+        this.isGmailConnected =
+          selectedAccount?.gmailConnected ||
+          selectedAccount?.enabledServices?.includes('GMAIL') ||
+          false;
+
+        if (this.isGoogleCalendarConnected) {
+          this.loadGoogleCalendarEvents();
+        } else {
+          this.calendarEvents = [];
+          this.calendarLoading = false;
+        }
+
+        if (this.isGmailConnected) {
+          this.loadGmailDashboardData();
+        } else {
+          this.gmailSummary = null;
+          this.gmailMessages = [];
+          this.gmailLoading = false;
+        }
+      },
       error: () => {
+        this.connectedAccounts = [];
+        this.selectedAccountId = '';
+        localStorage.removeItem('selectedGoogleAccountId');
+
         this.isGoogleCalendarConnected = false;
         this.isGmailConnected = false;
         this.calendarEvents = [];
@@ -128,11 +146,53 @@ export class DashboardPage implements OnInit {
     });
   }
 
+  selectGoogleAccount(accountId: string): void {
+    this.selectedAccountId = accountId;
+    localStorage.setItem('selectedGoogleAccountId', accountId);
+
+    const account = this.selectedAccount;
+
+    this.isGoogleCalendarConnected =
+      account?.calendarConnected ||
+      account?.enabledServices?.includes('CALENDAR') ||
+      false;
+
+    this.isGmailConnected =
+      account?.gmailConnected ||
+      account?.enabledServices?.includes('GMAIL') ||
+      false;
+
+    if (this.isGoogleCalendarConnected) {
+      this.loadGoogleCalendarEvents();
+    } else {
+      this.calendarEvents = [];
+    }
+
+    if (this.isGmailConnected) {
+      this.loadGmailDashboardData();
+    } else {
+      this.gmailSummary = null;
+      this.gmailMessages = [];
+    }
+  }
+
+  get selectedAccount(): GoogleConnectedAccount | undefined {
+    return this.connectedAccounts.find(
+      (account) => account.id === this.selectedAccountId
+    );
+  }
+
   loadGoogleCalendarEvents(): void {
+    if (!this.selectedAccountId) {
+      this.calendarEvents = [];
+      this.calendarLoading = false;
+      return;
+    }
+
     this.calendarLoading = true;
 
     this.apiService
-      .getGoogleCalendarEvents()
+      .getGoogleCalendarEvents(this.selectedAccountId)
       .pipe(finalize(() => (this.calendarLoading = false)))
       .subscribe({
         next: (eventsResponse) => {
@@ -145,11 +205,18 @@ export class DashboardPage implements OnInit {
   }
 
   loadGmailDashboardData(): void {
+    if (!this.selectedAccountId) {
+      this.gmailSummary = null;
+      this.gmailMessages = [];
+      this.gmailLoading = false;
+      return;
+    }
+
     this.gmailLoading = true;
 
     forkJoin({
-      summary: this.apiService.getGoogleGmailSummary(),
-      messages: this.apiService.getGoogleGmailMessages(),
+      summary: this.apiService.getGoogleGmailSummary(this.selectedAccountId),
+      messages: this.apiService.getGoogleGmailMessages(this.selectedAccountId),
     })
       .pipe(finalize(() => (this.gmailLoading = false)))
       .subscribe({
@@ -162,6 +229,18 @@ export class DashboardPage implements OnInit {
           this.gmailMessages = [];
         },
       });
+  }
+
+  getSenderName(from: string): string {
+    if (!from) {
+      return 'Unknown sender';
+    }
+
+    if (from.includes('<')) {
+      return from.split('<')[0].trim().replace(/"/g, '') || from;
+    }
+
+    return from;
   }
 
   formatCalendarTime(value: string | null): string {
@@ -200,18 +279,6 @@ export class DashboardPage implements OnInit {
       hour: '2-digit',
       minute: '2-digit',
     });
-  }
-
-  getSenderName(from: string): string {
-    if (!from) {
-      return 'Unknown sender';
-    }
-
-    if (from.includes('<')) {
-      return from.split('<')[0].trim().replace(/"/g, '') || from;
-    }
-
-    return from;
   }
 
   handleRefresh(event: CustomEvent): void {

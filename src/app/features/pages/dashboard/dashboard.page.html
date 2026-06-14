@@ -86,9 +86,55 @@
         </div>
       </section>
 
+      @if (connectedAccounts.length) {
+        <section class="section">
+          <div class="section-header">
+            <h3>Connected Google Accounts</h3>
+          </div>
+
+          <div class="accounts-list">
+            @for (account of connectedAccounts; track account.id) {
+              <button
+                type="button"
+                class="account-card"
+                [class.active]="selectedAccountId === account.id"
+                (click)="selectGoogleAccount(account.id)"
+              >
+                <div class="account-info">
+                  <h4>{{ account.email }}</h4>
+
+                  <p>
+                    @if (account.gmailConnected) {
+                      Gmail connected
+                    }
+
+                    @if (account.gmailConnected && account.calendarConnected) {
+                      •
+                    }
+
+                    @if (account.calendarConnected) {
+                      Calendar connected
+                    }
+                  </p>
+                </div>
+
+                @if (selectedAccountId === account.id) {
+                  <span class="selected-badge">Active</span>
+                }
+              </button>
+            }
+          </div>
+        </section>
+      }
+
       <section class="section">
         <div class="section-header">
-          <h3>Inbox Summary</h3>
+          <h3>
+            Inbox Summary
+            @if (selectedAccount) {
+              <span class="account-tag">{{ selectedAccount.email }}</span>
+            }
+          </h3>
         </div>
 
         @if (gmailLoading) {
@@ -121,6 +167,41 @@
             </div>
           </div>
 
+          @if (gmailSummary?.categories) {
+            <div class="category-grid">
+              <div class="category-chip">
+                Work <strong>{{ gmailSummary?.categories?.work || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Meetings <strong>{{ gmailSummary?.categories?.meetings || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Finance <strong>{{ gmailSummary?.categories?.finance || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Invoices <strong>{{ gmailSummary?.categories?.invoices || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Subscriptions <strong>{{ gmailSummary?.categories?.subscriptions || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Promotions <strong>{{ gmailSummary?.categories?.promotions || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Social <strong>{{ gmailSummary?.categories?.social || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Personal <strong>{{ gmailSummary?.categories?.personal || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Travel <strong>{{ gmailSummary?.categories?.travel || 0 }}</strong>
+              </div>
+              <div class="category-chip">
+                Other <strong>{{ gmailSummary?.categories?.other || 0 }}</strong>
+              </div>
+            </div>
+          }
+
           @if (!gmailMessages.length) {
             <section class="empty-card small-empty">
               <div class="empty-icon">✅</div>
@@ -133,8 +214,14 @@
                 <article class="gmail-card" [class.unread]="email.isUnread">
                   <div class="gmail-top">
                     <div>
-                      <h4>{{ email.subject }}</h4>
+                      <h4>{{ email.subject || 'No subject' }}</h4>
                       <p>{{ getSenderName(email.from) }}</p>
+
+                      @if (email.category) {
+                        <span class="email-category">
+                          {{ email.category }}
+                        </span>
+                      }
                     </div>
 
                     @if (email.isUnread) {
@@ -154,7 +241,12 @@
 
       <section class="section">
         <div class="section-header">
-          <h3>Upcoming Calendar</h3>
+          <h3>
+            Upcoming Calendar
+            @if (selectedAccount) {
+              <span class="account-tag">{{ selectedAccount.email }}</span>
+            }
+          </h3>
         </div>
 
         @if (calendarLoading) {
