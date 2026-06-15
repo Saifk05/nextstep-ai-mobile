@@ -269,7 +269,7 @@ sendGoogleConnectOtp(
   payload: GoogleOtpSendPayload
 ): Observable<GoogleOtpResponse> {
   return this.http.post<GoogleOtpResponse>(
-    `${this.clientUrl}/integrations/google/send-otp`,
+    `${this.clientUrl}/integrations/google/connect/init`,
     payload
   );
 }
@@ -278,7 +278,7 @@ verifyGoogleConnectOtp(
   payload: GoogleOtpVerifyPayload
 ): Observable<GoogleOtpResponse> {
   return this.http.post<GoogleOtpResponse>(
-    `${this.clientUrl}/integrations/google/verify-otp`,
+    `${this.clientUrl}/integrations/google/connect/verify-otp`,
     payload
   );
 }

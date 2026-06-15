@@ -1,0 +1,90 @@
+<ion-content class="google-connect-content" [fullscreen]="true">
+  <div class="page">
+<section class="hero-card">
+  <div class="hero-bg-circle circle-one"></div>
+  <div class="hero-bg-circle circle-two"></div>
+
+  <div class="hero-top">
+    <button type="button" class="back-btn" (click)="goBack()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </button>
+
+    <div class="hero-copy">
+      <p class="eyebrow">Google Workspace</p>
+      <h1>Add Google Account</h1>
+      <p class="subtitle">
+        Verify your email first, then connect Gmail and Calendar securely.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <section class="form-card">
+      @if (!otpSent) {
+        <div class="step-icon">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+
+        <h2>Enter email address</h2>
+        <p class="helper">
+          We’ll send an OTP to confirm this Google account belongs to you.
+        </p>
+
+        <label class="input-label">Email address</label>
+        <input
+          class="input-box"
+          type="email"
+          placeholder="example@gmail.com"
+          [(ngModel)]="email"
+        />
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="loading"
+          (click)="sendOtp()"
+        >
+          {{ loading ? 'Sending OTP...' : 'Send OTP' }}
+        </button>
+      } @else {
+        <div class="step-icon success">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </div>
+
+        <h2>Verify OTP</h2>
+        <p class="helper">
+          Enter the OTP sent to <strong>{{ email }}</strong>
+        </p>
+
+        <label class="input-label">OTP Code</label>
+        <input
+          class="input-box otp-input"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+          placeholder="Enter OTP"
+          [(ngModel)]="otp"
+        />
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="verifying || loading"
+          (click)="verifyOtp()"
+        >
+          {{ verifying ? 'Verifying...' : 'Verify & Connect Google' }}
+        </button>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          [disabled]="loading || verifying"
+          (click)="resendOtp()"
+        >
+          <ion-icon name="refresh-outline"></ion-icon>
+          {{ loading ? 'Resending...' : 'Resend OTP' }}
+        </button>
+      }
+    </section>
+  </div>
+</ion-content>

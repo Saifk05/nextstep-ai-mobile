@@ -33,9 +33,7 @@ export const routes: Routes = [
   {
     path: 'gmail',
     loadComponent: () =>
-      import('./features/pages/gmail/gmail.page').then(
-        (m) => m.GmailPage
-      ),
+      import('./features/pages/gmail/gmail.page').then((m) => m.GmailPage),
     canActivate: [authGuard],
   },
   {
@@ -51,6 +49,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/pages/settings/profile/profile.page').then(
         (m) => m.ProfilePage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings/google-connect',
+    loadComponent: () =>
+      import('./features/pages/google-connect/google-connect.page').then(
+        (m) => m.GoogleConnectPage
       ),
     canActivate: [authGuard],
   },
@@ -73,9 +79,9 @@ export const routes: Routes = [
   {
     path: 'tasks/:id/complete',
     loadComponent: () =>
-      import('./features/pages/tasks/task-complete/task-complete.component').then(
-        (m) => m.TaskCompleteComponent
-      ),
+      import(
+        './features/pages/tasks/task-complete/task-complete.component'
+      ).then((m) => m.TaskCompleteComponent),
     canActivate: [authGuard],
   },
   {

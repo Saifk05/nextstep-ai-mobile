@@ -5,7 +5,6 @@ import {
   IonContent,
   IonIcon,
   NavController,
-  ToastController,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -32,6 +31,7 @@ import {
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
 import { ApiService, User } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
+import { ToastService } from '../../../core/services/toast';
 import { GoogleConnectedAccount } from '../../../core/models/integration.model';
 
 @Component({
@@ -59,7 +59,7 @@ export class SettingsPage implements OnInit {
     private readonly navCtrl: NavController,
     private readonly apiService: ApiService,
     private readonly storageService: StorageService,
-    private readonly toastCtrl: ToastController,
+    private readonly toastService: ToastService,
     private readonly router: Router
   ) {
     addIcons({
@@ -137,13 +137,13 @@ export class SettingsPage implements OnInit {
           this.selectAccount(accounts[0].id);
         }
       },
-      error: async () => {
+      error: () => {
         this.connectedAccounts = [];
         this.isGoogleConnected = false;
         this.selectedAccountId = '';
         localStorage.removeItem('selectedGoogleAccountId');
 
-        await this.showToast('Unable to fetch Google connection status');
+        this.showError('Unable to fetch Google connection status');
       },
     });
   }
@@ -160,9 +160,10 @@ export class SettingsPage implements OnInit {
         this.isGoogleLoading = false;
         window.location.href = response.data.url;
       },
-      error: async (error) => {
+      error: (error) => {
         this.isGoogleLoading = false;
-        await this.showToast(
+
+        this.showError(
           error?.error?.message || 'Unable to connect Google Workspace'
         );
       },
@@ -182,14 +183,15 @@ export class SettingsPage implements OnInit {
     this.isDisconnecting = true;
 
     this.apiService.disconnectGoogleAccount(accountId).subscribe({
-      next: async () => {
+      next: () => {
         this.isDisconnecting = false;
-        await this.showToast('Google account disconnected');
+        this.showSuccess('Google account disconnected');
         this.checkGoogleStatus();
       },
-      error: async (error) => {
+      error: (error) => {
         this.isDisconnecting = false;
-        await this.showToast(
+
+        this.showError(
           error?.error?.message || 'Unable to disconnect account'
         );
       },
@@ -260,7 +262,7 @@ export class SettingsPage implements OnInit {
   }
 
   comingSoon(label: string): void {
-    this.showToast(`${label} coming soon`);
+    this.showInfo(`${label} coming soon`);
   }
 
   async logout(): Promise<void> {
@@ -298,13 +300,19 @@ export class SettingsPage implements OnInit {
     this.navCtrl.navigateRoot('/login');
   }
 
-  private async showToast(message: string): Promise<void> {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 1600,
-      position: 'bottom',
-    });
+  goToGoogleOtp(): void {
+    this.router.navigate(['/settings/google-connect']);
+  }
 
-    await toast.present();
+  private showSuccess(message: string): void {
+    this.toastService.success(message);
+  }
+
+  private showError(message: string): void {
+    this.toastService.error(message);
+  }
+
+  private showInfo(message: string): void {
+    this.toastService.success(message);
   }
 }

@@ -34,19 +34,12 @@
           <p>{{ userEmail }}</p>
         </div>
 
-        <ion-icon
-          class="profile-arrow"
-          name="chevron-forward-outline"
-        ></ion-icon>
+        <ion-icon class="profile-arrow" name="chevron-forward-outline"></ion-icon>
       </div>
     </section>
 
     <section class="summary-grid">
-      <button
-        type="button"
-        class="summary-card"
-        (click)="comingSoon('Productivity')"
-      >
+      <button type="button" class="summary-card" (click)="comingSoon('Productivity')">
         <div class="icon-box blue">
           <ion-icon name="sparkles-outline"></ion-icon>
         </div>
@@ -55,11 +48,7 @@
         <p>{{ productivityScore }} Score</p>
       </button>
 
-      <button
-        type="button"
-        class="summary-card"
-        (click)="comingSoon('Daily Goal')"
-      >
+      <button type="button" class="summary-card" (click)="comingSoon('Daily Goal')">
         <div class="icon-box">
           <ion-icon name="notifications-outline"></ion-icon>
         </div>
@@ -73,11 +62,7 @@
       <h2>Account</h2>
 
       <div class="menu-card">
-        <button
-          type="button"
-          class="menu-item"
-          (click)="goToProfile($event)"
-        >
+        <button type="button" class="menu-item" (click)="goToProfile($event)">
           <span class="left">
             <span class="menu-icon">
               <ion-icon name="person-outline"></ion-icon>
@@ -111,7 +96,7 @@
           class="menu-item connected-account-item"
           [class.connected]="isGoogleConnected"
           [disabled]="isGoogleLoading"
-          (click)="connectGoogleCalendar()"
+          (click)="isGoogleConnected ? goToGoogleOtp() : connectGoogleCalendar()"
         >
           <span class="left">
             <span class="menu-icon google">
@@ -147,7 +132,7 @@
             type="button"
             class="add-account-box"
             [disabled]="isGoogleLoading"
-            (click)="connectGoogleCalendar()"
+            (click)="goToGoogleOtp()"
           >
             <span>
               <ion-icon name="add-circle-outline"></ion-icon>
@@ -228,11 +213,7 @@
       <h2>Preferences</h2>
 
       <div class="menu-card">
-        <button
-          type="button"
-          class="menu-item"
-          (click)="comingSoon('Notifications')"
-        >
+        <button type="button" class="menu-item" (click)="comingSoon('Notifications')">
           <span class="left">
             <span class="menu-icon purple">
               <ion-icon name="notifications-outline"></ion-icon>
@@ -247,11 +228,7 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
 
-        <button
-          type="button"
-          class="menu-item"
-          (click)="comingSoon('Appearance')"
-        >
+        <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
           <span class="left">
             <span class="menu-icon orange">
               <ion-icon name="color-palette-outline"></ion-icon>
@@ -272,11 +249,7 @@
       <h2>Support</h2>
 
       <div class="menu-card">
-        <button
-          type="button"
-          class="menu-item"
-          (click)="comingSoon('Help & Support')"
-        >
+        <button type="button" class="menu-item" (click)="comingSoon('Help & Support')">
           <span class="left">
             <span class="menu-icon green">
               <ion-icon name="help-circle-outline"></ion-icon>
@@ -291,11 +264,7 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
 
-        <button
-          type="button"
-          class="menu-item"
-          (click)="comingSoon('About App')"
-        >
+        <button type="button" class="menu-item" (click)="comingSoon('About App')">
           <span class="left">
             <span class="menu-icon gray">
               <ion-icon name="information-circle-outline"></ion-icon>
