@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  clientUrl: 'https://api.nextstepai.com/api/v1'
+  clientUrl: 'https://nextstep-ai-backend-mtbs.onrender.com/api/v1'
 };
