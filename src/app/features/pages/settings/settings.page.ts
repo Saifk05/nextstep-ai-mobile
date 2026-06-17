@@ -6,6 +6,7 @@ import {
   IonIcon,
   NavController,
 } from '@ionic/angular/standalone';
+import { AppPopupComponent } from '../../../shared/components/app-popup/app-popup.component';
 
 import { addIcons } from 'ionicons';
 import {
@@ -42,7 +43,7 @@ import { GoogleConnectedAccount } from '../../../core/models/integration.model';
   standalone: true,
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
-  imports: [CommonModule, IonContent, IonIcon, AppFooterComponent],
+  imports: [CommonModule, IonContent, IonIcon, AppFooterComponent, AppPopupComponent],
 })
 export class SettingsPage implements OnInit {
   private readonly privacyPolicyUrl =
@@ -69,6 +70,7 @@ export class SettingsPage implements OnInit {
   isGoogleConnected = false;
   isGoogleLoading = false;
   isDisconnecting = false;
+  showLogoutPopup = false;
 
   constructor(
     private readonly navCtrl: NavController,
@@ -350,5 +352,19 @@ export class SettingsPage implements OnInit {
 
   private showInfo(message: string): void {
     this.toastService.success(message);
+  }
+
+  openLogoutPopup(event?: Event): void {
+    this.blurActiveElement(event);
+    this.showLogoutPopup = true;
+  }
+
+  closeLogoutPopup(): void {
+    this.showLogoutPopup = false;
+  }
+
+  confirmLogout(): void {
+    this.showLogoutPopup = false;
+    this.logout();
   }
 }

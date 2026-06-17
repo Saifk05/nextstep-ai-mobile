@@ -332,13 +332,23 @@
       </div>
     </section>
 
-    <button type="button" class="logout-btn" (click)="logout()">
+    <button type="button" class="logout-btn" (click)="openLogoutPopup($event)">
       <ion-icon name="log-out-outline"></ion-icon>
       <span>Logout</span>
     </button>
 
     <p class="version">NextStep AI v1.0.0</p>
   </div>
+  <app-popup
+  [open]="showLogoutPopup"
+  title="Logout?"
+  message="Are you sure you want to logout from NextStep AI?"
+  confirmText="Logout"
+  cancelText="Cancel"
+  type="danger"
+  (close)="closeLogoutPopup()"
+  (confirm)="confirmLogout()"
+></app-popup>
 
   <app-footer></app-footer>
 </ion-content>
