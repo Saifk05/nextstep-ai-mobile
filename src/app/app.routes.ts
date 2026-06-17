@@ -60,6 +60,30 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
+  // {
+  //   path: 'settings/privacy-policy',
+  //   loadComponent: () =>
+  //     import('./features/pages/privacy-policy/privacy-policy.page').then(
+  //       (m) => m.PrivacyPolicyPage
+  //     ),
+  //   canActivate: [authGuard],
+  // },
+  // {
+  //   path: 'settings/terms-conditions',
+  //   loadComponent: () =>
+  //     import('./features/pages/terms-conditions/terms-conditions.page').then(
+  //       (m) => m.TermsConditionsPage
+  //     ),
+  //   canActivate: [authGuard],
+  // },
+  // {
+  //   path: 'settings/data-acquisition',
+  //   loadComponent: () =>
+  //     import('./features/pages/data-acquisition/data-acquisition.page').then(
+  //       (m) => m.DataAcquisitionPage
+  //     ),
+  //   canActivate: [authGuard],
+  // },
   {
     path: 'tasks',
     loadComponent: () =>

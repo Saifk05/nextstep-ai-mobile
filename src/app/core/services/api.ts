@@ -316,7 +316,8 @@ getGoogleGmailStatus(): Observable<GmailStatusResponse> {
 
 getGoogleGmailMessages(
   accountId?: string,
-  category?: string
+  pageToken?: string,
+  limit: number = 10
 ): Observable<GmailMessagesResponse> {
   const params: string[] = [];
 
@@ -324,8 +325,12 @@ getGoogleGmailMessages(
     params.push(`accountId=${accountId}`);
   }
 
-  if (category) {
-    params.push(`category=${category}`);
+  if (pageToken) {
+    params.push(`pageToken=${pageToken}`);
+  }
+
+  if (limit) {
+    params.push(`limit=${limit}`);
   }
 
   const query = params.length ? `?${params.join('&')}` : '';

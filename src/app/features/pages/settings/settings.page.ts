@@ -26,6 +26,9 @@ import {
   mailOutline,
   trashOutline,
   addCircleOutline,
+  shieldCheckmarkOutline,
+  documentTextOutline,
+  lockClosedOutline,
 } from 'ionicons/icons';
 
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
@@ -42,6 +45,18 @@ import { GoogleConnectedAccount } from '../../../core/models/integration.model';
   imports: [CommonModule, IonContent, IonIcon, AppFooterComponent],
 })
 export class SettingsPage implements OnInit {
+  private readonly privacyPolicyUrl =
+    'https://nextstep-ai-legal.vercel.app/privacy-policy';
+
+  private readonly termsConditionsUrl =
+    'https://nextstep-ai-legal.vercel.app/terms-and-conditions';
+
+  private readonly dataAcquisitionUrl =
+    'https://nextstep-ai-legal.vercel.app/data-access';
+
+  private readonly deleteAccountUrl =
+    'https://nextstep-ai-legal.vercel.app/delete-account';
+
   user: User | null = null;
 
   userName = 'User';
@@ -80,6 +95,9 @@ export class SettingsPage implements OnInit {
       mailOutline,
       trashOutline,
       addCircleOutline,
+      shieldCheckmarkOutline,
+      documentTextOutline,
+      lockClosedOutline,
     });
   }
 
@@ -191,9 +209,7 @@ export class SettingsPage implements OnInit {
       error: (error) => {
         this.isDisconnecting = false;
 
-        this.showError(
-          error?.error?.message || 'Unable to disconnect account'
-        );
+        this.showError(error?.error?.message || 'Unable to disconnect account');
       },
     });
   }
@@ -261,6 +277,26 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  goToGoogleOtp(): void {
+    this.router.navigate(['/settings/google-connect']);
+  }
+
+  openPrivacyPolicy(): void {
+    this.openExternalUrl(this.privacyPolicyUrl);
+  }
+
+  openTermsConditions(): void {
+    this.openExternalUrl(this.termsConditionsUrl);
+  }
+
+  openDataAcquisition(): void {
+    this.openExternalUrl(this.dataAcquisitionUrl);
+  }
+
+  openDeleteAccount(): void {
+    this.openExternalUrl(this.deleteAccountUrl);
+  }
+
   comingSoon(label: string): void {
     this.showInfo(`${label} coming soon`);
   }
@@ -285,6 +321,10 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  private openExternalUrl(url: string): void {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
   private blurActiveElement(event?: Event): void {
     const activeElement = document.activeElement as HTMLElement | null;
     activeElement?.blur();
@@ -298,10 +338,6 @@ export class SettingsPage implements OnInit {
     await this.storageService.clearAuthStorage();
     localStorage.removeItem('selectedGoogleAccountId');
     this.navCtrl.navigateRoot('/login');
-  }
-
-  goToGoogleOtp(): void {
-    this.router.navigate(['/settings/google-connect']);
   }
 
   private showSuccess(message: string): void {

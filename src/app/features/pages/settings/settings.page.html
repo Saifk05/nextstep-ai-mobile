@@ -281,6 +281,57 @@
       </div>
     </section>
 
+    <section class="menu-section">
+      <h2>Legal & Privacy</h2>
+
+      <div class="menu-card">
+        <button type="button" class="menu-item" (click)="openPrivacyPolicy()">
+          <span class="left">
+            <span class="menu-icon blue-soft">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Privacy Policy</strong>
+              <small>How we collect and protect your data</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
+        <button type="button" class="menu-item" (click)="openTermsConditions()">
+          <span class="left">
+            <span class="menu-icon purple">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Terms & Conditions</strong>
+              <small>Rules for using NextStep AI</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
+        <button type="button" class="menu-item" (click)="openDataAcquisition()">
+          <span class="left">
+            <span class="menu-icon green">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+            </span>
+
+            <span>
+              <strong>Data Acquisition</strong>
+              <small>How connected account data is accessed</small>
+            </span>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </section>
+
     <button type="button" class="logout-btn" (click)="logout()">
       <ion-icon name="log-out-outline"></ion-icon>
       <span>Logout</span>

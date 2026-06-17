@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div *ngIf="loading" class="loading-container">
+    <div *ngIf="loading && messages.length === 0" class="loading-container">
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
@@ -33,7 +33,7 @@
       <p>{{ errorMessage }}</p>
     </div>
 
-    <ng-container *ngIf="!loading && !errorMessage">
+    <ng-container *ngIf="(!loading || messages.length > 0) && !errorMessage">
       <section class="section">
         <div class="section-header">
           <div>
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="accounts-list">
+        <!-- <div class="accounts-list">
           <div
             *ngFor="let account of accounts"
             class="account-card"
@@ -55,7 +55,9 @@
 
             <div class="account-info">
               <h4>{{ account.email }}</h4>
-              <p>Google Account</p>
+              <p>
+                {{ account.isDefault ? 'Default Google Account' : 'Google Account' }}
+              </p>
             </div>
 
             <ion-icon
@@ -64,7 +66,33 @@
               name="checkmark-circle-outline"
             ></ion-icon>
           </div>
-        </div>
+        </div> -->
+      
+        <section class="section">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Accounts</p>
+      <h2>Select Gmail Account</h2>
+    </div>
+  </div>
+
+  <div class="account-select-card">
+    <ion-select
+      interface="popover"
+      label="Gmail Account"
+      label-placement="stacked"
+      [value]="selectedAccountId"
+      (ionChange)="onAccountChange($event)"
+    >
+      <ion-select-option
+        *ngFor="let account of accounts"
+        [value]="account.id"
+      >
+        {{ account.email }} {{ account.isDefault ? '(Default)' : '' }}
+      </ion-select-option>
+    </ion-select>
+  </div>
+</section>
       </section>
 
       <section class="summary-grid">
@@ -92,7 +120,7 @@
           </div>
         </div>
 
-        <div *ngIf="messages.length === 0" class="state-card empty-state">
+        <div *ngIf="!loading && messages.length === 0" class="state-card empty-state">
           <ion-icon class="state-icon" name="mail-outline"></ion-icon>
           <h3>No Emails Found</h3>
           <p>No emails are available for this account.</p>
@@ -119,10 +147,23 @@
           <div class="email-footer">
             <span
               class="category-badge"
-              [class.work]="message.category === 'WORK'"
+              [class.work]="message.category === 'WORK' || message.category === 'INTERVIEW'"
               [class.personal]="message.category === 'PERSONAL'"
+              [class.subscription]="message.category === 'SUBSCRIPTION'"
+              [class.meeting]="message.category === 'MEETING'"
+              [class.deadline]="message.category === 'DEADLINE'"
             >
               {{ message.category || 'INBOX' }}
+            </span>
+
+            <span
+              *ngIf="message.priority"
+              class="priority-badge"
+              [class.high]="message.priority === 'HIGH'"
+              [class.medium]="message.priority === 'MEDIUM'"
+              [class.low]="message.priority === 'LOW'"
+            >
+              {{ message.priority }}
             </span>
 
             <span *ngIf="message.isUnread" class="unread-badge">
@@ -130,6 +171,17 @@
             </span>
           </div>
         </button>
+
+        <ion-infinite-scroll
+          threshold="120px"
+          [disabled]="!nextPageToken"
+          (ionInfinite)="loadMoreMessages($event)"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="crescent"
+            loadingText="Loading more emails..."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </section>
     </ng-container>
   </div>
@@ -167,6 +219,13 @@
 
           <div class="modal-category">
             {{ selectedMessage.category || 'INBOX' }}
+          </div>
+
+          <div
+            *ngIf="selectedMessage.priority"
+            class="modal-category"
+          >
+            Priority: {{ selectedMessage.priority }}
           </div>
 
           <div class="modal-message">

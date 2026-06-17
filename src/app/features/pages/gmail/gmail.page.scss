@@ -1,275 +1,257 @@
 .gmail-content {
-  --background: #edf4ff;
+  --background: #eef5ff;
 }
 
 .page {
   min-height: 100%;
-  padding: 0 16px 120px;
+  padding: 0 14px 120px;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 35%),
-    linear-gradient(180deg, #edf4ff 0%, #ffffff 65%);
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 34%),
+    linear-gradient(180deg, #eef5ff 0%, #ffffff 72%);
 }
 
 .hero-card {
   position: relative;
   overflow: hidden;
-  margin: 0 -16px 24px;
-  padding: 24px 20px 28px;
-  border-radius: 0 0 32px 32px;
+  margin: 0 -14px 20px;
+  padding: 24px 18px 26px;
+  border-radius: 0 0 30px 30px;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%);
-  box-shadow: 0 24px 45px rgba(37, 99, 235, 0.28);
+  box-shadow: 0 22px 42px rgba(37, 99, 235, 0.28);
 }
 
 .hero-bg-circle {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .circle-one {
-  width: 180px;
-  height: 180px;
-  top: -60px;
-  right: -40px;
+  width: 130px;
+  height: 130px;
+  left: -44px;
+  bottom: -48px;
 }
 
 .circle-two {
-  width: 120px;
-  height: 120px;
-  bottom: -40px;
-  left: -30px;
+  width: 150px;
+  height: 150px;
+  right: -54px;
+  top: -34px;
 }
 
 .hero-top {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
 .back-btn,
-.refresh-btn {
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.18);
+.refresh-btn,
+.close-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.17);
   color: #ffffff;
 }
 
 .back-btn ion-icon,
-.refresh-btn ion-icon {
+.refresh-btn ion-icon,
+.close-btn ion-icon {
   font-size: 22px;
 }
 
 .hero-copy {
   flex: 1;
-  min-width: 0;
+  color: #ffffff;
 }
 
 .eyebrow {
-  margin: 0 0 6px;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 12px;
-  font-weight: 800;
+  margin: 0 0 4px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
 }
 
 .hero-copy h1 {
   margin: 0;
   color: #ffffff;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 900;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.04em;
 }
 
 .subtitle {
-  margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 14px;
-  line-height: 1.4;
+  margin: 5px 0 0;
+  max-width: 230px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .section {
-  margin-bottom: 24px;
+  margin-top: 18px;
 }
 
 .section-header {
-  margin-bottom: 14px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .section-label {
-  margin: 0 0 4px;
+  margin: 0 0 3px;
   color: #64748b;
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .section-header h2 {
   margin: 0;
-  color: #0f172a;
+  color: #020617;
   font-size: 18px;
   font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
-.accounts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.account-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 20px;
-  background: #ffffff;
-  border: 2px solid transparent;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-}
-
-.account-card.active {
-  border-color: #2563eb;
-}
-
-.account-avatar ion-icon {
-  font-size: 42px;
-  color: #2563eb;
-}
-
-.account-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.account-info h4 {
-  margin: 0;
-  color: #0f172a;
-  font-size: 15px;
-  font-weight: 800;
+.account-select-card {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
 }
 
-.account-info p {
-  margin: 4px 0 0;
-  color: #64748b;
-  font-size: 13px;
-}
-
-.selected-icon {
-  font-size: 24px;
-  color: #22c55e;
+.account-select-card ion-select {
+  width: 100%;
+  min-height: 68px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --color: #0f172a;
+  --placeholder-color: #64748b;
+  font-weight: 800;
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 11px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .summary-card {
-  padding: 18px 10px;
-  border-radius: 20px;
+  padding: 17px 8px;
+  border-radius: 18px;
   background: #ffffff;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
 }
 
 .summary-card h3 {
   margin: 0;
   color: #2563eb;
-  font-size: 24px;
-  font-weight: 900;
+  font-size: 23px;
+  font-weight: 950;
+  letter-spacing: -0.04em;
 }
 
 .summary-card p {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
   color: #64748b;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .email-card {
-  width: 100%;
   display: block;
-  padding: 18px;
-  margin: 0 0 14px;
-  border: none;
-  border-radius: 20px;
+  width: 100%;
+  margin-bottom: 13px;
+  padding: 15px;
+  border: 0;
+  border-radius: 22px;
   background: #ffffff;
   text-align: left;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-}
-
-.email-card:active {
-  transform: scale(0.98);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
 }
 
 .email-header {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 
 .email-from {
-  max-width: 62%;
-  color: #0f172a;
-  font-size: 14px;
-  font-weight: 800;
+  max-width: 64%;
   overflow: hidden;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 900;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .email-time {
+  flex: 0 0 auto;
   color: #64748b;
-  font-size: 12px;
-  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .email-subject {
-  margin: 0 0 8px;
-  color: #0f172a;
+  margin: 0;
+  color: #020617;
   font-size: 15px;
-  font-weight: 800;
-  line-height: 1.35;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 .email-snippet {
-  margin: 0;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.55;
   display: -webkit-box;
+  overflow: hidden;
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .email-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 14px;
+  gap: 9px;
+  margin-top: 13px;
 }
 
 .category-badge,
+.priority-badge,
 .unread-badge {
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 10px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .category-badge {
@@ -279,171 +261,183 @@
 
 .category-badge.work {
   background: #dbeafe;
-  color: #2563eb;
+  color: #1d4ed8;
 }
 
-.category-badge.personal {
-  background: #dcfce7;
-  color: #16a34a;
+.category-badge.subscription {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.category-badge.meeting {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.category-badge.deadline {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.priority-badge.high {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.priority-badge.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priority-badge.low {
+  background: #f1f5f9;
+  color: #334155;
 }
 
 .unread-badge {
+  margin-left: auto;
   background: #fee2e2;
-  color: #dc2626;
-}
-
-.state-card {
-  padding: 28px 20px;
-  border-radius: 24px;
-  background: #ffffff;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-}
-
-.state-icon {
-  font-size: 46px;
-  color: #2563eb;
-}
-
-.error-card .state-icon {
   color: #ef4444;
 }
 
+.loading-container {
+  padding-top: 20px;
+}
+
+.skeleton-card {
+  height: 112px;
+  margin-bottom: 14px;
+  border-radius: 22px;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+.state-card {
+  margin-top: 22px;
+  padding: 24px 18px;
+  border-radius: 24px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
+}
+
+.state-icon {
+  color: #2563eb;
+  font-size: 34px;
+}
+
 .state-card h3 {
-  margin: 12px 0 8px;
+  margin: 10px 0 5px;
   color: #0f172a;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
 }
 
 .state-card p {
   margin: 0;
   color: #64748b;
-  line-height: 1.6;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.error-card .state-icon {
+  color: #ef4444;
 }
 
-.skeleton-card {
-  height: 110px;
-  border-radius: 20px;
-  background: linear-gradient(90deg, #e2e8f0 0%, #f8fafc 50%, #e2e8f0 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-@keyframes shimmer {
-  from {
-    background-position: 200% 0;
-  }
-
-  to {
-    background-position: -200% 0;
-  }
-}
-
-/* Modal */
-
-ion-modal {
-  --border-radius: 28px 28px 0 0;
-  --height: 88%;
-  --width: 100%;
-  --backdrop-opacity: 0.35;
+ion-infinite-scroll-content {
+  min-height: 76px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .modal-content-shell {
-  --background: #f8fbff;
+  --background: #eef5ff;
 }
 
 .message-modal {
   min-height: 100%;
-  padding: 20px 18px 36px;
-  background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 36%),
-    linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+  padding: 18px 16px 30px;
+  background: linear-gradient(180deg, #eef5ff 0%, #ffffff 100%);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
-.close-btn {
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 14px;
-  background: #e2e8f0;
+.modal-header .close-btn {
+  background: #ffffff;
   color: #0f172a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn ion-icon {
-  font-size: 22px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #0f172a;
-  font-size: 20px;
+  color: #020617;
+  font-size: 19px;
   font-weight: 900;
 }
 
 .modal-body {
-  padding: 22px;
-  border-radius: 24px;
+  padding: 20px;
+  border-radius: 26px;
   background: #ffffff;
-  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
 }
 
 .modal-from {
-  margin-bottom: 12px;
   color: #2563eb;
-  font-size: 14px;
-  font-weight: 800;
-  word-break: break-word;
+  font-size: 13px;
+  font-weight: 900;
 }
 
 .modal-body h1 {
-  margin: 0 0 10px;
-  color: #0f172a;
+  margin: 10px 0;
+  color: #020617;
   font-size: 22px;
-  line-height: 1.3;
-  font-weight: 900;
-  letter-spacing: -0.3px;
+  font-weight: 950;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
 }
 
 .modal-time {
-  margin-bottom: 14px;
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .modal-category {
   display: inline-flex;
-  margin-bottom: 18px;
-  padding: 7px 13px;
+  margin-top: 12px;
+  margin-right: 8px;
+  padding: 7px 11px;
   border-radius: 999px;
-  background: #dbeafe;
-  color: #2563eb;
+  background: #e0f2fe;
+  color: #0369a1;
   font-size: 11px;
   font-weight: 900;
+  text-transform: uppercase;
 }
 
 .modal-message {
-  padding-top: 18px;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 18px;
   color: #334155;
-  font-size: 15px;
-  line-height: 1.75;
-  white-space: pre-wrap;
-  word-break: break-word;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }

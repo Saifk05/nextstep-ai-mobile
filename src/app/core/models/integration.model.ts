@@ -1,5 +1,4 @@
-export type GoogleAccountType = 'PERSONAL' | 'WORKSPACE';
-
+export type GoogleAccountType = 'PERSONAL' | 'WORK' | 'WORKSPACE';
 
 export interface GoogleConnectResponse {
   success: boolean;
@@ -28,16 +27,19 @@ export interface GoogleStatusResponse {
   message: string;
   data: {
     isConnected: boolean;
+    provider?: 'GOOGLE';
+    totalConnectedAccounts?: number;
+    defaultAccount?: GoogleConnectedAccount | null;
     accounts: GoogleConnectedAccount[];
   };
 }
 
 export interface GoogleOtpSendPayload {
-  email: string;
+  email?: string;
 }
 
 export interface GoogleOtpVerifyPayload {
-  email: string;
+  email?: string;
   otp: string;
 }
 
@@ -45,7 +47,7 @@ export interface GoogleOtpResponse {
   success: boolean;
   message: string;
   data?: {
-    email: string;
+    email?: string;
     expiryMinutes?: number;
   };
 }
@@ -59,8 +61,8 @@ export interface GoogleCalendarEvent {
   location: string;
   start: string | null;
   end: string | null;
-  htmlLink: string;
-  status: string;
+  htmlLink?: string;
+  status?: string;
 }
 
 export interface GoogleCalendarEventsResponse {
@@ -73,12 +75,18 @@ export interface GmailStatusResponse {
   success: boolean;
   message: string;
   data: {
+    accountId?: string;
+    email?: string;
     isConnected: boolean;
-    accounts: GoogleConnectedAccount[];
+    accounts?: GoogleConnectedAccount[];
   };
 }
 
 export type GmailCategory =
+  | 'INTERVIEW'
+  | 'SUBSCRIPTION'
+  | 'DEADLINE'
+  | 'MEETING'
   | 'WORK'
   | 'MEETINGS'
   | 'FINANCE'
@@ -90,23 +98,20 @@ export type GmailCategory =
   | 'TRAVEL'
   | 'OTHER';
 
+export type GmailPriority = 'HIGH' | 'MEDIUM' | 'LOW';
+
 export interface GmailMessage {
   id: string;
   threadId: string;
-  accountId: string;
-  accountEmail: string;
+  accountId?: string;
+  accountEmail?: string;
   subject: string;
   from: string;
   snippet: string;
   receivedAt: string | null;
   isUnread: boolean;
   category?: GmailCategory;
-}
-
-export interface GmailMessagesResponse {
-  success: boolean;
-  message: string;
-  data: GmailMessage[];
+  priority?: GmailPriority;
 }
 
 export interface GmailSummary {
@@ -116,17 +121,35 @@ export interface GmailSummary {
   unreadEmails: number;
   importantEmails: number;
   categories?: {
-    work: number;
-    meetings: number;
-    finance: number;
-    invoices: number;
-    subscriptions: number;
-    promotions: number;
-    social: number;
-    personal: number;
-    travel: number;
-    other: number;
+    work?: number;
+    meetings?: number;
+    finance?: number;
+    invoices?: number;
+    subscriptions?: number;
+    promotions?: number;
+    social?: number;
+    personal?: number;
+    travel?: number;
+    interview?: number;
+    deadline?: number;
+    subscription?: number;
+    meeting?: number;
+    other?: number;
   };
+}
+
+export interface GmailPagination {
+  nextPageToken: string | null;
+  resultSizeEstimate: number;
+  limit: number;
+}
+
+export interface GmailMessagesResponse {
+  success: boolean;
+  message: string;
+  summary?: GmailSummary;
+  data: GmailMessage[];
+  pagination?: GmailPagination;
 }
 
 export interface GmailSummaryResponse {

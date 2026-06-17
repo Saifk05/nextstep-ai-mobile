@@ -2,7 +2,15 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, IonIcon, IonModal } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonIcon,
+  IonModal,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import {
@@ -29,6 +37,10 @@ import { ApiService } from '../../../core/services/api';
     IonContent,
     IonIcon,
     IonModal,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class GmailPage implements OnInit {
@@ -42,6 +54,10 @@ export class GmailPage implements OnInit {
 
   selectedMessage: any = null;
   isMessageModalOpen = false;
+
+  nextPageToken: string | null = null;
+  pageLimit = 10;
+  isLoadingMore = false;
 
   summary = {
     accountId: '',
@@ -73,22 +89,13 @@ export class GmailPage implements OnInit {
   loadInbox(): void {
     this.loading = true;
     this.errorMessage = '';
+    this.nextPageToken = null;
 
-    this.apiService.getGoogleGmailStatus().subscribe({
+    this.apiService.getGoogleStatus().subscribe({
       next: (statusRes) => {
         const statusData: any = statusRes.data;
 
-        this.accounts = statusData?.accounts?.length
-          ? statusData.accounts
-          : statusData?.isConnected
-            ? [
-                {
-                  id: statusData.accountId,
-                  email: statusData.email,
-                  isConnected: statusData.isConnected,
-                },
-              ]
-            : [];
+        this.accounts = statusData?.accounts || [];
 
         if (!statusData?.isConnected || this.accounts.length === 0) {
           this.loading = false;
@@ -96,63 +103,140 @@ export class GmailPage implements OnInit {
           return;
         }
 
-        if (!this.selectedAccountId) {
-          this.selectedAccountId = this.accounts[0].id;
+        const savedAccountId =
+          localStorage.getItem('selectedGoogleAccountId') || '';
+
+        const savedAccountExists = this.accounts.some(
+          (account) => account.id === savedAccountId
+        );
+
+        if (this.selectedAccountId) {
+          const selectedExists = this.accounts.some(
+            (account) => account.id === this.selectedAccountId
+          );
+
+          if (!selectedExists) {
+            this.selectedAccountId = '';
+          }
         }
 
-        this.loadSummaryAndMessages();
-      },
-      error: (error) => {
-        console.error('Gmail status error:', error);
-        this.loading = false;
-        this.errorMessage = 'Unable to fetch Gmail connection status.';
-      },
-    });
-  }
+        if (!this.selectedAccountId) {
+          this.selectedAccountId = savedAccountExists
+            ? savedAccountId
+            : statusData.defaultAccount?.id || this.accounts[0].id;
+        }
 
-  loadSummaryAndMessages(): void {
-    this.loading = true;
-    this.errorMessage = '';
-
-    this.apiService.getGoogleGmailSummary(this.selectedAccountId).subscribe({
-      next: (summaryRes) => {
-        this.summary = {
-          accountId: summaryRes.data?.accountId || '',
-          accountEmail: summaryRes.data?.accountEmail || '',
-          totalEmails: summaryRes.data?.totalEmails || 0,
-          unreadEmails: summaryRes.data?.unreadEmails || 0,
-          importantEmails: summaryRes.data?.importantEmails || 0,
-        };
+        localStorage.setItem('selectedGoogleAccountId', this.selectedAccountId);
 
         this.loadMessages();
       },
       error: (error) => {
-        console.error('Gmail summary error:', error);
+        console.error('Google status error:', error);
         this.loading = false;
-
-        if (error?.status === 401) {
-          this.errorMessage =
-            'Gmail permission expired. Please reconnect your Google account.';
-          return;
-        }
-
-        this.errorMessage = 'Unable to fetch Gmail summary.';
+        this.errorMessage = 'Unable to fetch Google accounts.';
       },
     });
   }
 
-  loadMessages(): void {
-    this.apiService.getGoogleGmailMessages(this.selectedAccountId).subscribe({
-      next: (messagesRes) => {
-        this.messages = messagesRes.data || [];
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Gmail messages error:', error);
-        this.loading = false;
-        this.errorMessage = 'Unable to fetch Gmail messages.';
-      },
-    });
+  loadMessages(pageToken?: string): void {
+    const isLoadMore = !!pageToken;
+
+    if (isLoadMore) {
+      this.isLoadingMore = true;
+    } else {
+      this.loading = true;
+      this.messages = [];
+      this.nextPageToken = null;
+    }
+
+    this.errorMessage = '';
+
+    this.apiService
+      .getGoogleGmailMessages(
+        this.selectedAccountId,
+        pageToken,
+        this.pageLimit
+      )
+      .subscribe({
+        next: (messagesRes) => {
+          this.summary = {
+            accountId: this.selectedAccountId,
+            accountEmail: this.selectedAccount?.email || '',
+            totalEmails: messagesRes.summary?.totalEmails || 0,
+            unreadEmails: messagesRes.summary?.unreadEmails || 0,
+            importantEmails: messagesRes.summary?.importantEmails || 0,
+          };
+
+          const newMessages = messagesRes.data || [];
+
+          this.messages = isLoadMore
+            ? [...this.messages, ...newMessages]
+            : newMessages;
+
+          this.nextPageToken = messagesRes.pagination?.nextPageToken || null;
+
+          this.loading = false;
+          this.isLoadingMore = false;
+        },
+        error: (error) => {
+          console.error('Gmail messages error:', error);
+
+          this.loading = false;
+          this.isLoadingMore = false;
+
+          if (error?.status === 401 || error?.status === 403) {
+            this.errorMessage =
+              'Gmail permission expired. Please reconnect your Google account.';
+            return;
+          }
+
+          this.errorMessage = 'Unable to fetch Gmail messages.';
+        },
+      });
+  }
+
+  loadMoreMessages(event: any): void {
+    if (!this.nextPageToken || this.isLoadingMore) {
+      event.target.complete();
+      return;
+    }
+
+    this.isLoadingMore = true;
+
+    this.apiService
+      .getGoogleGmailMessages(
+        this.selectedAccountId,
+        this.nextPageToken,
+        this.pageLimit
+      )
+      .subscribe({
+        next: (messagesRes) => {
+          this.messages = [...this.messages, ...(messagesRes.data || [])];
+          this.nextPageToken = messagesRes.pagination?.nextPageToken || null;
+          this.isLoadingMore = false;
+
+          event.target.complete();
+
+          if (!this.nextPageToken) {
+            event.target.disabled = true;
+          }
+        },
+        error: (error) => {
+          console.error('Load more Gmail error:', error);
+          this.isLoadingMore = false;
+          event.target.complete();
+        },
+      });
+  }
+
+  onAccountChange(event: any): void {
+    const accountId = event.detail.value;
+
+    if (!accountId || this.selectedAccountId === accountId) {
+      return;
+    }
+
+    this.selectAccount(accountId);
   }
 
   selectAccount(accountId: string): void {
@@ -161,12 +245,22 @@ export class GmailPage implements OnInit {
     }
 
     this.selectedAccountId = accountId;
-    this.loadSummaryAndMessages();
+    localStorage.setItem('selectedGoogleAccountId', accountId);
+
+    this.messages = [];
+    this.nextPageToken = null;
+    this.resetSummary();
+
+    this.loadMessages();
+  }
+
+  get selectedAccount(): any {
+    return this.accounts.find(
+      (account) => account.id === this.selectedAccountId
+    );
   }
 
   openMessage(message: any): void {
-    console.log('Opened Gmail message:', message);
-
     this.selectedMessage = message;
     this.isMessageModalOpen = true;
   }
@@ -189,5 +283,15 @@ export class GmailPage implements OnInit {
 
   trackByMessage(index: number, item: any): string {
     return item.id;
+  }
+
+  private resetSummary(): void {
+    this.summary = {
+      accountId: '',
+      accountEmail: '',
+      totalEmails: 0,
+      unreadEmails: 0,
+      importantEmails: 0,
+    };
   }
 }
