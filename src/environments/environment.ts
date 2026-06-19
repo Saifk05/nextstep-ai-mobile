@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   clientUrl: 'http://localhost:3000/api/v1'
+  // clientUrl: 'https://nextstep-ai-backend-mtbs.onrender.com/api/v1'
 };
 
 /*
