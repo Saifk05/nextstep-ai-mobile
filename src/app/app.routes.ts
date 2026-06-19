@@ -117,7 +117,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'finance',
+    loadComponent: () =>
+      import('./features/pages/finance/finance.page').then(
+        (m) => m.FinancePage
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
     path: '**',
     redirectTo: 'login',
   },
+
 ];

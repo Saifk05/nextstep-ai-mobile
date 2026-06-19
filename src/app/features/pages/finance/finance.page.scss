@@ -1,0 +1,69 @@
+.finance-content {
+  --background: #edf4ff;
+}
+
+.page {
+  min-height: 100%;
+  padding: 24px 16px;
+}
+
+.hero-card {
+  padding: 28px 24px;
+  border-radius: 28px;
+  background: linear-gradient(
+    135deg,
+    #3b82f6 0%,
+    #2563eb 55%,
+    #1d4ed8 100%
+  );
+
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.25);
+}
+
+.eyebrow {
+  margin: 0;
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-card h1 {
+  margin: 8px 0;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin: 0;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+}
+
+.coming-soon-card {
+  margin-top: 32px;
+  padding: 48px 24px;
+  text-align: center;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.icon {
+  font-size: 64px;
+}
+
+.coming-soon-card h2 {
+  margin: 20px 0 12px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.coming-soon-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+}

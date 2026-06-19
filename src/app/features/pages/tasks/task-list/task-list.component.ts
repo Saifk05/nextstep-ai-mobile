@@ -55,6 +55,12 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('TaskListComponent Loaded:', this.router.url);
+    // this.loadTasks();
+  }
+
+
+  ionViewWillEnter(): void {
+    console.log('TaskListComponent Entered:', this.router.url);
     this.loadTasks();
   }
 

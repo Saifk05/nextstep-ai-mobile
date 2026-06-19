@@ -7,12 +7,14 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../core/services/toast';
+
 
 import {
   IonContent,
   IonIcon,
   NavController,
-  ToastController,
+  // ToastController,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -70,7 +72,7 @@ export class ProfilePage implements OnInit {
   constructor(
     private readonly apiService: ApiService,
     private readonly navCtrl: NavController,
-    private readonly toastCtrl: ToastController,
+    private readonly toastService: ToastService,
     private readonly cdr: ChangeDetectorRef,
     private readonly ngZone: NgZone
   ) {
@@ -105,7 +107,7 @@ export class ProfilePage implements OnInit {
           this.cdr.detectChanges();
         });
 
-        await this.showToast('Failed to load profile');
+        this.toastService.error('Failed to load profile');
       },
     });
   }
@@ -150,7 +152,7 @@ export class ProfilePage implements OnInit {
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      await this.showToast('Only JPG, PNG, or WEBP images are allowed');
+      this.toastService.error('Only JPG, PNG, or WEBP images are allowed');
       input.value = '';
       return;
     }
@@ -158,7 +160,7 @@ export class ProfilePage implements OnInit {
     const maxSize = 5 * 1024 * 1024;
 
     if (file.size > maxSize) {
-      await this.showToast('Image size should be less than 5MB');
+      this.toastService.error('Image size should be less than 5MB');
       input.value = '';
       return;
     }
@@ -179,7 +181,7 @@ export class ProfilePage implements OnInit {
         });
 
         input.value = '';
-        await this.showToast('Profile picture updated successfully');
+        this.toastService.success('Profile picture updated successfully');
       },
       error: async (error: unknown) => {
         console.error('PROFILE PICTURE UPLOAD ERROR', error);
@@ -190,7 +192,7 @@ export class ProfilePage implements OnInit {
         });
 
         input.value = '';
-        await this.showToast('Failed to upload profile picture');
+        this.toastService.error('Failed to upload profile picture');
       },
     });
   }
@@ -237,52 +239,72 @@ export class ProfilePage implements OnInit {
   }
 
   saveProfile(): void {
-    if (this.isSaving || this.isUploadingPhoto) {
+  if (this.isSaving || this.isUploadingPhoto) {
+    return;
+  }
+
+  if (this.form.dateOfBirth) {
+    const today = new Date();
+    const dob = new Date(this.form.dateOfBirth);
+
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < dob.getDate())
+    ) {
+      age--;
+    }
+
+    if (age < 18) {
+      this.toastService.error('You must be at least 18 years old.');
       return;
     }
-
-    this.isSaving = true;
-
-    const payload: UpdateProfileRequest = {
-      firstName: this.form.firstName?.trim() || '',
-      lastName: this.form.lastName?.trim() || '',
-      phoneNumber: this.form.phoneNumber?.trim() || '',
-      dateOfBirth: this.form.dateOfBirth || null,
-      gender: this.form.gender || null,
-    };
-
-    if (this.selectedAddress) {
-      payload.address = this.selectedAddress;
-    }
-
-    this.apiService.updateProfile(payload).subscribe({
-      next: async (response) => {
-        this.ngZone.run(() => {
-          this.profile = response.data;
-          this.setFormFromProfile();
-
-          this.addressSuggestions = [];
-          this.selectedAddress = null;
-          this.isSaving = false;
-          this.isEditMode = false;
-
-          this.cdr.detectChanges();
-        });
-
-        await this.showToast('Profile updated successfully');
-      },
-      error: async (error: unknown) => {
-        console.error('UPDATE PROFILE ERROR', error);
-
-        this.ngZone.run(() => {
-          this.isSaving = false;
-          this.cdr.detectChanges();
-        });
-
-        await this.showToast('Failed to update profile');
-      },
-    });
   }
+
+  this.isSaving = true;
+
+  const payload: UpdateProfileRequest = {
+    firstName: this.form.firstName?.trim() || '',
+    lastName: this.form.lastName?.trim() || '',
+    phoneNumber: this.form.phoneNumber?.trim() || '',
+    dateOfBirth: this.form.dateOfBirth || null,
+    gender: this.form.gender || null,
+  };
+
+  if (this.selectedAddress) {
+    payload.address = this.selectedAddress;
+  }
+
+  this.apiService.updateProfile(payload).subscribe({
+    next: (response) => {
+      this.ngZone.run(() => {
+        this.profile = response.data;
+        this.setFormFromProfile();
+
+        this.addressSuggestions = [];
+        this.selectedAddress = null;
+        this.isSaving = false;
+        this.isEditMode = false;
+
+        this.cdr.detectChanges();
+      });
+
+      this.toastService.success('Profile updated successfully');
+    },
+    error: (error: unknown) => {
+      console.error('UPDATE PROFILE ERROR', error);
+
+      this.ngZone.run(() => {
+        this.isSaving = false;
+        this.cdr.detectChanges();
+      });
+
+      this.toastService.error('Failed to update profile');
+    },
+  });
+}
 
   goBack(): void {
     this.navCtrl.navigateBack('/settings');
@@ -330,13 +352,27 @@ export class ProfilePage implements OnInit {
     return this.profile.address.description || 'Address not added';
   }
 
-  private async showToast(message: string): Promise<void> {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 2000,
-      position: 'bottom',
-    });
+ onFirstNameInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const cleanValue = input.value.replace(/[^a-zA-Z\s]/g, '');
 
-    await toast.present();
-  }
+  input.value = cleanValue;
+  this.form.firstName = cleanValue;
+}
+
+onLastNameInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const cleanValue = input.value.replace(/[^a-zA-Z\s]/g, '');
+
+  input.value = cleanValue;
+  this.form.lastName = cleanValue;
+}
+
+onPhoneNumberInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const cleanValue = input.value.replace(/\D/g, '').slice(0, 10);
+
+  input.value = cleanValue;
+  this.form.phoneNumber = cleanValue;
+}
 }

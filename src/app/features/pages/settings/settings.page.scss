@@ -543,3 +543,24 @@ small {
   font-size: 12px;
   font-weight: 600;
 }
+.menu-item {
+  text-align: left;
+}
+
+.menu-item .left {
+  flex: 1;
+}
+
+.menu-item .left > span:last-child {
+  flex: 1;
+  text-align: left;
+}
+
+.menu-item strong,
+.menu-item small {
+  text-align: left;
+}
+
+.menu-item > ion-icon {
+  margin-left: 12px;
+}
