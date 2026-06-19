@@ -19,14 +19,14 @@
     <div class="page">
       <section class="hero">
         <div class="hero-copy">
-          <p class="date">
-            {{ dashboard.greeting.day }} • {{ dashboard.greeting.date }}
-          </p>
-
           <h1>
             {{ dashboard.greeting.message }},<br />
             {{ dashboard.user.firstName }}
           </h1>
+
+          <p class="date">
+            {{ dashboard.greeting.day }} • {{ dashboard.greeting.date | date:'dd-MM-yyyy' }}
+          </p>
 
           <p class="subtitle">Ready to take your next step today?</p>
         </div>
@@ -49,7 +49,9 @@
         <h2>{{ dashboard.todayFocus.title }}</h2>
         <p>{{ dashboard.todayFocus.description }}</p>
 
-        <button class="primary-btn">Start Planning</button>
+        <button class="primary-btn" (click)="goToAddTask()">
+          Start Planning
+        </button>
       </section>
 
       <section class="stats-grid">
@@ -59,13 +61,13 @@
         </div>
 
         <div class="stat-card">
-          <span>Active Goals</span>
-          <strong>{{ dashboard.summary.activeGoals }}</strong>
+          <span>Completed</span>
+          <strong>{{ dashboard.summary.completedTasks }}</strong>
         </div>
 
         <div class="stat-card">
-          <span>Unread Emails</span>
-          <strong>{{ gmailSummary?.unreadEmails || 0 }}</strong>
+          <span>Pending</span>
+          <strong>{{ dashboard.summary.pendingTasks }}</strong>
         </div>
 
         <div class="stat-card highlight">
@@ -78,11 +80,56 @@
         <div>
           <p>Productivity</p>
           <h3>{{ dashboard.productivity.todayScore }}%</h3>
+          <small>Weekly score {{ dashboard.productivity.weeklyScore }}%</small>
         </div>
 
         <div class="progress-ring">
           <span>{{ dashboard.productivity.currentStreak }}</span>
           <small>day streak</small>
+        </div>
+      </section>
+
+      @if (dashboard.tasks.todayTasks.length) {
+        <section class="section">
+          <div class="section-header">
+            <h3>Today’s Tasks</h3>
+          </div>
+
+          <div class="task-list">
+            @for (task of dashboard.tasks.todayTasks; track task._id) {
+              <article class="task-card">
+                <div>
+                  <h4>{{ task.title }}</h4>
+                  <p>{{ task.category }} • {{ task.priority }}</p>
+                </div>
+
+                <span
+                  class="status-pill"
+                  [class.completed]="task.status === 'COMPLETED'"
+                >
+                  {{ task.status }}
+                </span>
+              </article>
+            }
+          </div>
+        </section>
+      }
+
+      <section class="section">
+        <div class="section-header">
+          <h3>Quick Actions</h3>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn" (click)="goToAddTask()">
+            <span>＋</span>
+            Add another task
+          </button>
+
+          <button class="action-btn" (click)="createGoal()">
+            <span>＋</span>
+            Create your first goal
+          </button>
         </div>
       </section>
 
@@ -102,20 +149,7 @@
               >
                 <div class="account-info">
                   <h4>{{ account.email }}</h4>
-
-                  <p>
-                    @if (account.gmailConnected) {
-                      Gmail connected
-                    }
-
-                    @if (account.gmailConnected && account.calendarConnected) {
-                      •
-                    }
-
-                    @if (account.calendarConnected) {
-                      Calendar connected
-                    }
-                  </p>
+                  <p>Gmail & Calendar</p>
                 </div>
 
                 @if (selectedAccountId === account.id) {
@@ -147,7 +181,7 @@
           <section class="empty-card">
             <div class="empty-icon">✉️</div>
             <h3>Gmail not connected</h3>
-            <p>Connect Google Workspace from settings to see your inbox summary.</p>
+            <p>Connect Google Workspace from settings.</p>
           </section>
         } @else {
           <div class="gmail-summary-grid">
@@ -167,50 +201,9 @@
             </div>
           </div>
 
-          @if (gmailSummary?.categories) {
-            <div class="category-grid">
-              <div class="category-chip">
-                Work <strong>{{ gmailSummary?.categories?.work || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Meetings <strong>{{ gmailSummary?.categories?.meetings || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Finance <strong>{{ gmailSummary?.categories?.finance || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Invoices <strong>{{ gmailSummary?.categories?.invoices || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Subscriptions <strong>{{ gmailSummary?.categories?.subscriptions || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Promotions <strong>{{ gmailSummary?.categories?.promotions || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Social <strong>{{ gmailSummary?.categories?.social || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Personal <strong>{{ gmailSummary?.categories?.personal || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Travel <strong>{{ gmailSummary?.categories?.travel || 0 }}</strong>
-              </div>
-              <div class="category-chip">
-                Other <strong>{{ gmailSummary?.categories?.other || 0 }}</strong>
-              </div>
-            </div>
-          }
-
-          @if (!gmailMessages.length) {
-            <section class="empty-card small-empty">
-              <div class="empty-icon">✅</div>
-              <h3>No recent emails</h3>
-              <p>Your inbox looks clear for now.</p>
-            </section>
-          } @else {
+          @if (gmailMessages.length) {
             <div class="gmail-list">
-              @for (email of gmailMessages.slice(0, 3); track email.id) {
+              @for (email of gmailMessages.slice(0, 2); track email.id) {
                 <article class="gmail-card" [class.unread]="email.isUnread">
                   <div class="gmail-top">
                     <div>
@@ -230,7 +223,6 @@
                   </div>
 
                   <p class="gmail-snippet">{{ email.snippet }}</p>
-
                   <small>{{ formatEmailTime(email.receivedAt) }}</small>
                 </article>
               }
@@ -253,13 +245,13 @@
           <section class="empty-card">
             <div class="empty-icon">⌛</div>
             <h3>Loading calendar...</h3>
-            <p>Fetching your upcoming Google Calendar events.</p>
+            <p>Fetching upcoming events.</p>
           </section>
         } @else if (!isGoogleCalendarConnected) {
           <section class="empty-card">
             <div class="empty-icon">📅</div>
             <h3>Calendar not connected</h3>
-            <p>Connect Google Workspace from settings to see your upcoming events.</p>
+            <p>Connect Google Workspace from settings.</p>
           </section>
         } @else if (!calendarEvents.length) {
           <section class="empty-card">
@@ -285,23 +277,24 @@
 
       <section class="section">
         <div class="section-header">
-          <h3>Quick Actions</h3>
+          <h3>Recent Activity</h3>
         </div>
 
-        <div class="actions">
-          @for (action of dashboard.quickActions; track action.type) {
-            <button class="action-btn">
-              <span>＋</span>
-              {{ action.title }}
-            </button>
-          }
-        </div>
-      </section>
-
-      <section class="empty-card">
-        <div class="empty-icon">☁</div>
-        <h3>No activity yet</h3>
-        <p>Add your first task or goal to start building your daily progress.</p>
+          @if ($any(dashboard).recentActivity?.length) {
+            <div class="activity-list">
+              @for (activity of $any(dashboard).recentActivity; track activity.id) {
+                <article class="activity-card">
+                  <h4>{{ activity.title }}</h4>
+                </article>
+              }
+            </div>
+          } @else {
+          <section class="empty-card">
+            <div class="empty-icon">☁</div>
+            <h3>No activity yet</h3>
+            <p>Add your first task or goal to start building your daily progress.</p>
+          </section>
+        }
       </section>
     </div>
   }
