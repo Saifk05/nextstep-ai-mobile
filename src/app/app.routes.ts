@@ -53,6 +53,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'settings/appearance',
+    loadComponent: () =>
+      import('./features/pages/settings/appearance/appearance.component').then(
+        (m) => m.AppearanceComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'settings/google-connect',
     loadComponent: () =>
       import('./features/pages/google-connect/google-connect.page').then(
@@ -60,30 +68,6 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-  // {
-  //   path: 'settings/privacy-policy',
-  //   loadComponent: () =>
-  //     import('./features/pages/privacy-policy/privacy-policy.page').then(
-  //       (m) => m.PrivacyPolicyPage
-  //     ),
-  //   canActivate: [authGuard],
-  // },
-  // {
-  //   path: 'settings/terms-conditions',
-  //   loadComponent: () =>
-  //     import('./features/pages/terms-conditions/terms-conditions.page').then(
-  //       (m) => m.TermsConditionsPage
-  //     ),
-  //   canActivate: [authGuard],
-  // },
-  // {
-  //   path: 'settings/data-acquisition',
-  //   loadComponent: () =>
-  //     import('./features/pages/data-acquisition/data-acquisition.page').then(
-  //       (m) => m.DataAcquisitionPage
-  //     ),
-  //   canActivate: [authGuard],
-  // },
   {
     path: 'tasks',
     loadComponent: () =>
@@ -124,10 +108,8 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-
   {
     path: '**',
     redirectTo: 'login',
   },
-
 ];

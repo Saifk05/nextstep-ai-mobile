@@ -209,7 +209,7 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
 
-        <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
+        <!-- <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
           <span class="left">
             <span class="menu-icon orange">
               <ion-icon name="color-palette-outline"></ion-icon>
@@ -222,7 +222,27 @@
           </span>
 
           <ion-icon name="chevron-forward-outline"></ion-icon>
-        </button>
+        </button> -->
+        
+        <button
+          type="button"
+          class="menu-item"
+          (click)="goToAppearance($event)"
+        >
+      <span class="left">
+        <span class="menu-icon orange">
+          <ion-icon name="color-palette-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>Appearance</strong>
+          <small>Theme and display settings</small>
+        </span>
+  </span>
+
+  <ion-icon name="chevron-forward-outline"></ion-icon>
+</button>
+      
       </div>
     </section>
 
@@ -316,7 +336,7 @@
     <button type="button" class="logout-btn" (click)="openLogoutPopup($event)">
       <ion-icon name="log-out-outline"></ion-icon>
       <span>Logout</span>
-    </button>
+    </button>(click)="comingSoon('Appearance')"
 
     <p class="version">NextStep AI v1.0.0</p>
   </div>

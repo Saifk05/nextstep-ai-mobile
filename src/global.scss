@@ -178,3 +178,99 @@ ion-router-outlet .ion-page-hidden {
 ion-router-outlet > .ion-page:not(.ion-page-hidden) {
   display: block;
 }
+
+/* ===============================
+   BLACK & WHITE DARK THEME
+================================ */
+
+body.dark-theme {
+  --ion-background-color: #000000;
+  --ion-text-color: #ffffff;
+  color-scheme: dark;
+}
+
+body.dark-theme ion-content {
+  --background: #000000;
+}
+
+/* Whole page */
+
+body.dark-theme .page {
+  background: #000000 !important;
+}
+
+/* Headers */
+
+body.dark-theme .hero-card {
+  background: #111111 !important;
+  color: #ffffff !important;
+}
+
+/* White cards */
+
+body.dark-theme .summary-card,
+body.dark-theme .stat-card,
+body.dark-theme .menu-card,
+body.dark-theme .menu-item,
+body.dark-theme .email-card,
+body.dark-theme .task-card,
+body.dark-theme .section-card,
+body.dark-theme .preview-card {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+/* Text inside white cards */
+
+body.dark-theme .summary-card *,
+body.dark-theme .stat-card *,
+body.dark-theme .menu-card *,
+body.dark-theme .menu-item *,
+body.dark-theme .email-card *,
+body.dark-theme .task-card * {
+  color: #000000 !important;
+}
+
+/* Footer */
+
+body.dark-theme .footer-container,
+body.dark-theme .bottom-nav {
+  background: #111111 !important;
+  border-top: 1px solid #2a2a2a !important;
+}
+
+/* Icons */
+
+body.dark-theme ion-icon {
+  color: inherit;
+}
+
+/* Inputs */
+
+body.dark-theme ion-input,
+body.dark-theme ion-textarea,
+body.dark-theme ion-select {
+  --background: #1a1a1a;
+  --color: #ffffff;
+  --placeholder-color: #9ca3af;
+}
+
+/* Generic headings */
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+  color: #ffffff;
+}
+
+/* Generic text */
+
+body.dark-theme p,
+body.dark-theme small,
+body.dark-theme span {
+  color: #d1d5db;
+}
