@@ -105,16 +105,29 @@
       </div>
 
       <div class="social-row">
-        <button type="button">
-          <ion-icon name="logo-google"></ion-icon>
-          <span>Google</span>
-        </button>
+  <button
+    type="button"
+    (click)="loginWithGoogle()"
+    [disabled]="loading"
+  >
+  <img
+    src="assets/icon/google-logo.png"
+    alt="Google"
+  />
 
-        <button type="button">
-          <ion-icon name="logo-facebook"></ion-icon>
-          <span>Facebook</span>
-        </button>
-      </div>
+  <span>Continue with Google</span>
+    </button>
+<!-- 
+  <button
+    type="button"
+    (click)="loginWithFacebook()"
+    [disabled]="loading"
+  >
+    <ion-icon name="logo-facebook"></ion-icon>
+    <span>Facebook</span>
+  </button> -->
+</div>
+
     </section>
   </div>
 </ion-content>

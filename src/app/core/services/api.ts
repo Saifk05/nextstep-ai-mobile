@@ -48,6 +48,11 @@ export interface LogoutPayload {
   userId: string;
 }
 
+export interface SocialLoginPayload {
+  provider: 'GOOGLE' | 'FACEBOOK';
+  idToken: string;
+}
+
 export interface User {
   id: string;
   firstName: string;
@@ -360,4 +365,10 @@ getGoogleGmailSummary(
   );
 }
 
+socialLogin(payload: SocialLoginPayload): Observable<AuthResponse> {
+  return this.http.post<AuthResponse>(
+    `${this.clientUrl}/auth/social-login`,
+    payload,
+  );
+}
 }

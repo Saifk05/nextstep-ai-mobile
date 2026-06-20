@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "93550905418",
+    "project_id": "nextstep-ai-c11b3",
+    "storage_bucket": "nextstep-ai-c11b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93550905418:android:a99c8b2b8e965e3afcfeb3",
+        "android_client_info": {
+          "package_name": "com.nextstep.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93550905418-l6u3rsfligeu68um7nift5icg01fe75r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nextstep.ai",
+            "certificate_hash": "a0eca56a3152470e9585746aa92198f2fed21784"
+          }
+        },
+        {
+          "client_id": "93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANDLB9wPLTkS-snhF9vsI3HaG5lMjieO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
