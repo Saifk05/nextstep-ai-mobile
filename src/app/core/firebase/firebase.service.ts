@@ -20,7 +20,7 @@ export class FirebaseService {
     if (Capacitor.isNativePlatform()) {
       await SocialLogin.initialize({
         google: {
-          webClientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
+          webClientId: 'Y93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com',
         },
       });
     }
