@@ -222,3 +222,15 @@ body.dark-theme {
 
   --app-shadow-lg: 0 24px 44px rgba(0,0,0,0.55);
 }
+
+:root {
+  --activity-card-bg: #ffffff;
+  --activity-card-border: #e2e8f0;
+  --activity-icon-bg: #eff6ff;
+}
+
+body.dark-theme {
+  --activity-card-bg: #151515;
+  --activity-card-border: #2a2a2a;
+  --activity-icon-bg: #1f1f1f;
+}

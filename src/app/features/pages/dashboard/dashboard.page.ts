@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { finalize, forkJoin } from 'rxjs';
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { ApiService } from '../../../core/services/api';
@@ -10,6 +10,11 @@ import {
   DashboardData,
   DashboardResponse,
 } from '../../../core/models/dashboard.model';
+import { addIcons } from 'ionicons';
+import {
+  checkmarkCircle,
+  createOutline,
+} from 'ionicons/icons';
 
 import {
   GmailMessage,
@@ -23,7 +28,7 @@ import {
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, DatePipe, IonContent, AppFooterComponent],
+  imports: [CommonModule, DatePipe, IonContent, IonIcon, AppFooterComponent],
 })
 export class DashboardPage implements OnInit {
   loading = false;
@@ -46,7 +51,12 @@ export class DashboardPage implements OnInit {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly toastService: ToastService
-  ) {}
+  ) {
+    addIcons({
+      checkmarkCircle,
+      createOutline,
+    });
+  }
 
   ngOnInit(): void {
     this.loadSelectedGoogleAccount();

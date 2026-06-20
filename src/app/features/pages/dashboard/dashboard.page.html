@@ -275,7 +275,67 @@
         }
       </section>
 
+
       <section class="section">
+
+  <div class="section-header">
+    <h3>Recent Activity</h3>
+  </div>
+
+  @if ($any(dashboard).recentActivity?.length) {
+
+    <div class="activity-list">
+
+      @for (activity of $any(dashboard).recentActivity; track activity.date) {
+
+        <article class="activity-card">
+
+          <div class="activity-icon">
+            <ion-icon
+              [name]="activity.icon || 'checkmark-circle'">
+            </ion-icon>
+          </div>
+
+          <div class="activity-info">
+
+            <h4>{{ activity.title }}</h4>
+
+            <p>{{ activity.description }}</p>
+
+            <span>
+              {{ activity.date | date:'dd MMM yyyy, h:mm a' }}
+            </span>
+
+          </div>
+
+          <div class="activity-arrow">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+
+        </article>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <section class="empty-card">
+
+      <div class="empty-icon">☁</div>
+
+      <h3>No activity yet</h3>
+
+      <p>
+        Add your first task or goal to start building your daily progress.
+      </p>
+
+    </section>
+
+  }
+
+</section>
+      <!-- <section class="section">
         <div class="section-header">
           <h3>Recent Activity</h3>
         </div>
@@ -295,7 +355,7 @@
             <p>Add your first task or goal to start building your daily progress.</p>
           </section>
         }
-      </section>
+      </section> -->
     </div>
   }
 
