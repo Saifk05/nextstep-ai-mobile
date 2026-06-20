@@ -253,8 +253,8 @@ export class SettingsPage implements OnInit {
   }
 
   getAccountTypeLabel(account: GoogleConnectedAccount): string {
-    if (account.accountType === 'WORKSPACE') {
-      return 'Workspace';
+    if (account.accountType === 'WORK') {
+      return 'Work';
     }
 
     return 'Personal';

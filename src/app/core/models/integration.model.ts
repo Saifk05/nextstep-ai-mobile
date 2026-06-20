@@ -1,4 +1,4 @@
-export type GoogleAccountType = 'PERSONAL' | 'WORK' | 'WORKSPACE';
+export type GoogleAccountType = 'PERSONAL' | 'WORK';
 
 export interface GoogleConnectResponse {
   success: boolean;

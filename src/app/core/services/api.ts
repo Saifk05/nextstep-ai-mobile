@@ -22,6 +22,7 @@ import {
   GoogleOtpSendPayload,
   GoogleOtpVerifyPayload,
   GoogleOtpResponse,
+  GoogleAccountType,
 } from '../models/integration.model';
 
 import {
@@ -258,9 +259,11 @@ export class ApiService {
   /*
  * Google Integrations
  */
-getGoogleConnectUrl(): Observable<GoogleConnectResponse> {
+getGoogleConnectUrl(
+  accountType: GoogleAccountType = 'PERSONAL'
+): Observable<GoogleConnectResponse> {
   return this.http.get<GoogleConnectResponse>(
-    `${this.clientUrl}/integrations/google/connect`
+    `${this.clientUrl}/integrations/google/connect?accountType=${accountType}`
   );
 }
 
