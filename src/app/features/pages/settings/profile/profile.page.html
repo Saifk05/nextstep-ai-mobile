@@ -57,11 +57,10 @@
               {{ profile.firstName || 'Not added' }}
             </div>
           } @else {
-            <input
-              type="text"
-              [(ngModel)]="form.firstName"
-              placeholder="Enter first name"
-            />
+          <input
+            [ngModel]="form.firstName"
+            (input)="onFirstNameInput($event)"
+          />
           }
         </div>
 
@@ -73,10 +72,9 @@
               {{ profile.lastName || 'Not added' }}
             </div>
           } @else {
-            <input
-              type="text"
+              <input
               [(ngModel)]="form.lastName"
-              placeholder="Enter last name"
+              (input)="onLastNameInput($event)"
             />
           }
         </div>
@@ -99,8 +97,10 @@
           } @else {
             <input
               type="tel"
-              [(ngModel)]="form.phoneNumber"
-              placeholder="Enter phone number"
+              [ngModel]="form.phoneNumber"
+              (input)="onPhoneNumberInput($event)"
+              maxlength="10"
+              inputmode="numeric"
             />
           }
         </div>

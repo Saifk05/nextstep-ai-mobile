@@ -21,26 +21,36 @@ html {
 }
 
 :root {
-  --app-primary: #2675ea;
-  --app-primary-dark: #1f5fd0;
 
-  --app-success: #12b76a;
-  --app-warning: #f79009;
-  --app-danger: #f04438;
-
-  --app-text-primary: #101828;
-  --app-text-secondary: #667085;
-
-  --app-border: #dce4f2;
+  /* LIGHT MODE */
 
   --app-bg: #ffffff;
-  --app-bg-secondary: #f8faff;
 
-  --app-radius-sm: 12px;
-  --app-radius-md: 16px;
-  --app-radius-lg: 24px;
+  --app-surface: #ffffff;
 
-  --app-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  --app-text: #071833;
+
+  --app-text-secondary: #64748b;
+
+  --app-text-muted: #94a3b8;
+
+  --app-border: #e2e8f0;
+
+  /* Original blue theme */
+
+  --app-primary: #2563eb;
+
+  --app-primary-dark: #3b82f6;
+
+  --app-primary-contrast: #ffffff;
+
+  --app-primary-soft: #eff6ff;
+
+  --app-focus-muted: rgba(255,255,255,0.88);
+
+  --app-shadow: 0 12px 28px rgba(15,23,42,0.06);
+
+  --app-shadow-lg: 0 24px 44px rgba(37,99,235,0.24);
 }
 
 *,
@@ -68,7 +78,8 @@ body {
   padding: 0;
   color-scheme: light;
   background: var(--app-bg);
-  color: var(--app-text-primary);
+   color: var(--app-text);
+  // color: var(--app-text-primary);
   font-family: 'Inter', sans-serif;
 }
 
@@ -80,7 +91,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
-  color: var(--app-text-primary);
+  color: var(--app-text);
 }
 
 p {
@@ -90,7 +101,7 @@ p {
 ion-input,
 ion-textarea,
 ion-select {
-  --color: var(--app-text-primary);
+  --color: var(--app-text);
   --placeholder-color: #98a2b3;
   --placeholder-opacity: 1;
   font-family: 'Inter', sans-serif;
@@ -98,7 +109,7 @@ ion-select {
 
 ion-input::part(native),
 ion-textarea::part(native) {
-  color: var(--app-text-primary);
+  color: var(--app-text);
   font-family: 'Inter', sans-serif;
   background: transparent;
   caret-color: var(--app-primary);
@@ -113,7 +124,7 @@ ion-textarea::part(native)::placeholder {
 ion-input::part(native)::selection,
 ion-textarea::part(native)::selection {
   background: rgba(38, 117, 234, 0.15);
-  color: var(--app-text-primary);
+  color: var(--app-text);
 }
 
 ion-button {
@@ -177,4 +188,37 @@ ion-router-outlet .ion-page-hidden {
 /* Prevent hidden Ionic pages from staying visible */
 ion-router-outlet > .ion-page:not(.ion-page-hidden) {
   display: block;
+}
+
+body.dark-theme {
+
+  color-scheme: dark;
+
+  --app-bg: #0a0a0a;
+
+  --app-surface: #151515;
+
+  --app-text: #ffffff;
+
+  --app-text-secondary: #d4d4d4;
+
+  --app-text-muted: #8c8c8c;
+
+  --app-border: #2a2a2a;
+
+  /* Yellow theme */
+
+  --app-primary: #facc15;
+
+  --app-primary-dark: #eab308;
+
+  --app-primary-contrast: #000000;
+
+  --app-primary-soft: #1f1f1f;
+
+  --app-focus-muted: rgba(0,0,0,0.75);
+
+  --app-shadow: 0 14px 30px rgba(0,0,0,0.4);
+
+  --app-shadow-lg: 0 24px 44px rgba(0,0,0,0.55);
 }

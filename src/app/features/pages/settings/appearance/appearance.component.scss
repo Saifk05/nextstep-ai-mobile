@@ -1,0 +1,257 @@
+.appearance-content {
+  --background: var(--app-bg);
+}
+
+.page {
+  min-height: 100%;
+  padding: 0 16px 120px;
+  background:
+    radial-gradient(circle at top left, var(--app-primary-soft), transparent 34%),
+    linear-gradient(180deg, var(--app-primary-soft) 0%, var(--app-bg) 62%);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  margin: 0 -16px 20px;
+  padding: 24px 20px 22px;
+  min-height: 155px;
+  border-radius: 0 0 30px 30px;
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+  box-shadow: var(--app-shadow-lg);
+  color: var(--app-primary-contrast);
+}
+
+.hero-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.back-btn {
+  width: 38px;
+  height: 38px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--app-primary-contrast);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.back-btn ion-icon {
+  font-size: 20px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--app-focus-muted);
+}
+
+h1 {
+  margin: 3px 0 0;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: var(--app-primary-contrast);
+}
+
+.subtitle {
+  position: relative;
+  z-index: 2;
+  max-width: 260px;
+  margin: 14px 0 0 50px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--app-focus-muted);
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.glow-one {
+  width: 110px;
+  height: 110px;
+  top: -34px;
+  right: -32px;
+  opacity: 0.45;
+}
+
+.glow-two {
+  width: 70px;
+  height: 70px;
+  bottom: -22px;
+  left: -20px;
+  opacity: 0.35;
+}
+
+.section-card,
+.preview-card {
+  border: 1px solid var(--app-border);
+  border-radius: 26px;
+  padding: 16px;
+  background: var(--app-surface);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--app-shadow);
+}
+
+.label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--app-primary);
+}
+
+.section-card h2 {
+  margin: 5px 0 0;
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--app-text);
+}
+
+.theme-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.theme-option {
+  width: 100%;
+  min-height: 64px;
+  border: 1px solid var(--app-border);
+  border-radius: 20px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--app-surface);
+  text-align: left;
+  transition: 0.22s ease;
+}
+
+.theme-option.active {
+  border-color: var(--app-primary);
+  box-shadow: var(--app-shadow-lg);
+}
+
+.option-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+}
+
+.option-icon ion-icon {
+  font-size: 20px;
+}
+
+.option-copy {
+  flex: 1;
+}
+
+.option-copy h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--app-text);
+}
+
+.option-copy p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--app-text-secondary);
+}
+
+.check-icon {
+  color: var(--app-primary);
+}
+
+.check-icon ion-icon {
+  font-size: 20px;
+}
+
+.preview-card {
+  margin-top: 16px;
+}
+
+.phone-preview {
+  margin-top: 14px;
+  border-radius: 24px;
+  padding: 14px;
+  background:
+    radial-gradient(circle at top right, var(--app-primary-soft), transparent 34%),
+    linear-gradient(180deg, var(--app-primary-soft), var(--app-bg));
+}
+
+.preview-top {
+  width: 58px;
+  height: 7px;
+  margin: 0 auto 16px;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.22);
+}
+
+.preview-card-inner {
+  border-radius: 18px;
+  padding: 15px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+}
+
+.preview-card-inner span {
+  width: 38px;
+  height: 38px;
+  display: block;
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+}
+
+.preview-card-inner strong {
+  display: block;
+  margin-top: 12px;
+  color: var(--app-text);
+}
+
+.preview-card-inner small {
+  display: block;
+  margin-top: 4px;
+  color: var(--app-text-secondary);
+}
+
+.preview-row {
+  height: 12px;
+  margin-top: 13px;
+  border-radius: 999px;
+  background: var(--app-primary-soft);
+}
+
+.preview-row.short {
+  width: 62%;
+}

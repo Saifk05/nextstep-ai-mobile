@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FirebaseService } from '../../../core/firebase/firebase.service';
 
 import {
   IonContent,
-  // IonText,
   IonSpinner,
   IonIcon,
   NavController,
@@ -31,12 +31,11 @@ import { ToastService } from '../../../core/services/toast';
     CommonModule,
     FormsModule,
     IonContent,
-    // IonText,
     IonSpinner,
     IonIcon,
   ],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   email = '';
   password = '';
 
@@ -50,7 +49,8 @@ export class LoginPage {
     private readonly apiService: ApiService,
     private readonly storageService: StorageService,
     private readonly toastService: ToastService,
-    private readonly navCtrl: NavController
+    private readonly navCtrl: NavController,
+    private readonly firebaseService: FirebaseService
   ) {
     addIcons({
       eyeOutline,
@@ -58,6 +58,10 @@ export class LoginPage {
       logoGoogle,
       logoFacebook,
     });
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.firebaseService.initializeGoogleLogin();
   }
 
   goToRegister(): void {
@@ -93,22 +97,11 @@ export class LoginPage {
       })
       .subscribe({
         next: async (response) => {
-          console.log('Login Response:', response);
-
           await this.storageService.setAuthData(
             response.data.accessToken,
             response.data.refreshToken,
             response.data.user
           );
-
-          const savedAccessToken =
-            await this.storageService.getAccessToken();
-
-          const savedRefreshToken =
-            await this.storageService.getRefreshToken();
-
-          console.log('Saved Access Token:', savedAccessToken);
-          console.log('Saved Refresh Token:', savedRefreshToken);
 
           this.loading = false;
 
@@ -130,4 +123,65 @@ export class LoginPage {
         },
       });
   }
+
+  async loginWithGoogle(): Promise<void> {
+    await this.socialLogin('GOOGLE');
+  }
+
+  async loginWithFacebook(): Promise<void> {
+    await this.socialLogin('FACEBOOK');
+  }
+
+  private async socialLogin(provider: 'GOOGLE' | 'FACEBOOK'): Promise<void> {
+  try {
+    this.loading = true;
+    this.errorMessage = '';
+
+    console.log('Starting social login:', provider);
+
+    const idToken =
+      provider === 'GOOGLE'
+        ? await this.firebaseService.googleLogin()
+        : await this.firebaseService.facebookLogin();
+
+    console.log('Firebase ID Token:', idToken);
+
+    this.apiService.socialLogin({ provider, idToken }).subscribe({
+      next: async (response) => {
+        console.log('Backend social login response:', response);
+
+        await this.storageService.setAuthData(
+          response.data.accessToken,
+          response.data.refreshToken,
+          response.data.user
+        );
+
+        this.loading = false;
+        this.toastService.success('Login successful');
+        await this.navCtrl.navigateRoot('/dashboard');
+      },
+
+      error: (error) => {
+        console.error('Backend social login error:', error);
+
+        this.loading = false;
+
+        const message =
+          error?.error?.message ||
+          error?.message ||
+          'Social login failed';
+
+        this.errorMessage = message;
+        this.toastService.error(message);
+      },
+    });
+  } catch (error) {
+    console.error('Firebase Google login error:', error);
+
+    this.loading = false;
+    this.errorMessage = 'Google login cancelled or failed';
+    this.toastService.error(this.errorMessage);
+  }
+}
+
 }

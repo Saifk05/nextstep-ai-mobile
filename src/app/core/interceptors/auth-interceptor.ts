@@ -44,6 +44,15 @@ function addToken(
   });
 }
 
+function isPublicAuthRequest(req: HttpRequest<unknown>): boolean {
+  return (
+    req.url.includes('/auth/login') ||
+    req.url.includes('/auth/register') ||
+    req.url.includes('/auth/refresh-token') ||
+    req.url.includes('/auth/social-login')
+  );
+}
+
 function refreshAndRetry(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
@@ -64,8 +73,12 @@ function refreshAndRetry(
   return from(storageService.getRefreshToken()).pipe(
     switchMap((refreshToken) => {
       if (!refreshToken) {
+        isRefreshing = false;
+
         return from(storageService.clearAuthStorage()).pipe(
-          switchMap(() => throwError(() => new Error('Refresh token not found')))
+          switchMap(() =>
+            throwError(() => new Error('Refresh token not found'))
+          )
         );
       }
 
@@ -108,14 +121,9 @@ export const authInterceptor: HttpInterceptorFn = (
   const storageService = inject(StorageService);
   const apiService = inject(ApiService);
 
-  const isAuthApi =
-    req.url.includes('/auth/login') ||
-    req.url.includes('/auth/register') ||
-    req.url.includes('/auth/refresh-token');
-
   const isGoogleIntegrationApi = req.url.includes('/integrations/google');
 
-  if (isAuthApi) {
+  if (isPublicAuthRequest(req)) {
     return next(req);
   }
 

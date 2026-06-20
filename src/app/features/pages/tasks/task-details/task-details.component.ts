@@ -78,27 +78,65 @@ export class TaskDetailsComponent implements OnInit {
     this.router.navigate(['/tasks']);
   }
 
+  // completeTask(): void {
+  //   console.log('Complete Task Clicked');
+
+  //   if (!this.task) {
+  //     return;
+  //   }
+
+  //   if (this.task.status === 'COMPLETED') {
+  //     this.toastService.error('Task is already completed.');
+  //     return;
+  //   }
+
+  //   if (this.task.completionType === 'PHOTO_PROOF') {
+  //     this.router.navigate(['/tasks', this.taskId, 'complete']);
+  //     return;
+  //   }
+
+  //   if (this.task.completionType === 'SELF_CONFIRM') {
+  //     console.log('Self confirm task completion API will be called here');
+  //   }
+  // }
+
   completeTask(): void {
-    console.log('Complete Task Clicked');
+  console.log('Complete Task Clicked');
 
-    if (!this.task) {
-      return;
-    }
-
-    if (this.task.status === 'COMPLETED') {
-      this.toastService.error('Task is already completed.');
-      return;
-    }
-
-    if (this.task.completionType === 'PHOTO_PROOF') {
-      this.router.navigate(['/tasks', this.taskId, 'complete']);
-      return;
-    }
-
-    if (this.task.completionType === 'SELF_CONFIRM') {
-      console.log('Self confirm task completion API will be called here');
-    }
+  if (!this.task) {
+    return;
   }
+
+  if (this.task.status === 'COMPLETED') {
+    this.toastService.error('Task is already completed.');
+    return;
+  }
+
+  if (this.task.completionType === 'PHOTO_PROOF') {
+    this.router.navigate(['/tasks', this.taskId, 'complete']);
+    return;
+  }
+
+  if (this.task.completionType === 'SELF_CONFIRM') {
+    this.isLoading = true;
+
+    this.apiService.completeTask(this.taskId).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.toastService.success('Task completed successfully.');
+        this.router.navigate(['/tasks']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.toastService.error(
+          error?.error?.message || 'Failed to complete task.'
+        );
+      },
+    });
+  }
+}
+
+
 
   formatLabel(value?: string): string {
     if (!value) return '-';

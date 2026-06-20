@@ -1,0 +1,81 @@
+<ion-content class="appearance-content" [fullscreen]="true">
+  <div class="page">
+    <section class="hero-card">
+      <div class="hero-glow glow-one"></div>
+      <div class="hero-glow glow-two"></div>
+
+      <div class="hero-top">
+        <button class="back-btn" type="button" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
+
+        <div>
+          <p class="eyebrow">Personalization</p>
+
+          <h1>Appearance</h1>
+        </div>
+      </div>
+
+      <p class="subtitle">
+        Choose how NextStep AI looks across your app.
+      </p>
+    </section>
+
+    <section class="section-card">
+      <p class="label">Theme Mode</p>
+
+      <h2>Select your preference</h2>
+
+      <div class="theme-list">
+        <button
+          class="theme-option"
+          type="button"
+          *ngFor="let option of themeOptions"
+          [class.active]="selectedTheme === option.id"
+          (click)="selectTheme(option.id)"
+        >
+          <div class="option-icon">
+            <ion-icon [name]="option.icon"></ion-icon>
+          </div>
+
+          <div class="option-copy">
+            <h3>{{ option.title }}</h3>
+
+            <p>{{ option.description }}</p>
+          </div>
+
+          <div
+            class="check-icon"
+            *ngIf="selectedTheme === option.id"
+          >
+            <ion-icon
+              name="checkmark-circle-outline"
+            ></ion-icon>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <section class="preview-card">
+      <p class="label">Preview</p>
+
+      <div class="phone-preview">
+        <div class="preview-top"></div>
+
+        <div class="preview-card-inner">
+          <span></span>
+
+          <strong>NextStep AI</strong>
+
+          <small>
+            Your smart daily workspace
+          </small>
+        </div>
+
+        <div class="preview-row"></div>
+
+        <div class="preview-row short"></div>
+      </div>
+    </section>
+  </div>
+</ion-content>

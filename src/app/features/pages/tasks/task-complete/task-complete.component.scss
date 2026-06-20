@@ -1,13 +1,23 @@
 .task-complete-content {
-  --background: #f8f5ff;
+  --background: var(--app-bg);
 }
 
 .page {
   min-height: 100%;
   padding: 22px 18px 34px;
+
   background:
-    radial-gradient(circle at top left, rgba(124, 58, 237, 0.18), transparent 34%),
-    linear-gradient(180deg, #f8f5ff 0%, #ffffff 58%);
+    radial-gradient(
+      circle at top left,
+      var(--app-primary-soft),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      180deg,
+      var(--app-primary-soft) 0%,
+      var(--app-bg) 58%
+    );
 }
 
 .top-bar {
@@ -18,7 +28,7 @@
 
   h2 {
     margin: 0;
-    color: #171426;
+    color: var(--app-text);
     font-size: 20px;
     font-weight: 800;
   }
@@ -31,11 +41,15 @@
 }
 
 .icon-btn {
-  border: none;
+  border: 1px solid var(--app-border);
+
   border-radius: 14px;
-  background: #ffffff;
-  color: #211833;
-  box-shadow: 0 10px 24px rgba(72, 52, 129, 0.1);
+
+  background: var(--app-surface);
+
+  color: var(--app-text);
+
+  box-shadow: var(--app-shadow);
 
   ion-icon {
     font-size: 22px;
@@ -44,11 +58,20 @@
 
 .hero-card {
   padding: 28px 22px;
+
   border-radius: 28px;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
-  color: #ffffff;
+
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+
+  color: var(--app-primary-contrast);
+
   text-align: center;
-  box-shadow: 0 18px 38px rgba(91, 70, 190, 0.28);
+
+  box-shadow: var(--app-shadow-lg);
 
   ion-icon {
     font-size: 42px;
@@ -57,25 +80,39 @@
 
   h1 {
     margin: 0;
+
     font-size: 27px;
+
     font-weight: 900;
+
+    color: var(--app-primary-contrast);
   }
 
   p {
     margin: 10px auto 0;
+
     max-width: 260px;
-    color: rgba(255, 255, 255, 0.82);
+
+    color: var(--app-focus-muted);
+
     font-size: 14px;
+
     line-height: 1.5;
   }
 }
 
 .form-card {
   margin-top: 18px;
+
   padding: 20px;
+
   border-radius: 26px;
-  background: #ffffff;
-  box-shadow: 0 14px 34px rgba(82, 66, 136, 0.1);
+
+  background: var(--app-surface);
+
+  border: 1px solid var(--app-border);
+
+  box-shadow: var(--app-shadow);
 }
 
 .form-group {
@@ -87,104 +124,164 @@
 
   label {
     display: block;
+
     margin-bottom: 10px;
-    color: #211833;
+
+    color: var(--app-text);
+
     font-size: 14px;
+
     font-weight: 800;
   }
 
   textarea {
     width: 100%;
+
     resize: none;
-    border: 1px solid #eee7ff;
+
+    border: 1px solid var(--app-border);
+
     border-radius: 18px;
+
     padding: 14px 15px;
-    background: #faf8ff;
-    color: #191427;
+
+    background: var(--app-bg);
+
+    color: var(--app-text);
+
     font-size: 14px;
+
     outline: none;
 
     &::placeholder {
-      color: #9b92ad;
+      color: var(--app-text-muted);
     }
 
     &:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+      border-color: var(--app-primary);
+
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
   }
 }
 
 .upload-box {
   width: 100%;
+
   min-height: 185px;
-  border: 2px dashed #c7b8ff;
+
+  border: 2px dashed var(--app-border);
+
   border-radius: 24px;
-  background: linear-gradient(180deg, #fbf9ff, #f6f1ff);
-  color: #6d5a91;
+
+  background: linear-gradient(
+    180deg,
+    var(--app-primary-soft),
+    var(--app-bg)
+  );
+
+  color: var(--app-text-secondary);
+
   text-align: center;
 
   ion-icon {
     font-size: 40px;
-    color: #7c3aed;
+
+    color: var(--app-primary);
   }
 
   h3 {
     margin: 10px 0 4px;
-    color: #211833;
+
+    color: var(--app-text);
+
     font-size: 17px;
+
     font-weight: 900;
   }
 
   p {
     margin: 0;
+
     font-size: 13px;
-    color: #8b7aa8;
+
+    color: var(--app-text-secondary);
   }
 }
 
 .proof-preview {
   position: relative;
+
   overflow: hidden;
+
   border-radius: 24px;
-  background: #f3efff;
+
+  background: var(--app-primary-soft);
 
   img {
     display: block;
+
     width: 100%;
+
     max-height: 320px;
+
     object-fit: cover;
   }
 }
 
 .remove-btn {
   position: absolute;
+
   right: 14px;
+
   bottom: 14px;
+
   border: none;
+
   border-radius: 999px;
+
   padding: 10px 16px;
+
   background: rgba(20, 15, 35, 0.78);
+
   color: #ffffff;
+
   font-size: 13px;
+
   font-weight: 800;
 }
 
 .submit-btn {
   width: 100%;
+
   min-height: 56px;
+
   margin-top: 22px;
+
   border: none;
+
   border-radius: 18px;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
-  color: #ffffff;
+
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+
+  color: var(--app-primary-contrast);
+
   font-size: 15px;
+
   font-weight: 900;
-  box-shadow: 0 16px 32px rgba(91, 70, 190, 0.28);
+
+  box-shadow: var(--app-shadow-lg);
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
 
   ion-icon {
@@ -193,6 +290,7 @@
 
   &:disabled {
     opacity: 0.6;
+
     box-shadow: none;
   }
 }

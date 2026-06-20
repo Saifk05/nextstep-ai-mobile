@@ -17,25 +17,6 @@
           <ion-icon name="settings-outline"></ion-icon>
         </div>
       </div>
-
-      <div
-        class="user-strip"
-        role="button"
-        tabindex="0"
-        (click)="goToProfile($event)"
-        (keydown.enter)="goToProfile($event)"
-      >
-        <div class="avatar">
-          {{ userName.charAt(0) }}
-        </div>
-
-        <div class="user-meta">
-          <h3>{{ userName }}</h3>
-          <p>{{ userEmail }}</p>
-        </div>
-
-        <ion-icon class="profile-arrow" name="chevron-forward-outline"></ion-icon>
-      </div>
     </section>
 
     <section class="summary-grid">
@@ -228,7 +209,7 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
 
-        <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
+        <!-- <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
           <span class="left">
             <span class="menu-icon orange">
               <ion-icon name="color-palette-outline"></ion-icon>
@@ -241,7 +222,27 @@
           </span>
 
           <ion-icon name="chevron-forward-outline"></ion-icon>
-        </button>
+        </button> -->
+        
+        <button
+          type="button"
+          class="menu-item"
+          (click)="goToAppearance($event)"
+        >
+      <span class="left">
+        <span class="menu-icon orange">
+          <ion-icon name="color-palette-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>Appearance</strong>
+          <small>Theme and display settings</small>
+        </span>
+  </span>
+
+  <ion-icon name="chevron-forward-outline"></ion-icon>
+</button>
+      
       </div>
     </section>
 

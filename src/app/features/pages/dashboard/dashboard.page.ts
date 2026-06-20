@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { finalize, forkJoin } from 'rxjs';
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
 import { IonContent } from '@ionic/angular/standalone';
-
+import { Router } from '@angular/router';
+import { ToastService } from '../../../core/services/toast';
 import { ApiService } from '../../../core/services/api';
 import {
   DashboardData,
@@ -22,7 +23,7 @@ import {
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, AppFooterComponent],
+  imports: [CommonModule, DatePipe, IonContent, AppFooterComponent],
 })
 export class DashboardPage implements OnInit {
   loading = false;
@@ -41,7 +42,11 @@ export class DashboardPage implements OnInit {
   isGmailConnected = false;
   gmailLoading = false;
 
-  constructor(private readonly apiService: ApiService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly router: Router,
+    private readonly toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadSelectedGoogleAccount();
@@ -299,5 +304,13 @@ export class DashboardPage implements OnInit {
           this.errorMessage = 'Unable to refresh dashboard. Please try again.';
         },
       });
+  }
+
+  goToAddTask(): void {
+    this.router.navigateByUrl('/tasks/add');
+  }
+
+  createGoal(): void {
+    this.toastService.info('Goals feature coming soon.');
   }
 }

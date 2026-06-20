@@ -279,6 +279,14 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  goToAppearance(event?: Event): void {
+    this.blurActiveElement(event);
+
+    this.router.navigate(['/settings/appearance'], {
+      replaceUrl: true,
+    });
+  }
+
   goToGoogleOtp(): void {
     this.router.navigate(['/settings/google-connect']);
   }
@@ -367,4 +375,7 @@ export class SettingsPage implements OnInit {
     this.showLogoutPopup = false;
     this.logout();
   }
+
+
+
 }
