@@ -292,14 +292,51 @@
   }
 }
 
+// .menu-icon.google,
+// .menu-icon.purple,
+// .menu-icon.orange,
+// .menu-icon.green,
+// .menu-icon.gray {
+//   background: var(--app-primary-soft);
+//   color: var(--app-primary);
+// }
+
 .menu-icon.google,
-.menu-icon.purple,
-.menu-icon.orange,
-.menu-icon.green,
+.menu-icon.blue-soft {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.menu-icon.purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.menu-icon.orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.menu-icon.green {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
 .menu-icon.gray {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+body.dark-theme .menu-icon.google,
+body.dark-theme .menu-icon.blue-soft,
+body.dark-theme .menu-icon.purple,
+body.dark-theme .menu-icon.orange,
+body.dark-theme .menu-icon.green,
+body.dark-theme .menu-icon.gray {
   background: var(--app-primary-soft);
   color: var(--app-primary);
 }
+
 
 strong {
   display: block;
