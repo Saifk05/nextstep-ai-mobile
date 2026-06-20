@@ -5,6 +5,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
 } from 'firebase/auth';
 
 import { firebaseApp } from './firebase.config';
@@ -20,7 +21,8 @@ export class FirebaseService {
     if (Capacitor.isNativePlatform()) {
       await SocialLogin.initialize({
         google: {
-          webClientId: '93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com',
+          webClientId:
+            '93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com',
         },
       });
     }
@@ -52,17 +54,24 @@ export class FirebaseService {
       options: {},
     });
 
-    const idToken =
+    const googleIdToken =
       result?.result?.idToken ||
       result?.result?.authentication?.idToken ||
       result?.idToken;
 
-    if (!idToken) {
+    if (!googleIdToken) {
       console.error('Google native login result:', result);
       throw new Error('Google ID token not found');
     }
 
-    return idToken;
+    const credential = GoogleAuthProvider.credential(googleIdToken);
+
+    const firebaseResult = await signInWithCredential(
+      this.auth,
+      credential
+    );
+
+    return await firebaseResult.user.getIdToken();
   }
 
   async facebookLogin(): Promise<string> {
