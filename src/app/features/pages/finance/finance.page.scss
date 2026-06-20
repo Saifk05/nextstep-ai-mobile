@@ -1,69 +1,142 @@
 .finance-content {
-  --background: #edf4ff;
+  --background: var(--app-bg);
 }
 
 .page {
   min-height: 100%;
-  padding: 24px 16px;
+  padding: 24px 16px 120px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      var(--app-primary-soft),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      180deg,
+      var(--app-primary-soft) 0%,
+      var(--app-bg) 70%
+    );
 }
 
 .hero-card {
-  padding: 28px 24px;
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 24px 22px;
+
   border-radius: 28px;
+
   background: linear-gradient(
     135deg,
-    #3b82f6 0%,
-    #2563eb 55%,
-    #1d4ed8 100%
+    var(--app-primary),
+    var(--app-primary-dark)
   );
 
-  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.25);
+  box-shadow: var(--app-shadow-lg);
+}
+
+.hero-card::after {
+  content: '';
+
+  position: absolute;
+
+  width: 140px;
+
+  height: 140px;
+
+  top: -50px;
+
+  right: -50px;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,.12);
 }
 
 .eyebrow {
+  position: relative;
+  z-index: 2;
+
   margin: 0;
-  color: rgba(255,255,255,0.8);
+
+  color: var(--app-focus-muted);
+
   font-size: 12px;
+
   font-weight: 700;
+
   letter-spacing: 2px;
+
   text-transform: uppercase;
 }
 
 .hero-card h1 {
+  position: relative;
+  z-index: 2;
+
   margin: 8px 0;
-  color: #fff;
+
+  color: var(--app-primary-contrast);
+
   font-size: 32px;
+
   font-weight: 800;
+
+  letter-spacing: -.5px;
 }
 
 .subtitle {
+  position: relative;
+  z-index: 2;
+
   margin: 0;
-  color: rgba(255,255,255,0.85);
+
+  color: var(--app-focus-muted);
+
   line-height: 1.6;
+
+  font-size: 14px;
 }
 
 .coming-soon-card {
   margin-top: 32px;
+
   padding: 48px 24px;
+
   text-align: center;
+
   border-radius: 28px;
-  background: #fff;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  background: var(--app-surface);
+
+  border: 1px solid var(--app-border);
+
+  box-shadow: var(--app-shadow);
 }
 
 .icon {
   font-size: 64px;
+
+  color: var(--app-primary);
 }
 
 .coming-soon-card h2 {
   margin: 20px 0 12px;
+
   font-size: 28px;
+
   font-weight: 800;
-  color: #0f172a;
+
+  color: var(--app-text);
 }
 
 .coming-soon-card p {
   margin: 0;
-  color: #64748b;
+
+  color: var(--app-text-secondary);
+
   line-height: 1.7;
 }

@@ -1,14 +1,14 @@
 .task-create-content {
-  --background: #f5f9ff;
+  --background: var(--app-bg);
 }
 
 .page {
   min-height: 100%;
   padding: 24px 18px 120px;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 36%),
-    radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 32%),
-    linear-gradient(180deg, #f6f9ff 0%, #ffffff 62%);
+    radial-gradient(circle at top left, var(--app-primary-soft), transparent 36%),
+    radial-gradient(circle at top right, var(--app-primary-soft), transparent 32%),
+    linear-gradient(180deg, var(--app-primary-soft) 0%, var(--app-bg) 62%);
 }
 
 .top-bar {
@@ -20,7 +20,7 @@
   h2 {
     margin: 0;
     text-align: center;
-    color: #0f172a;
+    color: var(--app-text);
     font-size: 18px;
     font-weight: 800;
   }
@@ -29,16 +29,16 @@
 .icon-btn {
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid var(--app-border);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
   display: flex;
   align-items: center;
   justify-content: center;
 
   ion-icon {
-    color: #0f172a;
+    color: var(--app-text);
     font-size: 22px;
   }
 }
@@ -56,12 +56,12 @@
   border-radius: 28px;
   background:
     radial-gradient(circle at top right, rgba(255, 255, 255, 0.28), transparent 34%),
-    linear-gradient(135deg, #1d4ed8 0%, #2563eb 48%, #60a5fa 100%);
-  box-shadow: 0 20px 44px rgba(37, 99, 235, 0.28);
+    linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+  box-shadow: var(--app-shadow-lg);
 
   h1 {
     margin: 0;
-    color: #ffffff;
+    color: var(--app-primary-contrast);
     font-size: 27px;
     font-weight: 850;
     letter-spacing: -0.7px;
@@ -70,7 +70,7 @@
   p {
     margin: 10px 0 0;
     max-width: 290px;
-    color: rgba(255, 255, 255, 0.88);
+    color: var(--app-focus-muted);
     font-size: 14px;
     line-height: 1.5;
     font-weight: 500;
@@ -79,10 +79,10 @@
 
 .form-card {
   padding: 18px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid var(--app-border);
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
   backdrop-filter: blur(18px);
 }
 
@@ -92,7 +92,7 @@
   label {
     display: block;
     margin-bottom: 8px;
-    color: #334155;
+    color: var(--app-text-secondary);
     font-size: 13px;
     font-weight: 750;
   }
@@ -101,14 +101,14 @@
   textarea,
   select {
     width: 100%;
-    border: 1px solid #dbeafe;
+    border: 1px solid var(--app-border);
     border-radius: 17px;
     outline: none;
-    background: #ffffff;
-    color: #0f172a;
+    background: var(--app-bg);
+    color: var(--app-text);
     font-size: 14px;
     font-weight: 600;
-    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.04);
+    box-shadow: var(--app-shadow);
     transition: 0.2s ease;
   }
 
@@ -128,15 +128,15 @@
   input:focus,
   textarea:focus,
   select:focus {
-    border-color: #2563eb;
+    border-color: var(--app-primary);
     box-shadow:
       0 0 0 4px rgba(37, 99, 235, 0.1),
-      0 8px 22px rgba(15, 23, 42, 0.05);
+      var(--app-shadow);
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: #94a3b8;
+    color: var(--app-text-muted);
     font-weight: 500;
   }
 }
@@ -148,8 +148,8 @@
 ::ng-deep .material-date-field .mat-mdc-text-field-wrapper {
   height: 54px;
   border-radius: 17px !important;
-  background: #ffffff !important;
-  box-shadow: 0 7px 18px rgba(15, 23, 42, 0.04);
+  background: var(--app-bg) !important;
+  box-shadow: var(--app-shadow);
 }
 
 ::ng-deep .material-date-field .mat-mdc-form-field-flex {
@@ -166,13 +166,13 @@
 ::ng-deep .material-date-field .mdc-notched-outline__leading,
 ::ng-deep .material-date-field .mdc-notched-outline__notch,
 ::ng-deep .material-date-field .mdc-notched-outline__trailing {
-  border-color: #dbeafe !important;
+  border-color: var(--app-border) !important;
 }
 
 ::ng-deep .material-date-field.mat-focused .mdc-notched-outline__leading,
 ::ng-deep .material-date-field.mat-focused .mdc-notched-outline__notch,
 ::ng-deep .material-date-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: #2563eb !important;
+  border-color: var(--app-primary) !important;
 }
 
 ::ng-deep .material-date-field .mat-mdc-form-field-subscript-wrapper {
@@ -180,16 +180,16 @@
 }
 
 ::ng-deep .material-date-field .mat-datepicker-toggle {
-  color: #2563eb !important;
+  color: var(--app-primary) !important;
 }
 
 ::ng-deep .mat-calendar-body-selected {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
+  background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast) !important;
 }
 
 ::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
-  border-color: #2563eb !important;
+  border-color: var(--app-primary) !important;
 }
 
 .priority-group {
@@ -200,19 +200,19 @@
 
 .priority-chip {
   height: 45px;
-  border: 1px solid #dbeafe;
+  border: 1px solid var(--app-border);
   border-radius: 16px;
-  background: #ffffff;
-  color: #64748b;
+  background: var(--app-bg);
+  color: var(--app-text-secondary);
   font-size: 13px;
   font-weight: 800;
   transition: 0.2s ease;
 
   &.active {
-    border-color: #2563eb;
-    color: #ffffff;
-    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-    box-shadow: 0 13px 28px rgba(37, 99, 235, 0.24);
+    border-color: var(--app-primary);
+    color: var(--app-primary-contrast);
+    background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+    box-shadow: var(--app-shadow-lg);
   }
 }
 
@@ -225,39 +225,37 @@
 .completion-card {
   min-height: 136px;
   padding: 15px;
-  border: 1px solid #dbeafe;
+  border: 1px solid var(--app-border);
   border-radius: 22px;
   text-align: left;
-  background: #ffffff;
+  background: var(--app-bg);
   transition: 0.2s ease;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.035);
+  box-shadow: var(--app-shadow);
 
   ion-icon {
-    color: #2563eb;
+    color: var(--app-primary);
     font-size: 27px;
   }
 
   h4 {
     margin: 10px 0 6px;
-    color: #0f172a;
+    color: var(--app-text);
     font-size: 14px;
     font-weight: 850;
   }
 
   p {
     margin: 0;
-    color: #64748b;
+    color: var(--app-text-secondary);
     font-size: 12px;
     line-height: 1.4;
     font-weight: 500;
   }
 
   &.active {
-    border-color: #2563eb;
-    background: linear-gradient(180deg, #eff6ff, #ffffff);
-    box-shadow:
-      inset 0 0 0 1px rgba(37, 99, 235, 0.2),
-      0 10px 24px rgba(37, 99, 235, 0.1);
+    border-color: var(--app-primary);
+    background: linear-gradient(180deg, var(--app-primary-soft), var(--app-bg));
+    box-shadow: var(--app-shadow-lg);
   }
 }
 
@@ -267,9 +265,9 @@
   margin-top: 20px;
   border: none;
   border-radius: 20px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #1d4ed8, #2563eb, #60a5fa);
-  box-shadow: 0 18px 38px rgba(37, 99, 235, 0.28);
+  color: var(--app-primary-contrast);
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+  box-shadow: var(--app-shadow-lg);
   font-size: 15px;
   font-weight: 850;
   transition: 0.2s ease;

@@ -1,27 +1,29 @@
 .appearance-content {
-  --background: #edf4ff;
+  --background: var(--app-bg);
 }
 
 .page {
   min-height: 100%;
   padding: 0 16px 120px;
   background:
-    radial-gradient(circle at top left, rgba(47, 122, 237, 0.18), transparent 34%),
-    linear-gradient(180deg, #edf4ff 0%, #ffffff 62%);
+    radial-gradient(circle at top left, var(--app-primary-soft), transparent 34%),
+    linear-gradient(180deg, var(--app-primary-soft) 0%, var(--app-bg) 62%);
 }
-
-/* HEADER */
 
 .hero-card {
   position: relative;
   overflow: hidden;
   margin: 0 -16px 20px;
-  padding: 24px 20px 30px;
-  min-height: 190px;
+  padding: 24px 20px 22px;
+  min-height: 155px;
   border-radius: 0 0 30px 30px;
-  background: linear-gradient(135deg, #2f7aed 0%, #2563eb 48%, #1d4ed8 100%);
-  box-shadow: 0 18px 42px rgba(37, 99, 235, 0.28);
-  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+  box-shadow: var(--app-shadow-lg);
+  color: var(--app-primary-contrast);
 }
 
 .hero-top {
@@ -41,7 +43,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  color: #ffffff;
+  color: var(--app-primary-contrast);
   background: rgba(255, 255, 255, 0.18);
 }
 
@@ -55,7 +57,7 @@
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--app-focus-muted);
 }
 
 h1 {
@@ -64,20 +66,18 @@ h1 {
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: -0.04em;
-  color: #ffffff;
+  color: var(--app-primary-contrast);
 }
 
 .subtitle {
   position: relative;
   z-index: 2;
   max-width: 260px;
-  margin: 24px 0 0 50px;
+  margin: 14px 0 0 50px;
   font-size: 13px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--app-focus-muted);
 }
-
-/* GLOWS */
 
 .hero-glow {
   position: absolute;
@@ -101,16 +101,14 @@ h1 {
   opacity: 0.35;
 }
 
-/* CARDS */
-
 .section-card,
 .preview-card {
-  border: 1px solid rgba(37, 99, 235, 0.1);
+  border: 1px solid var(--app-border);
   border-radius: 26px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--app-surface);
   backdrop-filter: blur(20px);
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--app-shadow);
 }
 
 .label {
@@ -119,17 +117,15 @@ h1 {
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #2563eb;
+  color: var(--app-primary);
 }
 
 .section-card h2 {
   margin: 5px 0 0;
   font-size: 19px;
   font-weight: 900;
-  color: #0f172a;
+  color: var(--app-text);
 }
-
-/* OPTIONS */
 
 .theme-list {
   display: grid;
@@ -140,20 +136,20 @@ h1 {
 .theme-option {
   width: 100%;
   min-height: 64px;
-  border: 1px solid rgba(37, 99, 235, 0.12);
+  border: 1px solid var(--app-border);
   border-radius: 20px;
   padding: 12px;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #ffffff;
+  background: var(--app-surface);
   text-align: left;
   transition: 0.22s ease;
 }
 
 .theme-option.active {
-  border-color: rgba(37, 99, 235, 0.65);
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.16);
+  border-color: var(--app-primary);
+  box-shadow: var(--app-shadow-lg);
 }
 
 .option-icon {
@@ -163,8 +159,8 @@ h1 {
   border-radius: 15px;
   display: grid;
   place-items: center;
-  background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
 }
 
 .option-icon ion-icon {
@@ -179,25 +175,23 @@ h1 {
   margin: 0;
   font-size: 14px;
   font-weight: 900;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .option-copy p {
   margin: 3px 0 0;
   font-size: 12px;
   line-height: 1.35;
-  color: #64748b;
+  color: var(--app-text-secondary);
 }
 
 .check-icon {
-  color: #2563eb;
+  color: var(--app-primary);
 }
 
 .check-icon ion-icon {
   font-size: 20px;
 }
-
-/* PREVIEW */
 
 .preview-card {
   margin-top: 16px;
@@ -208,8 +202,8 @@ h1 {
   border-radius: 24px;
   padding: 14px;
   background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 34%),
-    linear-gradient(180deg, #f8fbff, #eef5ff);
+    radial-gradient(circle at top right, var(--app-primary-soft), transparent 34%),
+    linear-gradient(180deg, var(--app-primary-soft), var(--app-bg));
 }
 
 .preview-top {
@@ -217,13 +211,14 @@ h1 {
   height: 7px;
   margin: 0 auto 16px;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.16);
+  background: rgba(128, 128, 128, 0.22);
 }
 
 .preview-card-inner {
   border-radius: 18px;
   padding: 15px;
-  background: #ffffff;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
 }
 
 .preview-card-inner span {
@@ -231,96 +226,32 @@ h1 {
   height: 38px;
   display: block;
   border-radius: 14px;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
 }
 
 .preview-card-inner strong {
   display: block;
   margin-top: 12px;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .preview-card-inner small {
   display: block;
   margin-top: 4px;
-  color: #64748b;
+  color: var(--app-text-secondary);
 }
 
 .preview-row {
   height: 12px;
   margin-top: 13px;
   border-radius: 999px;
-  background: rgba(37, 99, 235, 0.16);
+  background: var(--app-primary-soft);
 }
 
 .preview-row.short {
   width: 62%;
-}
-
-/* DARK MODE */
-
-:host-context(body.dark-theme) .appearance-content {
-  --background: #08111f;
-}
-
-:host-context(body.dark-theme) .page {
-  background: linear-gradient(180deg, #08111f 0%, #0f172a 100%);
-}
-
-:host-context(body.dark-theme) .hero-card {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 50%, #172554 100%);
-  box-shadow: 0 18px 42px rgba(2, 6, 23, 0.45);
-}
-
-:host-context(body.dark-theme) .section-card,
-:host-context(body.dark-theme) .preview-card {
-  background: rgba(15, 23, 42, 0.82);
-  border-color: rgba(148, 163, 184, 0.18);
-}
-
-:host-context(body.dark-theme) .label {
-  color: #93c5fd;
-}
-
-:host-context(body.dark-theme) .section-card h2,
-:host-context(body.dark-theme) .option-copy h3,
-:host-context(body.dark-theme) .preview-card strong {
-  color: #f8fafc;
-}
-
-:host-context(body.dark-theme) .option-copy p,
-:host-context(body.dark-theme) .preview-card small {
-  color: #cbd5e1;
-}
-
-:host-context(body.dark-theme) .theme-option {
-  background: rgba(30, 41, 59, 0.92);
-  border-color: rgba(148, 163, 184, 0.2);
-}
-
-:host-context(body.dark-theme) .theme-option.active {
-  background: rgba(37, 99, 235, 0.18);
-  border-color: rgba(96, 165, 250, 0.75);
-}
-
-:host-context(body.dark-theme) .option-icon {
-  background: rgba(59, 130, 246, 0.18);
-  color: #93c5fd;
-}
-
-:host-context(body.dark-theme) .check-icon {
-  color: #93c5fd;
-}
-
-:host-context(body.dark-theme) .phone-preview {
-  background: linear-gradient(180deg, #1e293b, #111827);
-}
-
-:host-context(body.dark-theme) .preview-card-inner {
-  background: rgba(30, 41, 59, 0.95);
-}
-
-:host-context(body.dark-theme) .preview-top,
-:host-context(body.dark-theme) .preview-row {
-  background: rgba(148, 163, 184, 0.22);
 }

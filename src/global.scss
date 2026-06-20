@@ -21,26 +21,36 @@ html {
 }
 
 :root {
-  --app-primary: #2675ea;
-  --app-primary-dark: #1f5fd0;
 
-  --app-success: #12b76a;
-  --app-warning: #f79009;
-  --app-danger: #f04438;
-
-  --app-text-primary: #101828;
-  --app-text-secondary: #667085;
-
-  --app-border: #dce4f2;
+  /* LIGHT MODE */
 
   --app-bg: #ffffff;
-  --app-bg-secondary: #f8faff;
 
-  --app-radius-sm: 12px;
-  --app-radius-md: 16px;
-  --app-radius-lg: 24px;
+  --app-surface: #ffffff;
 
-  --app-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  --app-text: #071833;
+
+  --app-text-secondary: #64748b;
+
+  --app-text-muted: #94a3b8;
+
+  --app-border: #e2e8f0;
+
+  /* Original blue theme */
+
+  --app-primary: #2563eb;
+
+  --app-primary-dark: #3b82f6;
+
+  --app-primary-contrast: #ffffff;
+
+  --app-primary-soft: #eff6ff;
+
+  --app-focus-muted: rgba(255,255,255,0.88);
+
+  --app-shadow: 0 12px 28px rgba(15,23,42,0.06);
+
+  --app-shadow-lg: 0 24px 44px rgba(37,99,235,0.24);
 }
 
 *,
@@ -68,7 +78,8 @@ body {
   padding: 0;
   color-scheme: light;
   background: var(--app-bg);
-  color: var(--app-text-primary);
+   color: var(--app-text);
+  // color: var(--app-text-primary);
   font-family: 'Inter', sans-serif;
 }
 
@@ -80,7 +91,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 700;
-  color: var(--app-text-primary);
+  color: var(--app-text);
 }
 
 p {
@@ -90,7 +101,7 @@ p {
 ion-input,
 ion-textarea,
 ion-select {
-  --color: var(--app-text-primary);
+  --color: var(--app-text);
   --placeholder-color: #98a2b3;
   --placeholder-opacity: 1;
   font-family: 'Inter', sans-serif;
@@ -98,7 +109,7 @@ ion-select {
 
 ion-input::part(native),
 ion-textarea::part(native) {
-  color: var(--app-text-primary);
+  color: var(--app-text);
   font-family: 'Inter', sans-serif;
   background: transparent;
   caret-color: var(--app-primary);
@@ -113,7 +124,7 @@ ion-textarea::part(native)::placeholder {
 ion-input::part(native)::selection,
 ion-textarea::part(native)::selection {
   background: rgba(38, 117, 234, 0.15);
-  color: var(--app-text-primary);
+  color: var(--app-text);
 }
 
 ion-button {
@@ -179,98 +190,35 @@ ion-router-outlet > .ion-page:not(.ion-page-hidden) {
   display: block;
 }
 
-/* ===============================
-   BLACK & WHITE DARK THEME
-================================ */
-
 body.dark-theme {
-  --ion-background-color: #000000;
-  --ion-text-color: #ffffff;
+
   color-scheme: dark;
-}
 
-body.dark-theme ion-content {
-  --background: #000000;
-}
+  --app-bg: #0a0a0a;
 
-/* Whole page */
+  --app-surface: #151515;
 
-body.dark-theme .page {
-  background: #000000 !important;
-}
+  --app-text: #ffffff;
 
-/* Headers */
+  --app-text-secondary: #d4d4d4;
 
-body.dark-theme .hero-card {
-  background: #111111 !important;
-  color: #ffffff !important;
-}
+  --app-text-muted: #8c8c8c;
 
-/* White cards */
+  --app-border: #2a2a2a;
 
-body.dark-theme .summary-card,
-body.dark-theme .stat-card,
-body.dark-theme .menu-card,
-body.dark-theme .menu-item,
-body.dark-theme .email-card,
-body.dark-theme .task-card,
-body.dark-theme .section-card,
-body.dark-theme .preview-card {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 1px solid #e5e7eb !important;
-}
+  /* Yellow theme */
 
-/* Text inside white cards */
+  --app-primary: #facc15;
 
-body.dark-theme .summary-card *,
-body.dark-theme .stat-card *,
-body.dark-theme .menu-card *,
-body.dark-theme .menu-item *,
-body.dark-theme .email-card *,
-body.dark-theme .task-card * {
-  color: #000000 !important;
-}
+  --app-primary-dark: #eab308;
 
-/* Footer */
+  --app-primary-contrast: #000000;
 
-body.dark-theme .footer-container,
-body.dark-theme .bottom-nav {
-  background: #111111 !important;
-  border-top: 1px solid #2a2a2a !important;
-}
+  --app-primary-soft: #1f1f1f;
 
-/* Icons */
+  --app-focus-muted: rgba(0,0,0,0.75);
 
-body.dark-theme ion-icon {
-  color: inherit;
-}
+  --app-shadow: 0 14px 30px rgba(0,0,0,0.4);
 
-/* Inputs */
-
-body.dark-theme ion-input,
-body.dark-theme ion-textarea,
-body.dark-theme ion-select {
-  --background: #1a1a1a;
-  --color: #ffffff;
-  --placeholder-color: #9ca3af;
-}
-
-/* Generic headings */
-
-body.dark-theme h1,
-body.dark-theme h2,
-body.dark-theme h3,
-body.dark-theme h4,
-body.dark-theme h5,
-body.dark-theme h6 {
-  color: #ffffff;
-}
-
-/* Generic text */
-
-body.dark-theme p,
-body.dark-theme small,
-body.dark-theme span {
-  color: #d1d5db;
+  --app-shadow-lg: 0 24px 44px rgba(0,0,0,0.55);
 }

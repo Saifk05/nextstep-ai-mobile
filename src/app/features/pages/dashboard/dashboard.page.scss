@@ -1,33 +1,34 @@
 .dashboard-content {
-  --background: #f4f8ff;
+  --background: var(--app-bg);
 }
 
 .page {
   min-height: 100%;
   padding: 18px 16px 150px;
   background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.16), transparent 34%),
-    linear-gradient(180deg, #eaf2ff 0%, #ffffff 72%);
+    radial-gradient(circle at top right, var(--app-primary-soft), transparent 34%),
+    linear-gradient(180deg, var(--app-primary-soft) 0%, var(--app-bg) 72%);
+  color: var(--app-text);
 }
 
 .hero {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 14px;
   padding: 18px 4px 20px;
 }
 
 .date {
   margin: 10px 0 0;
-  color: #475569;
+  color: var(--app-text-secondary);
   font-size: 13px;
   font-weight: 800;
 }
 
 .hero h1 {
   margin: 0;
-  color: #071833;
+  color: var(--app-text);
   font-size: 30px;
   font-weight: 950;
   line-height: 1.08;
@@ -36,7 +37,7 @@
 
 .subtitle {
   margin: 10px 0 0;
-  color: #5f7190;
+  color: var(--app-text-secondary);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -45,24 +46,14 @@
   width: 78px;
   height: 78px;
   min-width: 78px;
-
+  margin-top: -10px;
   border-radius: 22px;
-
-  background: linear-gradient(
-    135deg,
-    #3b82f6,
-    #1d4ed8
-  );
-
-  color: #ffffff;
-
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+  color: var(--app-primary-contrast);
   display: grid;
   place-items: center;
-
   overflow: hidden;
-
-  box-shadow:
-    0 14px 28px rgba(37, 99, 235, 0.22);
+  box-shadow: var(--app-shadow);
 }
 
 .avatar img {
@@ -71,26 +62,16 @@
   object-fit: cover;
 }
 
-.hero {
-  align-items: center;
-}
-
-.avatar {
-  margin-top: -10px;
-}
-
 .focus-card {
   position: relative;
   overflow: hidden;
   padding: 22px;
   border-radius: 30px;
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-  color: #ffffff;
-  box-shadow: 0 24px 44px rgba(37, 99, 235, 0.26);
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+  color: var(--app-primary-contrast);
+  box-shadow: var(--app-shadow-lg);
   margin-bottom: 16px;
 }
-
-
 
 .focus-card::after {
   content: '';
@@ -100,7 +81,7 @@
   right: -45px;
   top: -45px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .focus-top,
@@ -120,15 +101,15 @@
 .pill {
   padding: 8px 13px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
+  background: var(--app-primary-contrast);
+  color: var(--app-primary);
   font-size: 12px;
   font-weight: 900;
 }
 
 .spark {
   font-size: 20px;
-  color: #ffffff;
+  color: var(--app-primary-contrast);
 }
 
 .focus-card h2 {
@@ -138,13 +119,13 @@
   font-weight: 950;
   line-height: 1.16;
   letter-spacing: -0.6px;
-  color: #ffffff;
+  color: var(--app-primary-contrast);
 }
 
 .focus-card p {
   margin: 0 0 18px;
   max-width: 270px;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--app-focus-muted);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -154,11 +135,11 @@
   height: 52px;
   border: none;
   border-radius: 18px;
-  background: #ffffff;
-  color: #2563eb;
+  background: var(--app-primary-contrast);
+  color: var(--app-primary);
   font-size: 15px;
   font-weight: 950;
-  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--app-shadow);
 }
 
 .stats-grid {
@@ -172,47 +153,43 @@
   min-height: 95px;
   padding: 18px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.95);
-
-  box-shadow:
-    0 12px 28px rgba(15, 23, 42, 0.06);
-
-  border: 1px solid rgba(226, 232, 240, 0.8);
-
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .stat-card span {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 13px;
   font-weight: 800;
   line-height: 1.3;
 }
 
 .stat-card strong {
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 34px;
   font-weight: 950;
   letter-spacing: -1px;
 }
 
 .stat-card.highlight {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
 }
 
 .stat-card.highlight span,
 .stat-card.highlight strong {
-  color: #ffffff;
+  color: var(--app-primary-contrast);
 }
 
 .productivity-card {
   padding: 18px;
   border-radius: 26px;
-  background: #ffffff;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
-  border: 1px solid rgba(226, 232, 240, 0.78);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -221,21 +198,21 @@
 
 .productivity-card p {
   margin: 0 0 4px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 13px;
   font-weight: 900;
 }
 
 .productivity-card h3 {
   margin: 0;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 30px;
   font-weight: 950;
   letter-spacing: -0.7px;
 }
 
 .productivity-card small {
-  color: #94a3b8;
+  color: var(--app-text-muted);
   font-size: 12px;
   font-weight: 700;
 }
@@ -246,8 +223,8 @@
   min-width: 78px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, #ffffff 57%, transparent 58%),
-    conic-gradient(#2563eb 0 50%, #dbeafe 50% 100%);
+    radial-gradient(circle at center, var(--app-surface) 57%, transparent 58%),
+    conic-gradient(var(--app-primary) 0 50%, rgba(128, 128, 128, 0.2) 50% 100%);
   display: grid;
   place-items: center;
   text-align: center;
@@ -255,7 +232,7 @@
 
 .progress-ring span {
   display: block;
-  color: #2563eb;
+  color: var(--app-primary);
   font-size: 22px;
   font-weight: 950;
 }
@@ -263,7 +240,7 @@
 .progress-ring small {
   display: block;
   margin-top: -18px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 9px;
   font-weight: 900;
 }
@@ -278,7 +255,7 @@
 
 .section-header h3 {
   margin: 0;
-  color: #071833;
+  color: var(--app-text);
   font-size: 17px;
   font-weight: 950;
   letter-spacing: -0.2px;
@@ -288,7 +265,7 @@
   display: block;
   max-width: 260px;
   margin-top: 4px;
-  color: #2563eb;
+  color: var(--app-text-secondary);
   font-size: 10.5px;
   font-weight: 800;
   overflow: hidden;
@@ -315,9 +292,9 @@
 .empty-card,
 .error-card {
   border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.065);
-  border: 1px solid rgba(226, 232, 240, 0.78);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
 }
 
 .task-card {
@@ -333,7 +310,7 @@
 .calendar-card h4,
 .activity-card h4 {
   margin: 0;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 14px;
   font-weight: 950;
   line-height: 1.3;
@@ -343,7 +320,7 @@
 .gmail-card p,
 .calendar-card p {
   margin: 5px 0 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 11.5px;
   font-weight: 700;
   line-height: 1.35;
@@ -352,16 +329,16 @@
 .status-pill {
   padding: 7px 10px;
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--app-primary-soft);
+  color: var(--app-text-secondary);
   font-size: 9.5px;
   font-weight: 950;
   white-space: nowrap;
 }
 
 .status-pill.completed {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
 }
 
 .actions {
@@ -371,8 +348,7 @@
 .action-btn {
   width: 100%;
   min-height: 58px;
-  border: 1px solid rgba(226, 232, 240, 0.78);
-  color: #0f172a;
+  color: var(--app-text);
   display: flex;
   align-items: center;
   gap: 13px;
@@ -387,8 +363,8 @@
   height: 36px;
   min-width: 36px;
   border-radius: 14px;
-  background: #eef4ff;
-  color: #2563eb;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
   display: grid;
   place-items: center;
   font-size: 20px;
@@ -397,12 +373,10 @@
 .account-card {
   width: 100%;
   padding: 14px;
-  border-color: #bfdbfe;
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
-  background: #f8fbff;
 }
 
 .account-info {
@@ -411,7 +385,7 @@
 
 .account-info h4 {
   margin: 0;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 14px;
   font-weight: 950;
   overflow: hidden;
@@ -421,7 +395,7 @@
 
 .account-info p {
   margin: 5px 0 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 11.5px;
   font-weight: 700;
 }
@@ -429,8 +403,8 @@
 .selected-badge {
   padding: 7px 10px;
   border-radius: 999px;
-  background: #2563eb;
-  color: #ffffff;
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
   font-size: 10.5px;
   font-weight: 950;
 }
@@ -445,13 +419,13 @@
 .gmail-summary-card {
   padding: 14px 10px;
   border-radius: 22px;
-  background: #ffffff;
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
-  border: 1px solid rgba(226, 232, 240, 0.75);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
 }
 
 .gmail-summary-card span {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 10.5px;
   font-weight: 900;
 }
@@ -459,7 +433,7 @@
 .gmail-summary-card strong {
   display: block;
   margin-top: 8px;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 22px;
   font-weight: 950;
 }
@@ -469,7 +443,7 @@
 }
 
 .gmail-card.unread {
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid var(--app-primary);
 }
 
 .gmail-top {
@@ -502,8 +476,8 @@
   margin-top: 7px;
   padding: 5px 8px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
   font-size: 9.5px;
   font-weight: 950;
 }
@@ -514,13 +488,13 @@
   min-width: 9px;
   margin-top: 4px;
   border-radius: 50%;
-  background: #2563eb;
+  background: var(--app-primary);
 }
 
 .gmail-card small {
   display: block;
   margin-top: 10px;
-  color: #94a3b8;
+  color: var(--app-text-muted);
   font-size: 11px;
   font-weight: 700;
 }
@@ -536,8 +510,8 @@
 .calendar-card span {
   padding: 7px 10px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
   font-size: 10.5px;
   font-weight: 950;
 }
@@ -553,8 +527,8 @@
   height: 50px;
   margin: 0 auto 13px;
   border-radius: 18px;
-  background: #eef4ff;
-  color: #2563eb;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
   display: grid;
   place-items: center;
   font-size: 22px;
@@ -564,7 +538,7 @@
 .empty-card h3,
 .error-card h3 {
   margin: 0;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 16px;
   font-weight: 950;
 }
@@ -573,7 +547,7 @@
 .error-card p {
   margin: 8px auto 0;
   max-width: 260px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -584,14 +558,16 @@
   display: grid;
   place-items: center;
   padding: 20px;
+  background: var(--app-bg);
 }
 
 .loader-card {
   padding: 28px;
   border-radius: 26px;
-  background: #ffffff;
+  background: var(--app-surface);
   text-align: center;
-  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
 }
 
 .loader-ring {
@@ -599,14 +575,14 @@
   height: 42px;
   margin: 0 auto 14px;
   border-radius: 50%;
-  border: 4px solid #dbeafe;
-  border-top-color: #2563eb;
+  border: 4px solid var(--app-primary-soft);
+  border-top-color: var(--app-primary);
   animation: spin 0.8s linear infinite;
 }
 
 .loader-card p {
   margin: 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 13px;
   font-weight: 900;
 }
