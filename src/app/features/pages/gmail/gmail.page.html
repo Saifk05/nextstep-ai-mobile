@@ -1,30 +1,32 @@
 <ion-content class="gmail-content" [fullscreen]="true">
   <div class="page">
+    <div *ngIf="pageLoading" class="page-loader">
+      <div class="loader-card">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Loading your action center...</p>
+      </div>
+    </div>
+
     <div class="hero-card">
       <div class="hero-bg-circle circle-one"></div>
       <div class="hero-bg-circle circle-two"></div>
 
       <div class="hero-top">
-        <button class="back-btn" type="button" (click)="goBack()">
-          <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
-
         <div class="hero-copy">
           <p class="eyebrow">Google Workspace</p>
-          <h1>Gmail Inbox</h1>
-          <p class="subtitle">Manage emails from all connected accounts</p>
+          <h1>Action Center</h1>
+          <p class="subtitle">Track interviews, orders, bills and meetings</p>
         </div>
 
-        <button class="refresh-btn" type="button" (click)="refreshInbox()">
+        <button
+          class="refresh-btn"
+          type="button"
+          (click)="refreshInbox()"
+          [disabled]="loading || pageLoading"
+        >
           <ion-icon name="refresh-outline"></ion-icon>
         </button>
       </div>
-    </div>
-
-    <div *ngIf="loading && messages.length === 0" class="loading-container">
-      <div class="skeleton-card"></div>
-      <div class="skeleton-card"></div>
-      <div class="skeleton-card"></div>
     </div>
 
     <div *ngIf="!loading && errorMessage" class="state-card error-card">
@@ -33,72 +35,37 @@
       <p>{{ errorMessage }}</p>
     </div>
 
-    <ng-container *ngIf="(!loading || messages.length > 0) && !errorMessage">
+    <ng-container *ngIf="!errorMessage">
       <section class="section">
         <div class="section-header">
           <div>
             <p class="section-label">Accounts</p>
-            <h2>Connected Gmail Accounts</h2>
+            <h2>Select Gmail Account</h2>
           </div>
         </div>
 
-        <!-- <div class="accounts-list">
-          <div
-            *ngFor="let account of accounts"
-            class="account-card"
-            [class.active]="selectedAccountId === account.id"
-            (click)="selectAccount(account.id)"
+        <div class="account-select-card">
+          <ion-select
+            interface="popover"
+            label="Gmail Account"
+            label-placement="stacked"
+            [value]="selectedAccountId"
+            (ionChange)="onAccountChange($event)"
           >
-            <div class="account-avatar">
-              <ion-icon name="person-circle-outline"></ion-icon>
-            </div>
-
-            <div class="account-info">
-              <h4>{{ account.email }}</h4>
-              <p>
-                {{ account.isDefault ? 'Default Google Account' : 'Google Account' }}
-              </p>
-            </div>
-
-            <ion-icon
-              *ngIf="selectedAccountId === account.id"
-              class="selected-icon"
-              name="checkmark-circle-outline"
-            ></ion-icon>
-          </div>
-        </div> -->
-      
-        <section class="section">
-  <div class="section-header">
-    <div>
-      <p class="section-label">Accounts</p>
-      <h2>Select Gmail Account</h2>
-    </div>
-  </div>
-
-  <div class="account-select-card">
-    <ion-select
-      interface="popover"
-      label="Gmail Account"
-      label-placement="stacked"
-      [value]="selectedAccountId"
-      (ionChange)="onAccountChange($event)"
-    >
-      <ion-select-option
-        *ngFor="let account of accounts"
-        [value]="account.id"
-      >
-        {{ account.email }} {{ account.isDefault ? '(Default)' : '' }}
-      </ion-select-option>
-    </ion-select>
-  </div>
-</section>
+            <ion-select-option
+              *ngFor="let account of accounts"
+              [value]="account.id"
+            >
+              {{ account.email }} {{ account.isDefault ? '(Default)' : '' }}
+            </ion-select-option>
+          </ion-select>
+        </div>
       </section>
 
       <section class="summary-grid">
         <div class="summary-card">
           <h3>{{ summary.totalEmails }}</h3>
-          <p>Total Emails</p>
+          <p>Action Emails</p>
         </div>
 
         <div class="summary-card">
@@ -112,18 +79,45 @@
         </div>
       </section>
 
+      <section class="email-tools">
+        <div class="search-shell">
+          <ion-icon name="search-outline"></ion-icon>
+
+          <input
+            type="text"
+            placeholder="Search interviews, orders, bills..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearchEnter()"
+          />
+
+          <button type="button" class="filter-btn" (click)="openFilter()">
+            <ion-icon name="filter-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="active-filter-row">
+          <span>{{ selectedDays }} days</span>
+          <span *ngIf="selectedCategory !== 'ALL'">
+            {{ selectedCategory }}
+          </span>
+        </div>
+      </section>
+
       <section class="section">
         <div class="section-header">
           <div>
-            <p class="section-label">Inbox</p>
-            <h2>Recent Emails</h2>
+            <p class="section-label">Smart Inbox</p>
+            <h2>Recent Action Emails</h2>
           </div>
         </div>
 
-        <div *ngIf="!loading && messages.length === 0" class="state-card empty-state">
+        <div
+          *ngIf="!loading && messages.length === 0"
+          class="state-card empty-state"
+        >
           <ion-icon class="state-icon" name="mail-outline"></ion-icon>
           <h3>No Emails Found</h3>
-          <p>No emails are available for this account.</p>
+          <p>No useful emails found for this account.</p>
         </div>
 
         <button
@@ -152,6 +146,8 @@
               [class.subscription]="message.category === 'SUBSCRIPTION'"
               [class.meeting]="message.category === 'MEETING'"
               [class.deadline]="message.category === 'DEADLINE'"
+              [class.order]="message.category === 'ORDER'"
+              [class.payment]="message.category === 'PAYMENT'"
             >
               {{ message.category || 'INBOX' }}
             </span>
@@ -187,19 +183,57 @@
   </div>
 </ion-content>
 
-<ion-modal
-  [isOpen]="isMessageModalOpen"
-  (didDismiss)="closeMessage()"
->
+<ion-modal [isOpen]="isFilterModalOpen" (didDismiss)="closeFilter()">
+  <ng-template>
+    <ion-content class="filter-modal-content" [fullscreen]="true">
+      <div class="filter-modal">
+        <div class="filter-modal-header">
+          <h2>Filter Emails</h2>
+
+          <button type="button" class="close-btn" (click)="closeFilter()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="filter-group">
+          <p>Category</p>
+
+          <div class="filter-chips">
+            <button type="button" [class.active]="selectedCategory === 'ALL'" (click)="selectedCategory = 'ALL'">All</button>
+            <button type="button" [class.active]="selectedCategory === 'INTERVIEW'" (click)="selectedCategory = 'INTERVIEW'">Interview</button>
+            <button type="button" [class.active]="selectedCategory === 'ORDER'" (click)="selectedCategory = 'ORDER'">Orders</button>
+            <button type="button" [class.active]="selectedCategory === 'SUBSCRIPTION'" (click)="selectedCategory = 'SUBSCRIPTION'">Subscription</button>
+            <button type="button" [class.active]="selectedCategory === 'PAYMENT'" (click)="selectedCategory = 'PAYMENT'">Payment</button>
+            <button type="button" [class.active]="selectedCategory === 'MEETING'" (click)="selectedCategory = 'MEETING'">Meeting</button>
+            <button type="button" [class.active]="selectedCategory === 'DEADLINE'" (click)="selectedCategory = 'DEADLINE'">Deadline</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <p>Date Range</p>
+
+          <div class="filter-chips">
+            <button type="button" [class.active]="selectedDays === 7" (click)="selectedDays = 7">7 Days</button>
+            <button type="button" [class.active]="selectedDays === 30" (click)="selectedDays = 30">30 Days</button>
+            <button type="button" [class.active]="selectedDays === 90" (click)="selectedDays = 90">90 Days</button>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button type="button" class="clear-filter-btn" (click)="clearFilters()">Clear</button>
+          <button type="button" class="apply-filter-btn" (click)="applyFilters()">Apply Filter</button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="isMessageModalOpen" (didDismiss)="closeMessage()">
   <ng-template>
     <ion-content class="modal-content-shell" [fullscreen]="true">
       <div class="message-modal">
         <div class="modal-header">
-          <button
-            type="button"
-            class="close-btn"
-            (click)="closeMessage()"
-          >
+          <button type="button" class="close-btn" (click)="closeMessage()">
             <ion-icon name="close-outline"></ion-icon>
           </button>
 
@@ -207,10 +241,7 @@
         </div>
 
         <div *ngIf="selectedMessage" class="modal-body">
-          <div class="modal-from">
-            {{ selectedMessage.from }}
-          </div>
-
+          <div class="modal-from">{{ selectedMessage.from }}</div>
           <h1>{{ selectedMessage.subject }}</h1>
 
           <div class="modal-time">
@@ -221,10 +252,7 @@
             {{ selectedMessage.category || 'INBOX' }}
           </div>
 
-          <div
-            *ngIf="selectedMessage.priority"
-            class="modal-category"
-          >
+          <div *ngIf="selectedMessage.priority" class="modal-category">
             Priority: {{ selectedMessage.priority }}
           </div>
 
@@ -236,3 +264,5 @@
     </ion-content>
   </ng-template>
 </ion-modal>
+
+<app-footer></app-footer>

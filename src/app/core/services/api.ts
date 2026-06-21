@@ -325,20 +325,35 @@ getGoogleGmailStatus(): Observable<GmailStatusResponse> {
 getGoogleGmailMessages(
   accountId?: string,
   pageToken?: string,
-  limit: number = 10
+  limit: number = 10,
+  category?: string,
+  days?: number,
+  search?: string
 ): Observable<GmailMessagesResponse> {
   const params: string[] = [];
 
   if (accountId) {
-    params.push(`accountId=${accountId}`);
+    params.push(`accountId=${encodeURIComponent(accountId)}`);
   }
 
   if (pageToken) {
-    params.push(`pageToken=${pageToken}`);
+    params.push(`pageToken=${encodeURIComponent(pageToken)}`);
   }
 
   if (limit) {
     params.push(`limit=${limit}`);
+  }
+
+  if (category && category !== 'ALL') {
+    params.push(`category=${encodeURIComponent(category)}`);
+  }
+
+  if (days) {
+    params.push(`days=${days}`);
+  }
+
+  if (search?.trim()) {
+    params.push(`search=${encodeURIComponent(search.trim())}`);
   }
 
   const query = params.length ? `?${params.join('&')}` : '';

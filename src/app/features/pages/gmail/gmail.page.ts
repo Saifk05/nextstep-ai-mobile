@@ -6,21 +6,25 @@ import {
   IonContent,
   IonIcon,
   IonModal,
+  IonSpinner,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
 
+import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
 import { addIcons } from 'ionicons';
 import {
   alertCircleOutline,
   arrowBackOutline,
   checkmarkCircleOutline,
   closeOutline,
+  filterOutline,
   mailOutline,
   personCircleOutline,
   refreshOutline,
+  searchOutline,
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../core/services/api';
@@ -37,17 +41,25 @@ import { ApiService } from '../../../core/services/api';
     IonContent,
     IonIcon,
     IonModal,
+    IonSpinner,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonSelect,
     IonSelectOption,
+    AppFooterComponent,
   ],
 })
 export class GmailPage implements OnInit {
   loading = false;
+  pageLoading = false;
   errorMessage = '';
 
   selectedAccountId = '';
+
+  searchTerm = '';
+  selectedCategory = 'ALL';
+  selectedDays = 30;
+  isFilterModalOpen = false;
 
   accounts: any[] = [];
   messages: any[] = [];
@@ -76,9 +88,11 @@ export class GmailPage implements OnInit {
       arrowBackOutline,
       checkmarkCircleOutline,
       closeOutline,
+      filterOutline,
       mailOutline,
       personCircleOutline,
       refreshOutline,
+      searchOutline,
     });
   }
 
@@ -88,6 +102,7 @@ export class GmailPage implements OnInit {
 
   loadInbox(): void {
     this.loading = true;
+    this.pageLoading = true;
     this.errorMessage = '';
     this.nextPageToken = null;
 
@@ -99,6 +114,7 @@ export class GmailPage implements OnInit {
 
         if (!statusData?.isConnected || this.accounts.length === 0) {
           this.loading = false;
+          this.pageLoading = false;
           this.errorMessage = 'No Gmail account connected.';
           return;
         }
@@ -133,6 +149,7 @@ export class GmailPage implements OnInit {
       error: (error) => {
         console.error('Google status error:', error);
         this.loading = false;
+        this.pageLoading = false;
         this.errorMessage = 'Unable to fetch Google accounts.';
       },
     });
@@ -145,6 +162,7 @@ export class GmailPage implements OnInit {
       this.isLoadingMore = true;
     } else {
       this.loading = true;
+      this.pageLoading = true;
       this.messages = [];
       this.nextPageToken = null;
     }
@@ -155,7 +173,10 @@ export class GmailPage implements OnInit {
       .getGoogleGmailMessages(
         this.selectedAccountId,
         pageToken,
-        this.pageLimit
+        this.pageLimit,
+        this.selectedCategory,
+        this.selectedDays,
+        this.searchTerm
       )
       .subscribe({
         next: (messagesRes) => {
@@ -176,12 +197,14 @@ export class GmailPage implements OnInit {
           this.nextPageToken = messagesRes.pagination?.nextPageToken || null;
 
           this.loading = false;
+          this.pageLoading = false;
           this.isLoadingMore = false;
         },
         error: (error) => {
           console.error('Gmail messages error:', error);
 
           this.loading = false;
+          this.pageLoading = false;
           this.isLoadingMore = false;
 
           if (error?.status === 401 || error?.status === 403) {
@@ -207,7 +230,10 @@ export class GmailPage implements OnInit {
       .getGoogleGmailMessages(
         this.selectedAccountId,
         this.nextPageToken,
-        this.pageLimit
+        this.pageLimit,
+        this.selectedCategory,
+        this.selectedDays,
+        this.searchTerm
       )
       .subscribe({
         next: (messagesRes) => {
@@ -254,6 +280,34 @@ export class GmailPage implements OnInit {
     this.loadMessages();
   }
 
+  onSearchEnter(): void {
+    this.messages = [];
+    this.nextPageToken = null;
+    this.loadMessages();
+  }
+
+  openFilter(): void {
+    this.isFilterModalOpen = true;
+  }
+
+  closeFilter(): void {
+    this.isFilterModalOpen = false;
+  }
+
+  applyFilters(): void {
+    this.isFilterModalOpen = false;
+    this.messages = [];
+    this.nextPageToken = null;
+    this.loadMessages();
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.selectedCategory = 'ALL';
+    this.selectedDays = 30;
+    this.applyFilters();
+  }
+
   get selectedAccount(): any {
     return this.accounts.find(
       (account) => account.id === this.selectedAccountId
@@ -274,6 +328,10 @@ export class GmailPage implements OnInit {
   }
 
   refreshInbox(): void {
+    if (this.loading || this.pageLoading) {
+      return;
+    }
+
     this.loadInbox();
   }
 
