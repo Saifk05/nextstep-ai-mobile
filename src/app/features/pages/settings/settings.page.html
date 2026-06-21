@@ -194,35 +194,24 @@
       <h2>Preferences</h2>
 
       <div class="menu-card">
-        <button type="button" class="menu-item" (click)="comingSoon('Notifications')">
-          <span class="left">
-            <span class="menu-icon purple">
-              <ion-icon name="notifications-outline"></ion-icon>
-            </span>
+<button
+  type="button"
+  class="menu-item"
+  (click)="goToNotifications($event)"
+>
+  <span class="left">
+    <span class="menu-icon purple">
+      <ion-icon name="notifications-outline"></ion-icon>
+    </span>
 
-            <span>
-              <strong>Notifications</strong>
-              <small>Task and goal reminders</small>
-            </span>
-          </span>
+    <span>
+      <strong>Notifications</strong>
+      <small>Task and goal reminders</small>
+    </span>
+  </span>
 
-          <ion-icon name="chevron-forward-outline"></ion-icon>
-        </button>
-
-        <!-- <button type="button" class="menu-item" (click)="comingSoon('Appearance')">
-          <span class="left">
-            <span class="menu-icon orange">
-              <ion-icon name="color-palette-outline"></ion-icon>
-            </span>
-
-            <span>
-              <strong>Appearance</strong>
-              <small>Theme and display settings</small>
-            </span>
-          </span>
-
-          <ion-icon name="chevron-forward-outline"></ion-icon>
-        </button> -->
+  <ion-icon name="chevron-forward-outline"></ion-icon>
+</button>
         
         <button
           type="button"

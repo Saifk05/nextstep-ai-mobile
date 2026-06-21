@@ -279,6 +279,14 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  goToNotifications(event?: Event): void {
+    this.blurActiveElement(event);
+
+    this.router.navigate(['/settings/notifications'], {
+      replaceUrl: true,
+    });
+  }
+
   goToAppearance(event?: Event): void {
     this.blurActiveElement(event);
 

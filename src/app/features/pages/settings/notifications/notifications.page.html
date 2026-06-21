@@ -1,0 +1,115 @@
+<ion-content class="notifications-content" fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="loadNotifications($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <main class="notifications-page">
+    <section class="hero-card">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+
+      <div>
+        <p>Settings</p>
+        <h1>Notifications</h1>
+        <span>Gmail, Calendar and app updates in one place.</span>
+      </div>
+
+      <div class="hero-icon">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+    </section>
+
+    <section class="summary-card">
+      <div>
+        <strong>{{ unreadCount }}</strong>
+        <span>Unread notifications</span>
+      </div>
+
+      <button type="button" (click)="markAllAsRead()" [disabled]="!unreadCount">
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+        Mark all as read
+      </button>
+    </section>
+
+    <section class="notification-list">
+      <ng-container *ngIf="isLoading; else notificationContent">
+        <article class="notification-card skeleton" *ngFor="let item of [1,2,3,4]">
+          <div class="skeleton-icon"></div>
+
+          <div class="skeleton-body">
+            <span></span>
+            <p></p>
+            <small></small>
+          </div>
+        </article>
+      </ng-container>
+
+      <ng-template #notificationContent>
+        <section class="empty-card" *ngIf="!notifications.length">
+          <div class="empty-icon">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </div>
+
+          <h2>No notifications yet</h2>
+          <p>Important Gmail, Calendar, task and account updates will appear here.</p>
+        </section>
+
+        <article
+          class="notification-card"
+          *ngFor="let notification of notifications"
+          [class.unread]="!notification.isRead"
+          [class.gmail]="notification.type === 'GMAIL'"
+          [class.calendar]="notification.type === 'CALENDAR'"
+          [class.task]="notification.type === 'TASK'"
+          (click)="markAsRead(notification)"
+        >
+          <div class="notification-icon">
+            <ion-icon [name]="getIconName(notification)"></ion-icon>
+          </div>
+
+          <div class="notification-info">
+            <div class="title-row">
+              <div>
+                <h3>{{ notification.title }}</h3>
+
+                <span class="source-badge" *ngIf="notification.type">
+                  {{ notification.type }}
+                </span>
+              </div>
+
+              <span class="unread-dot" *ngIf="!notification.isRead"></span>
+            </div>
+
+            <p>{{ notification.message }}</p>
+
+            <small>
+              <ion-icon name="time-outline"></ion-icon>
+              {{ getTimeAgo(notification.createdAt) }}
+            </small>
+          </div>
+
+          <button
+            type="button"
+            class="delete-btn"
+            (click)="deleteNotification($event, notification.id)"
+            aria-label="Delete notification"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </article>
+      </ng-template>
+    </section>
+
+    <ion-infinite-scroll
+      threshold="120px"
+      [disabled]="!hasNextPage"
+      (ionInfinite)="loadMore($event)"
+    >
+      <ion-infinite-scroll-content
+        loadingSpinner="crescent"
+        loadingText="Loading more notifications..."
+      ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </main>
+</ion-content>

@@ -102,6 +102,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'settings/notifications',
+    loadComponent: () => import('./features/pages/settings/notifications/notifications.page').then( 
+      (m) => m.NotificationsPage
+    ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'settings/google-connect',
     loadComponent: () =>
       import('./features/pages/google-connect/google-connect.page').then(
@@ -113,4 +120,6 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login',
   },
+
+
 ];

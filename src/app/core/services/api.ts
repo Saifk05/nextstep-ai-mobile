@@ -13,6 +13,11 @@ import {
 } from '../models/task.model';
 
 import {
+  NotificationItem,
+  NotificationsResponse,
+} from '../models/notification.model';
+
+import {
   GoogleConnectResponse,
   GoogleStatusResponse,
   GoogleCalendarEventsResponse,
@@ -429,10 +434,58 @@ getGoogleGmailSummary(
   );
 }
 
-socialLogin(payload: SocialLoginPayload): Observable<AuthResponse> {
-  return this.http.post<AuthResponse>(
-    `${this.clientUrl}/auth/social-login`,
-    payload,
-  );
-}
+  socialLogin(payload: SocialLoginPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.clientUrl}/auth/social-login`,
+      payload,
+    );
+  }
+
+  /*
+  * Notifications
+  */
+  getNotifications(
+    cursor?: string,
+    limit: number = 10
+  ): Observable<NotificationsResponse> {
+    const params: string[] = [];
+
+    if (limit) {
+      params.push(`limit=${limit}`);
+    }
+
+    if (cursor) {
+      params.push(`cursor=${encodeURIComponent(cursor)}`);
+    }
+
+    const query = params.length ? `?${params.join('&')}` : '';
+
+    return this.http.get<NotificationsResponse>(
+      `${this.clientUrl}/notifications${query}`
+    );
+  }
+
+  markNotificationAsRead(
+    notificationId: string
+  ): Observable<any> {
+    return this.http.patch(
+      `${this.clientUrl}/notifications/${notificationId}/read`,
+      {}
+    );
+  }
+
+  markAllNotificationsAsRead(): Observable<any> {
+    return this.http.patch(
+      `${this.clientUrl}/notifications/read-all`,
+      {}
+    );
+  }
+
+  deleteNotification(
+    notificationId: string
+  ): Observable<any> {
+    return this.http.delete(
+      `${this.clientUrl}/notifications/${notificationId}`
+    );
+  }
 }
