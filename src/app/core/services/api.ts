@@ -273,6 +273,12 @@ getGoogleStatus(): Observable<GoogleStatusResponse> {
   );
 }
 
+getGoogleAccounts(): Observable<any> {
+  return this.http.get<any>(
+    `${this.clientUrl}/integrations/google/accounts`
+  );
+}
+
 sendGoogleConnectOtp(
   payload: GoogleOtpSendPayload
 ): Observable<GoogleOtpResponse> {
@@ -306,15 +312,55 @@ disconnectGoogleAccount(accountId: string): Observable<any> {
   );
 }
 
+// getGoogleCalendarEvents(
+//   accountId?: string
+// ): Observable<GoogleCalendarEventsResponse> {
+//   const query = accountId ? `?accountId=${accountId}` : '';
+
+//   return this.http.get<GoogleCalendarEventsResponse>(
+//     `${this.clientUrl}/integrations/google/calendar/events${query}`
+//   );
+// }
+
+
+
+
 getGoogleCalendarEvents(
-  accountId?: string
+  accountId?: string,
+  range?: string,
+  search?: string,
+  pageToken?: string,
+  limit: number = 10
 ): Observable<GoogleCalendarEventsResponse> {
-  const query = accountId ? `?accountId=${accountId}` : '';
+  const params: string[] = [];
+
+  if (accountId) {
+    params.push(`accountId=${encodeURIComponent(accountId)}`);
+  }
+
+  if (range) {
+    params.push(`range=${encodeURIComponent(range)}`);
+  }
+
+  if (search?.trim()) {
+    params.push(`search=${encodeURIComponent(search.trim())}`);
+  }
+
+  if (pageToken) {
+    params.push(`pageToken=${encodeURIComponent(pageToken)}`);
+  }
+
+  if (limit) {
+    params.push(`limit=${limit}`);
+  }
+
+  const query = params.length ? `?${params.join('&')}` : '';
 
   return this.http.get<GoogleCalendarEventsResponse>(
     `${this.clientUrl}/integrations/google/calendar/events${query}`
   );
 }
+
 
 getGoogleGmailStatus(): Observable<GmailStatusResponse> {
   return this.http.get<GmailStatusResponse>(

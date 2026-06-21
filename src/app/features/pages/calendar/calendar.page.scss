@@ -1,0 +1,502 @@
+.calendar-content {
+  --background: var(--app-bg);
+}
+
+.calendar-page {
+  min-height: 100%;
+  padding: 18px 16px 96px;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+.hero-card,
+.account-select-card,
+.summary-grid article,
+.search-box,
+.filter-icon-btn,
+.calendar-range-btn,
+.event-card,
+.empty-card,
+.selected-range-row {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+}
+
+.hero-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 26px;
+
+  p {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--app-text-secondary);
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 220px;
+    font-size: 24px;
+    line-height: 1.12;
+    font-weight: 850;
+    color: var(--app-text);
+  }
+
+  ion-icon {
+    flex: 0 0 auto;
+    font-size: 34px;
+    color: var(--app-primary);
+  }
+}
+
+/* ACCOUNT */
+
+.section {
+  margin-top: 18px;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  h2 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+}
+
+.section-label {
+  margin: 0 0 3px;
+  color: var(--app-text-secondary);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.account-select-card {
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--app-surface);
+}
+
+.account-select-card ion-select {
+  width: 100%;
+  min-height: 68px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --color: var(--app-text);
+  --placeholder-color: var(--app-text-secondary);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.account-select-card ion-select::part(text) {
+  max-width: calc(100vw - 120px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-select-card ion-select::part(icon) {
+  color: var(--app-primary);
+  opacity: 1;
+}
+
+/* SUMMARY */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+
+  article {
+    min-height: 88px;
+    padding: 16px;
+    border-radius: 22px;
+
+    span {
+      display: block;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 850;
+      color: var(--app-text);
+    }
+
+    p {
+      margin: 8px 0 0;
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 750;
+      color: var(--app-text-secondary);
+    }
+  }
+}
+
+/* SEARCH + DATE RANGE */
+
+.search-filter-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 52px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.search-box {
+  min-width: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-radius: 18px;
+
+  ion-icon {
+    flex: 0 0 auto;
+    font-size: 19px;
+    color: var(--app-text-secondary);
+  }
+
+  input {
+    min-width: 0;
+    flex: 1;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--app-text);
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  input::placeholder {
+    color: var(--app-text-secondary);
+    opacity: 0.75;
+  }
+}
+
+.calendar-range-btn {
+  width: 52px;
+  height: 52px;
+
+  padding: 0;
+
+  border: 1px solid var(--app-border);
+
+  border-radius: 18px;
+
+  background: var(--app-surface);
+
+  color: var(--app-text);
+
+  display: grid;
+
+  place-items: center;
+
+  cursor: pointer;
+}
+
+.calendar-range-btn ion-icon {
+  font-size: 22px;
+}
+
+.calendar-range-btn ::ng-deep .mat-mdc-icon-button {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  color: var(--app-text);
+}
+
+.calendar-range-btn ::ng-deep .mat-mdc-button-touch-target {
+  width: 52px;
+  height: 52px;
+}
+
+.calendar-range-btn ::ng-deep svg {
+  fill: var(--app-text);
+}
+
+.hidden-range-picker {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  opacity: 0;
+
+  overflow: hidden;
+
+  top: 0;
+
+  left: 0;
+
+  pointer-events: none;
+}
+
+.selected-range-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+
+  span {
+    min-width: 0;
+    color: var(--app-text);
+    font-size: 12px;
+    font-weight: 850;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  button {
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 13px;
+    background: var(--app-primary);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 900;
+  }
+}
+
+/* FILTERS */
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+
+  button {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 6px;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: var(--app-surface);
+    color: var(--app-text-secondary);
+    font-size: 10.5px;
+    font-weight: 850;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  button.active {
+    background: var(--app-primary);
+    border-color: var(--app-primary);
+    color: #ffffff;
+  }
+}
+
+/* EVENTS */
+
+.events-section {
+  margin-top: 20px;
+}
+
+.event-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 22px;
+}
+
+.event-date {
+  flex: 0 0 68px;
+
+  strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 850;
+    color: var(--app-primary);
+  }
+
+  span {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--app-text-secondary);
+  }
+}
+
+.event-main {
+  min-width: 0;
+  flex: 1;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.25;
+    font-weight: 850;
+    color: var(--app-text);
+  }
+
+  small {
+    display: block;
+    margin-top: 9px;
+    max-width: 100%;
+    font-size: 11px;
+    color: var(--app-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.event-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.category-pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--app-bg);
+  color: var(--app-text-secondary);
+  border: 1px solid var(--app-border);
+  font-size: 10px;
+  font-weight: 850;
+  white-space: nowrap;
+
+  ion-icon {
+    font-size: 12px;
+  }
+}
+
+.event-meta,
+.event-description {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--app-text-secondary);
+
+  ion-icon {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    font-size: 14px;
+  }
+}
+
+/* EMPTY + LOADING */
+
+.empty-card {
+  margin-top: 14px;
+  padding: 34px 18px;
+  border-radius: 24px;
+  text-align: center;
+
+  ion-icon {
+    font-size: 40px;
+    color: var(--app-text-secondary);
+  }
+
+  h3 {
+    margin: 12px 0 6px;
+    font-size: 17px;
+    font-weight: 850;
+    color: var(--app-text);
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--app-text-secondary);
+  }
+}
+
+.event-skeleton {
+  height: 92px;
+  margin-bottom: 12px;
+  border-radius: 22px;
+  background: linear-gradient(
+    90deg,
+    var(--app-surface),
+    var(--app-border),
+    var(--app-surface)
+  );
+}
+
+ion-infinite-scroll-content {
+  min-height: 76px;
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* MATERIAL DATE PICKER OVERLAY */
+
+::ng-deep .mat-datepicker-content {
+  border-radius: 22px !important;
+  overflow: hidden;
+}
+
+::ng-deep .mat-calendar {
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: var(--app-primary) !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .mat-calendar-body-in-range::before {
+  background: var(--app-primary-soft) !important;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: var(--app-primary) !important;
+}
+
+@media (max-width: 380px) {
+  .calendar-page {
+    padding-inline: 14px;
+  }
+
+  .filter-row {
+    gap: 6px;
+
+    button {
+      font-size: 9.8px;
+      padding: 0 4px;
+    }
+  }
+
+  .summary-grid article {
+    padding: 14px;
+  }
+}

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
@@ -37,6 +38,46 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'calendar',
+    loadComponent: () =>
+      import('./features/pages/calendar/calendar.page').then(
+        (m) => m.CalendarPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-list/task-list.component').then(
+        (m) => m.TaskListComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/add',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-create/task-create.component').then(
+        (m) => m.TaskCreateComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/:id/complete',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-complete/task-complete.component').then(
+        (m) => m.TaskCompleteComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/:id',
+    loadComponent: () =>
+      import('./features/pages/tasks/task-details/task-details.component').then(
+        (m) => m.TaskDetailsComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./features/pages/settings/settings.page').then(
@@ -65,46 +106,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/pages/google-connect/google-connect.page').then(
         (m) => m.GoogleConnectPage
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'tasks',
-    loadComponent: () =>
-      import('./features/pages/tasks/task-list/task-list.component').then(
-        (m) => m.TaskListComponent
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'tasks/add',
-    loadComponent: () =>
-      import('./features/pages/tasks/task-create/task-create.component').then(
-        (m) => m.TaskCreateComponent
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'tasks/:id/complete',
-    loadComponent: () =>
-      import(
-        './features/pages/tasks/task-complete/task-complete.component'
-      ).then((m) => m.TaskCompleteComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'tasks/:id',
-    loadComponent: () =>
-      import('./features/pages/tasks/task-details/task-details.component').then(
-        (m) => m.TaskDetailsComponent
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'finance',
-    loadComponent: () =>
-      import('./features/pages/finance/finance.page').then(
-        (m) => m.FinancePage
       ),
     canActivate: [authGuard],
   },

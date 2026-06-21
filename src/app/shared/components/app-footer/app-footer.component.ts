@@ -4,11 +4,11 @@ import { NavigationEnd, Router } from '@angular/router';
 import { IonIcon, NavController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
+  calendarOutline,
   checkmarkCircleOutline,
   home,
   mailOutline,
   settingsOutline,
-  walletOutline,
 } from 'ionicons/icons';
 import { filter, Subscription } from 'rxjs';
 
@@ -31,7 +31,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
     addIcons({
       home,
       mailOutline,
-      walletOutline,
+      calendarOutline,
       settingsOutline,
       checkmarkCircleOutline,
     });
@@ -56,7 +56,7 @@ export class AppFooterComponent implements OnInit, OnDestroy {
       home: '/dashboard',
       inbox: '/gmail',
       tasks: '/tasks',
-      finance: '/finance',
+      calendar: '/calendar',
       settings: '/settings',
     };
 
@@ -79,8 +79,8 @@ export class AppFooterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (url.startsWith('/finance')) {
-      this.activeTab = 'finance';
+    if (url.startsWith('/calendar')) {
+      this.activeTab = 'calendar';
       return;
     }
 

@@ -1,0 +1,190 @@
+<ion-content class="calendar-content" fullscreen>
+  <section class="calendar-page">
+    <section class="hero-card">
+      <div>
+        <p>AI Action Calendar</p>
+        <h1>Your upcoming schedule</h1>
+      </div>
+
+      <ion-icon name="calendar-outline"></ion-icon>
+    </section>
+
+    <section *ngIf="!accounts.length && !loading" class="empty-card">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h3>No Google account connected</h3>
+      <p>Connect your Google account from Settings to view calendar events.</p>
+    </section>
+
+    <ng-container *ngIf="accounts.length">
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Accounts</p>
+            <h2>Select Google Account</h2>
+          </div>
+        </div>
+
+        <div class="account-select-card">
+          <ion-select
+            interface="popover"
+            label="Google Account"
+            label-placement="stacked"
+            [value]="selectedAccountId"
+            (ionChange)="onAccountChange($event)"
+          >
+            <ion-select-option
+              *ngFor="let account of accounts"
+              [value]="account.id"
+            >
+              {{ account.email }} {{ account.isDefault ? '(Default)' : '' }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article>
+          <span>{{ summary.todayEvents }}</span>
+          <p>Today's Events</p>
+        </article>
+
+        <article>
+          <span>{{ summary.upcomingMeetings }}</span>
+          <p>Meetings</p>
+        </article>
+
+        <article>
+          <span>{{ summary.deadlines }}</span>
+          <p>Deadlines</p>
+        </article>
+
+        <article>
+          <span>{{ summary.interviews }}</span>
+          <p>Interviews</p>
+        </article>
+      </section>
+
+      <section class="search-filter-row">
+        <div class="search-box">
+          <ion-icon name="search-outline"></ion-icon>
+
+          <input
+            type="text"
+            placeholder="Search events"
+            [(ngModel)]="searchText"
+            (input)="onSearchChange()"
+          />
+        </div>
+
+        <button
+          class="calendar-range-btn"
+          type="button"
+          (click)="picker.open()"
+        >
+          <ion-icon name="calendar-outline"></ion-icon>
+        </button>
+      </section>
+
+      <mat-form-field class="hidden-range-picker">
+        <mat-date-range-input [rangePicker]="picker">
+          <input
+            matStartDate
+            placeholder="Start date"
+            [(ngModel)]="startDate"
+            (dateChange)="onDateRangeChange()"
+          />
+
+          <input
+            matEndDate
+            placeholder="End date"
+            [(ngModel)]="endDate"
+            (dateChange)="onDateRangeChange()"
+          />
+        </mat-date-range-input>
+
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <section *ngIf="startDate && endDate" class="selected-range-row">
+        <span>{{ selectedDateRangeLabel }}</span>
+
+        <button type="button" (click)="clearDateRange()">
+          Clear
+        </button>
+      </section>
+
+      <section class="filter-row">
+        <button
+          *ngFor="let filter of filters"
+          [class.active]="selectedFilter === filter.value && !(startDate && endDate)"
+          (click)="changeFilter(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+      </section>
+
+      <section class="events-section">
+        <div class="section-header">
+          <h2>Upcoming Events</h2>
+        </div>
+
+        <ng-container *ngIf="loading">
+          <div class="event-skeleton"></div>
+          <div class="event-skeleton"></div>
+          <div class="event-skeleton"></div>
+        </ng-container>
+
+        <section *ngIf="!loading && !events.length" class="empty-card">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <h3>No events found</h3>
+          <p>No matching events found for the selected filter.</p>
+        </section>
+
+        <article class="event-card" *ngFor="let event of events">
+          <div class="event-date">
+            <strong>{{ formatEventTime(event) }}</strong>
+            <span>{{ formatEventDate(event) }}</span>
+          </div>
+
+          <div class="event-main">
+            <div class="event-title-row">
+              <h3>{{ event.title }}</h3>
+
+              <span
+                class="category-pill"
+                [attr.data-category]="event.category"
+              >
+                <ion-icon [name]="getCategoryIcon(event.category)"></ion-icon>
+                {{ getCategoryLabel(event.category) }}
+              </span>
+            </div>
+
+            <p *ngIf="event.location" class="event-meta">
+              <ion-icon name="location-outline"></ion-icon>
+              {{ event.location }}
+            </p>
+
+            <p *ngIf="event.description" class="event-description">
+              {{ event.description }}
+            </p>
+
+            <small>{{ event.accountEmail }}</small>
+          </div>
+        </article>
+      </section>
+
+      <ion-infinite-scroll
+        threshold="100px"
+        [disabled]="!hasMore"
+        (ionInfinite)="loadMore($event)"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="Loading more events..."
+        ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ng-container>
+
+    <app-footer></app-footer>
+  </section>
+</ion-content>
