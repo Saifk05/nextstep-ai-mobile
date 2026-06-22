@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { finalize, forkJoin } from 'rxjs';
+import { finalize } from 'rxjs';
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
@@ -219,32 +219,34 @@ export class DashboardPage implements OnInit {
       });
   }
 
+
   loadGmailDashboardData(): void {
-    if (!this.selectedAccountId) {
-      this.gmailSummary = null;
-      this.gmailMessages = [];
-      this.gmailLoading = false;
-      return;
-    }
-
-    this.gmailLoading = true;
-
-    forkJoin({
-      summary: this.apiService.getGoogleGmailSummary(this.selectedAccountId),
-      messages: this.apiService.getGoogleGmailMessages(this.selectedAccountId),
-    })
-      .pipe(finalize(() => (this.gmailLoading = false)))
-      .subscribe({
-        next: (response) => {
-          this.gmailSummary = response.summary.data;
-          this.gmailMessages = response.messages.data || [];
-        },
-        error: () => {
-          this.gmailSummary = null;
-          this.gmailMessages = [];
-        },
-      });
+  if (!this.selectedAccountId) {
+    this.gmailSummary = null;
+    this.gmailMessages = [];
+    this.gmailLoading = false;
+    return;
   }
+
+  this.gmailLoading = true;
+
+  this.apiService
+    .getGoogleGmailSummary(this.selectedAccountId)
+    .pipe(finalize(() => (this.gmailLoading = false)))
+    .subscribe({
+      next: (response) => {
+        this.gmailSummary = response.data;
+
+        this.gmailMessages = response.data.emails || [];
+      },
+
+      error: () => {
+        this.gmailSummary = null;
+        this.gmailMessages = [];
+      },
+    });
+}
+
 
   getSenderName(from: string): string {
     if (!from) {

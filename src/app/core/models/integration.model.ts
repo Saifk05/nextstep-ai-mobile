@@ -120,6 +120,7 @@ export interface GmailSummary {
   totalEmails: number;
   unreadEmails: number;
   importantEmails: number;
+  emails?: GmailMessage[];
   categories?: {
     work?: number;
     meetings?: number;
