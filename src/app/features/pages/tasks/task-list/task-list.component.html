@@ -55,15 +55,84 @@
     </section>
 
     <section class="search-row">
+      <button class="calendar-btn" type="button" (click)="picker.open()">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </button>
+
+      <mat-form-field class="hidden-date-range">
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate [(ngModel)]="dateRange.start" />
+          <input
+            matEndDate
+            [(ngModel)]="dateRange.end"
+            (dateChange)="applyFilters()"
+          />
+        </mat-date-range-input>
+
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
       <div class="search-box">
         <ion-icon name="search-outline"></ion-icon>
-        <span>Search tasks...</span>
+
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+        />
       </div>
 
-      <button class="filter-btn" type="button">
-        <ion-icon name="funnel-outline"></ion-icon>
-      </button>
+      <div class="filter-wrapper">
+        <button
+          class="filter-btn"
+          type="button"
+          (click)="toggleStatusFilter($event)"
+        >
+          <ion-icon name="funnel-outline"></ion-icon>
+        </button>
+
+        @if (showStatusFilter) {
+          <div class="status-dropdown">
+            @for (status of statusOptions; track status.value) {
+              <button
+                type="button"
+                [class.active]="selectedStatus === status.value"
+                (click)="selectStatus(status.value)"
+              >
+                {{ status.label }}
+              </button>
+            }
+          </div>
+        }
+      </div>
     </section>
+
+    @if (isDateFilterActive || selectedStatus !== 'ALL' || searchText) {
+      <section class="active-filters">
+        @if (searchText) {
+          <span>
+            Search: {{ searchText }}
+            <button type="button" (click)="clearSearch()">×</button>
+          </span>
+        }
+
+        @if (selectedStatus !== 'ALL') {
+          <span>
+            {{ formatLabel(selectedStatus) }}
+            <button type="button" (click)="clearStatusFilter()">×</button>
+          </span>
+        }
+
+        @if (isDateFilterActive) {
+          <span>
+            {{ dateRange.start | date: 'dd MMM' }} -
+            {{ dateRange.end | date: 'dd MMM' }}
+            <button type="button" (click)="clearDateFilter()">×</button>
+          </span>
+        }
+      </section>
+    }
 
     @if (isLoading) {
       <section class="skeleton-list">
@@ -82,7 +151,7 @@
 
         <button type="button" (click)="loadTasks()">Try Again</button>
       </section>
-    } @else if (!tasks.length) {
+    } @else if (!allTasks.length) {
       <section class="empty-state">
         <div class="empty-icon">
           <ion-icon name="checkmark-circle-outline"></ion-icon>
@@ -93,6 +162,19 @@
 
         <button type="button" (click)="goToAddTask($event)">
           Create Task
+        </button>
+      </section>
+    } @else if (!tasks.length) {
+      <section class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="search-outline"></ion-icon>
+        </div>
+
+        <h2>No matching tasks</h2>
+        <p>Try changing your search, status, or date filter.</p>
+
+        <button type="button" (click)="clearAllFilters()">
+          Clear Filters
         </button>
       </section>
     } @else {

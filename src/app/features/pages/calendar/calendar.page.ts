@@ -22,6 +22,7 @@ import {
   alertCircleOutline,
   briefcaseOutline,
   calendarOutline,
+  funnelOutline,
   locationOutline,
   notificationsOutline,
   peopleOutline,
@@ -40,19 +41,16 @@ type CalendarFilter = 'today' | 'tomorrow' | 'week' | 'month';
   imports: [
     CommonModule,
     FormsModule,
-
     IonContent,
     IonIcon,
     IonSelect,
     IonSelectOption,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-
     AppFooterComponent,
   ],
   templateUrl: './calendar.page.html',
@@ -63,7 +61,6 @@ export class CalendarPage implements OnInit {
   events: any[] = [];
 
   selectedAccountId = localStorage.getItem('selectedGoogleAccountId') || '';
-
   selectedFilter: CalendarFilter = 'today';
 
   searchText = '';
@@ -71,6 +68,7 @@ export class CalendarPage implements OnInit {
   startDate: Date | null = null;
   endDate: Date | null = null;
 
+  showFilterDropdown = false;
   nextPageToken: string | null = null;
   hasMore = true;
 
@@ -97,6 +95,7 @@ export class CalendarPage implements OnInit {
     addIcons({
       calendarOutline,
       searchOutline,
+      funnelOutline,
       peopleOutline,
       briefcaseOutline,
       notificationsOutline,
@@ -157,7 +156,6 @@ export class CalendarPage implements OnInit {
         }
 
         localStorage.setItem('selectedGoogleAccountId', this.selectedAccountId);
-
         this.loadCalendar(true);
       },
       error: () => {
@@ -182,11 +180,24 @@ export class CalendarPage implements OnInit {
     this.loadCalendar(true);
   }
 
+  toggleFilterDropdown(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.showFilterDropdown = !this.showFilterDropdown;
+  }
+
+  selectFilter(filter: CalendarFilter): void {
+    this.showFilterDropdown = false;
+    this.changeFilter(filter);
+  }
+
   onDateRangeChange(): void {
     if (!this.startDate || !this.endDate) {
       return;
     }
 
+    this.showFilterDropdown = false;
     this.nextPageToken = null;
     this.hasMore = true;
 
@@ -205,6 +216,7 @@ export class CalendarPage implements OnInit {
     this.endDate = null;
 
     if (this.selectedFilter === filter) {
+      this.loadCalendar(true);
       return;
     }
 

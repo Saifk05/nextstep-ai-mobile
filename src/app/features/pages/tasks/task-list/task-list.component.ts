@@ -1,7 +1,15 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+
 import { AppFooterComponent } from '../../../../shared/components/app-footer/app-footer.component';
 
 import { addIcons } from 'ionicons';
@@ -27,15 +35,41 @@ import { Task } from '../../../../core/models/task.model';
   imports: [
     CommonModule,
     DatePipe,
+    FormsModule,
     IonContent,
     IonIcon,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
     AppFooterComponent,
   ],
 })
 export class TaskListComponent implements OnInit {
+  allTasks: Task[] = [];
   tasks: Task[] = [];
+
   isLoading = false;
   errorMessage = '';
+
+  searchText = '';
+  showStatusFilter = false;
+  selectedStatus = 'ALL';
+
+  dateRange: {
+    start: Date | null;
+    end: Date | null;
+  } = {
+    start: null,
+    end: null,
+  };
+
+  statusOptions = [
+    { label: 'All', value: 'ALL' },
+    { label: 'Pending', value: 'PENDING' },
+    { label: 'Completed', value: 'COMPLETED' },
+    { label: 'Overdue', value: 'OVERDUE' },
+  ];
 
   constructor(
     private readonly apiService: ApiService,
@@ -55,9 +89,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('TaskListComponent Loaded:', this.router.url);
-    // this.loadTasks();
   }
-
 
   ionViewWillEnter(): void {
     console.log('TaskListComponent Entered:', this.router.url);
@@ -70,7 +102,9 @@ export class TaskListComponent implements OnInit {
 
     this.apiService.getTasks().subscribe({
       next: (response) => {
-        this.tasks = response.data || [];
+        this.allTasks = response.data || [];
+        this.tasks = [...this.allTasks];
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (error) => {
@@ -85,13 +119,7 @@ export class TaskListComponent implements OnInit {
     event?.preventDefault();
     event?.stopPropagation();
 
-    console.log('Clicked Add Task');
-    console.log('Current URL Before:', this.router.url);
-
-    this.router.navigateByUrl('/tasks/add').then((success) => {
-      console.log('Navigation Success:', success);
-      console.log('Current URL After:', this.router.url);
-    });
+    this.router.navigateByUrl('/tasks/add');
   }
 
   openTask(task: Task, event?: Event): void {
@@ -105,6 +133,98 @@ export class TaskListComponent implements OnInit {
     }
 
     this.router.navigateByUrl(`/tasks/${taskId}`);
+  }
+
+  toggleStatusFilter(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.showStatusFilter = !this.showStatusFilter;
+  }
+
+  selectStatus(status: string): void {
+    this.selectedStatus = status;
+    this.showStatusFilter = false;
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let filteredTasks = [...this.allTasks];
+
+    const search = this.searchText.trim().toLowerCase();
+
+    if (search) {
+      filteredTasks = filteredTasks.filter((task) => {
+        const title = task.title?.toLowerCase() || '';
+        const description = task.description?.toLowerCase() || '';
+        const category = task.category?.toLowerCase() || '';
+
+        return (
+          title.includes(search) ||
+          description.includes(search) ||
+          category.includes(search)
+        );
+      });
+    }
+
+    if (this.selectedStatus !== 'ALL') {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.status === this.selectedStatus
+      );
+    }
+
+    if (this.dateRange.start && this.dateRange.end) {
+      const start = new Date(this.dateRange.start);
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date(this.dateRange.end);
+      end.setHours(23, 59, 59, 999);
+
+      filteredTasks = filteredTasks.filter((task) => {
+        if (!task.dueDate) {
+          return false;
+        }
+
+        const dueDate = new Date(task.dueDate);
+        return dueDate >= start && dueDate <= end;
+      });
+    }
+
+    this.tasks = filteredTasks;
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.applyFilters();
+  }
+
+  clearStatusFilter(): void {
+    this.selectedStatus = 'ALL';
+    this.applyFilters();
+  }
+
+  clearDateFilter(): void {
+    this.dateRange = {
+      start: null,
+      end: null,
+    };
+
+    this.applyFilters();
+  }
+
+  clearAllFilters(): void {
+    this.searchText = '';
+    this.selectedStatus = 'ALL';
+    this.dateRange = {
+      start: null,
+      end: null,
+    };
+
+    this.applyFilters();
+  }
+
+  get isDateFilterActive(): boolean {
+    return !!this.dateRange.start && !!this.dateRange.end;
   }
 
   get totalTasks(): number {

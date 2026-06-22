@@ -135,16 +135,35 @@ h1 {
   background: rgba(220, 38, 38, 0.1);
 }
 
-/* Search */
+/* Search + Calendar + Filter */
 
 .search-row {
-  display: flex;
-  gap: 12px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  gap: 10px;
   margin-bottom: 18px;
 }
 
+.calendar-btn,
+.filter-btn {
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    color: var(--app-primary);
+    font-size: 19px;
+  }
+}
+
 .search-box {
-  flex: 1;
   height: 52px;
   padding: 0 16px;
   display: flex;
@@ -160,24 +179,127 @@ h1 {
     font-size: 18px;
   }
 
-  span {
-    color: var(--app-text-muted);
+  input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--app-text);
     font-size: 14px;
+  }
+
+  input::placeholder {
+    color: var(--app-text-muted);
   }
 }
 
-.filter-btn {
-  width: 52px;
-  height: 52px;
-  border: 1px solid var(--app-border);
+.hidden-date-range {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-wrapper {
+  position: relative;
+}
+
+.status-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  z-index: 50;
+  width: 165px;
+  padding: 8px;
   border-radius: 18px;
   background: var(--app-surface);
-  box-shadow: var(--app-shadow);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow-lg);
 
-  ion-icon {
+  button {
+    width: 100%;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: transparent;
     color: var(--app-text-secondary);
-    font-size: 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
   }
+
+  button.active {
+    background: var(--app-primary);
+    color: var(--app-primary-contrast);
+  }
+}
+
+/* Active Filters */
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -4px 0 18px;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: var(--app-primary-soft);
+    color: var(--app-primary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  button {
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 50%;
+    background: var(--app-primary);
+    color: var(--app-primary-contrast);
+    font-size: 14px;
+    line-height: 1;
+  }
+}
+
+/* Angular Material Datepicker Theme */
+
+::ng-deep .mat-datepicker-content {
+  border-radius: 24px !important;
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  box-shadow: var(--app-shadow-lg) !important;
+}
+
+::ng-deep .mat-calendar {
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content,
+::ng-deep .mat-calendar-table-header,
+::ng-deep .mat-calendar-period-button,
+::ng-deep .mat-calendar-previous-button,
+::ng-deep .mat-calendar-next-button {
+  color: var(--app-text) !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast) !important;
+}
+
+::ng-deep .mat-calendar-body-in-range::before {
+  background: var(--app-primary-soft) !important;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: var(--app-primary) !important;
 }
 
 /* Tasks */

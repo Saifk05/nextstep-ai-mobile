@@ -235,3 +235,6 @@ body.dark-theme {
   --activity-icon-bg: #1f1f1f;
 }
 
+.cdk-overlay-pane:has(.mat-datepicker-content) {
+  transform: translateY(130px) !important;
+}
