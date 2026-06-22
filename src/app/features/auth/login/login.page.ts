@@ -21,6 +21,7 @@ import {
 import { ApiService } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
 import { ToastService } from '../../../core/services/toast';
+import { PushNotificationService } from '../../../core/services/push-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,8 @@ export class LoginPage implements OnInit {
     private readonly storageService: StorageService,
     private readonly toastService: ToastService,
     private readonly navCtrl: NavController,
-    private readonly firebaseService: FirebaseService
+    private readonly firebaseService: FirebaseService,
+    private readonly pushNotificationService: PushNotificationService
   ) {
     addIcons({
       eyeOutline,
@@ -102,7 +104,16 @@ export class LoginPage implements OnInit {
             response.data.refreshToken,
             response.data.user
           );
+          this.pushNotificationService
+            .initPushNotifications()
+            .catch((error) => {
+              console.error(
+                'Push notification initialization failed',
+                error,
+              );
+            });
 
+          // await this.pushNotificationService.initPushNotifications();
           this.loading = false;
 
           this.toastService.success('Login successful');
@@ -156,6 +167,16 @@ export class LoginPage implements OnInit {
           response.data.user
         );
 
+          this.pushNotificationService
+            .initPushNotifications()
+            .catch((error) => {
+              console.error(
+                'Push notification initialization failed',
+                error,
+              );
+            });
+                    
+        // await this.pushNotificationService.initPushNotifications();
         this.loading = false;
         this.toastService.success('Login successful');
         await this.navCtrl.navigateRoot('/dashboard');

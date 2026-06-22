@@ -488,4 +488,28 @@ getGoogleGmailSummary(
       `${this.clientUrl}/notifications/${notificationId}`
     );
   }
+
+  registerNotificationDevice(
+  payload: {
+    token: string;
+    platform: 'ANDROID' | 'IOS' | 'WEB';
+    deviceName?: string;
+  }
+): Observable<any> {
+  return this.http.post(
+    `${this.clientUrl}/notifications/register-device`,
+    payload
+  );
+}
+
+unregisterNotificationDevice(
+  token: string
+): Observable<any> {
+  return this.http.delete(
+    `${this.clientUrl}/notifications/unregister-device`,
+    {
+      body: { token },
+    }
+  );
+}
 }

@@ -8,6 +8,9 @@ import {
 } from '@ionic/angular/standalone';
 import { AppPopupComponent } from '../../../shared/components/app-popup/app-popup.component';
 
+import { PushNotificationService } from '../../../core/services/push-notification.service';
+
+
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline,
@@ -77,7 +80,8 @@ export class SettingsPage implements OnInit {
     private readonly apiService: ApiService,
     private readonly storageService: StorageService,
     private readonly toastService: ToastService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly pushNotificationService: PushNotificationService
   ) {
     addIcons({
       arrowBackOutline,
@@ -319,8 +323,30 @@ export class SettingsPage implements OnInit {
     this.showInfo(`${label} coming soon`);
   }
 
+  // async logout(): Promise<void> {
+  //   this.blurActiveElement();
+
+  //   const user = await this.storageService.getUser();
+
+  //   if (!user?.id) {
+  //     await this.clearAndRedirectToLogin();
+  //     return;
+  //   }
+
+  //   this.apiService.logout({ userId: user.id }).subscribe({
+  //     next: async () => {
+  //       await this.clearAndRedirectToLogin();
+  //     },
+  //     error: async () => {
+  //       await this.clearAndRedirectToLogin();
+  //     },
+  //   });
+  // }
+
   async logout(): Promise<void> {
     this.blurActiveElement();
+
+    this.pushNotificationService.unregisterDevice();
 
     const user = await this.storageService.getUser();
 
@@ -338,6 +364,7 @@ export class SettingsPage implements OnInit {
       },
     });
   }
+
 
   private openExternalUrl(url: string): void {
     window.open(url, '_blank', 'noopener,noreferrer');
