@@ -139,38 +139,38 @@ export class SettingsPage implements OnInit {
       localStorage.getItem('selectedGoogleAccountId') || '';
   }
 
-  checkGoogleStatus(): void {
-    this.apiService.getGoogleStatus().subscribe({
-      next: (response) => {
-        const accounts = response.data?.accounts || [];
+  // checkGoogleStatus(): void {
+  //   this.apiService.getGoogleStatus().subscribe({
+  //     next: (response) => {
+  //       const accounts = response.data?.accounts || [];
 
-        this.connectedAccounts = accounts;
-        this.isGoogleConnected = accounts.length > 0;
+  //       this.connectedAccounts = accounts;
+  //       this.isGoogleConnected = accounts.length > 0;
 
-        if (accounts.length === 0) {
-          this.selectedAccountId = '';
-          localStorage.removeItem('selectedGoogleAccountId');
-          return;
-        }
+  //       if (accounts.length === 0) {
+  //         this.selectedAccountId = '';
+  //         localStorage.removeItem('selectedGoogleAccountId');
+  //         return;
+  //       }
 
-        const selectedExists = accounts.some(
-          (account) => account.id === this.selectedAccountId
-        );
+  //       const selectedExists = accounts.some(
+  //         (account) => account.id === this.selectedAccountId
+  //       );
 
-        if (!this.selectedAccountId || !selectedExists) {
-          this.selectAccount(accounts[0].id);
-        }
-      },
-      error: () => {
-        this.connectedAccounts = [];
-        this.isGoogleConnected = false;
-        this.selectedAccountId = '';
-        localStorage.removeItem('selectedGoogleAccountId');
+  //       if (!this.selectedAccountId || !selectedExists) {
+  //         this.selectAccount(accounts[0].id);
+  //       }
+  //     },
+  //     error: () => {
+  //       this.connectedAccounts = [];
+  //       this.isGoogleConnected = false;
+  //       this.selectedAccountId = '';
+  //       localStorage.removeItem('selectedGoogleAccountId');
 
-        this.showError('Unable to fetch Google connection status');
-      },
-    });
-  }
+  //       this.showError('Unable to fetch Google connection status');
+  //     },
+  //   });
+  // }
 
   // connectGoogleCalendar(): void {
   //   if (this.isGoogleLoading) {
@@ -193,6 +193,52 @@ export class SettingsPage implements OnInit {
   //     },
   //   });
   // }
+
+  checkGoogleStatus(): void {
+
+  this.isGoogleLoading = true;
+
+  this.apiService.getGoogleStatus().subscribe({
+    next: (response) => {
+
+      this.isGoogleLoading = false;
+
+      const accounts = response.data?.accounts || [];
+
+      this.connectedAccounts = accounts;
+      this.isGoogleConnected = accounts.length > 0;
+
+      if (accounts.length === 0) {
+        this.selectedAccountId = '';
+        localStorage.removeItem('selectedGoogleAccountId');
+        return;
+      }
+
+      const selectedExists = accounts.some(
+        (account) => account.id === this.selectedAccountId
+      );
+
+      if (!this.selectedAccountId || !selectedExists) {
+        this.selectAccount(accounts[0].id);
+      }
+    },
+
+    error: () => {
+
+      this.isGoogleLoading = false;
+
+      this.connectedAccounts = [];
+      this.isGoogleConnected = false;
+      this.selectedAccountId = '';
+
+      localStorage.removeItem('selectedGoogleAccountId');
+
+      this.showError('Unable to fetch Google connection status');
+    },
+  });
+}
+
+
 
   connectGoogleCalendar(): void {
   if (this.isGoogleLoading) {
