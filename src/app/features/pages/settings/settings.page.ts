@@ -4,12 +4,15 @@ import { Router } from '@angular/router';
 import {
   IonContent,
   IonIcon,
+  IonRefresher,
+  IonRefresherContent,
   NavController,
+  RefresherCustomEvent,
 } from '@ionic/angular/standalone';
+
 import { AppPopupComponent } from '../../../shared/components/app-popup/app-popup.component';
 import { Capacitor } from '@capacitor/core';
 import { PushNotificationService } from '../../../core/services/push-notification.service';
-
 
 import { addIcons } from 'ionicons';
 import {
@@ -32,7 +35,9 @@ import {
   addCircleOutline,
   shieldCheckmarkOutline,
   documentTextOutline,
+  
   lockClosedOutline,
+  chevronDownCircleOutline,
 } from 'ionicons/icons';
 
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
@@ -46,7 +51,15 @@ import { GoogleConnectedAccount } from '../../../core/models/integration.model';
   standalone: true,
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
-  imports: [CommonModule, IonContent, IonIcon, AppFooterComponent, AppPopupComponent],
+  imports: [
+    CommonModule,
+    IonContent,
+    IonIcon,
+    IonRefresher,
+    IonRefresherContent,
+    AppFooterComponent,
+    AppPopupComponent,
+  ],
 })
 export class SettingsPage implements OnInit {
   private readonly privacyPolicyUrl =
@@ -104,6 +117,7 @@ export class SettingsPage implements OnInit {
       shieldCheckmarkOutline,
       documentTextOutline,
       lockClosedOutline,
+      chevronDownCircleOutline,
     });
   }
 
@@ -116,6 +130,12 @@ export class SettingsPage implements OnInit {
     await this.loadUserFromStorage();
     this.loadSelectedGoogleAccount();
     this.checkGoogleStatus();
+  }
+
+  async refreshSettings(event: RefresherCustomEvent): Promise<void> {
+    await this.loadUserFromStorage();
+    this.loadSelectedGoogleAccount();
+    this.checkGoogleStatus(event);
   }
 
   private async loadUserFromStorage(): Promise<void> {
@@ -139,9 +159,13 @@ export class SettingsPage implements OnInit {
       localStorage.getItem('selectedGoogleAccountId') || '';
   }
 
-  // checkGoogleStatus(): void {
+  // checkGoogleStatus(event?: RefresherCustomEvent): void {
+  //   this.isGoogleLoading = true;
+
   //   this.apiService.getGoogleStatus().subscribe({
   //     next: (response) => {
+  //       this.isGoogleLoading = false;
+
   //       const accounts = response.data?.accounts || [];
 
   //       this.connectedAccounts = accounts;
@@ -150,6 +174,7 @@ export class SettingsPage implements OnInit {
   //       if (accounts.length === 0) {
   //         this.selectedAccountId = '';
   //         localStorage.removeItem('selectedGoogleAccountId');
+  //         event?.target?.complete();
   //         return;
   //       }
 
@@ -160,47 +185,32 @@ export class SettingsPage implements OnInit {
   //       if (!this.selectedAccountId || !selectedExists) {
   //         this.selectAccount(accounts[0].id);
   //       }
+
+  //       event?.target?.complete();
   //     },
   //     error: () => {
+  //       this.isGoogleLoading = false;
+
   //       this.connectedAccounts = [];
   //       this.isGoogleConnected = false;
   //       this.selectedAccountId = '';
+
   //       localStorage.removeItem('selectedGoogleAccountId');
 
+  //       event?.target?.complete();
   //       this.showError('Unable to fetch Google connection status');
   //     },
   //   });
   // }
+checkGoogleStatus(event?: RefresherCustomEvent): void {
+  const isRefresh = !!event;
 
-  // connectGoogleCalendar(): void {
-  //   if (this.isGoogleLoading) {
-  //     return;
-  //   }
-
-  //   this.isGoogleLoading = true;
-
-  //   this.apiService.getGoogleConnectUrl().subscribe({
-  //     next: (response) => {
-  //       this.isGoogleLoading = false;
-  //       window.location.href = response.data.url;
-  //     },
-  //     error: (error) => {
-  //       this.isGoogleLoading = false;
-
-  //       this.showError(
-  //         error?.error?.message || 'Unable to connect Google Workspace'
-  //       );
-  //     },
-  //   });
-  // }
-
-  checkGoogleStatus(): void {
-
-  this.isGoogleLoading = true;
+  if (!isRefresh) {
+    this.isGoogleLoading = true;
+  }
 
   this.apiService.getGoogleStatus().subscribe({
     next: (response) => {
-
       this.isGoogleLoading = false;
 
       const accounts = response.data?.accounts || [];
@@ -211,6 +221,7 @@ export class SettingsPage implements OnInit {
       if (accounts.length === 0) {
         this.selectedAccountId = '';
         localStorage.removeItem('selectedGoogleAccountId');
+        event?.target?.complete();
         return;
       }
 
@@ -221,48 +232,41 @@ export class SettingsPage implements OnInit {
       if (!this.selectedAccountId || !selectedExists) {
         this.selectAccount(accounts[0].id);
       }
+
+      event?.target?.complete();
     },
-
     error: () => {
-
       this.isGoogleLoading = false;
-
-      this.connectedAccounts = [];
-      this.isGoogleConnected = false;
-      this.selectedAccountId = '';
-
-      localStorage.removeItem('selectedGoogleAccountId');
-
+      event?.target?.complete();
       this.showError('Unable to fetch Google connection status');
     },
   });
 }
 
 
-
   connectGoogleCalendar(): void {
-  if (this.isGoogleLoading) {
-    return;
+    if (this.isGoogleLoading) {
+      return;
+    }
+
+    this.isGoogleLoading = true;
+
+    const platform = Capacitor.isNativePlatform() ? 'mobile' : 'web';
+
+    this.apiService.getGoogleConnectUrl(undefined, platform).subscribe({
+      next: (response) => {
+        this.isGoogleLoading = false;
+        window.location.href = response.data.url;
+      },
+      error: (error) => {
+        this.isGoogleLoading = false;
+
+        this.showError(
+          error?.error?.message || 'Unable to connect Google Workspace'
+        );
+      },
+    });
   }
-
-  this.isGoogleLoading = true;
-
-  const platform = Capacitor.isNativePlatform() ? 'mobile' : 'web';
-
-  this.apiService.getGoogleConnectUrl(undefined, platform).subscribe({
-    next: (response) => {
-      this.isGoogleLoading = false;
-      window.location.href = response.data.url;
-    },
-    error: (error) => {
-      this.isGoogleLoading = false;
-
-      this.showError(
-        error?.error?.message || 'Unable to connect Google Workspace'
-      );
-    },
-  });
-}
 
   selectAccount(accountId: string): void {
     this.selectedAccountId = accountId;
@@ -369,12 +373,9 @@ export class SettingsPage implements OnInit {
     });
   }
 
-  // goToGoogleOtp(): void {
-  //   this.router.navigate(['/settings/google-connect']);
-  // }
   goToGoogleOtp(): void {
-  this.connectGoogleCalendar();
-}
+    this.connectGoogleCalendar();
+  }
 
   openPrivacyPolicy(): void {
     this.openExternalUrl(this.privacyPolicyUrl);
@@ -395,26 +396,6 @@ export class SettingsPage implements OnInit {
   comingSoon(label: string): void {
     this.showInfo(`${label} coming soon`);
   }
-
-  // async logout(): Promise<void> {
-  //   this.blurActiveElement();
-
-  //   const user = await this.storageService.getUser();
-
-  //   if (!user?.id) {
-  //     await this.clearAndRedirectToLogin();
-  //     return;
-  //   }
-
-  //   this.apiService.logout({ userId: user.id }).subscribe({
-  //     next: async () => {
-  //       await this.clearAndRedirectToLogin();
-  //     },
-  //     error: async () => {
-  //       await this.clearAndRedirectToLogin();
-  //     },
-  //   });
-  // }
 
   async logout(): Promise<void> {
     this.blurActiveElement();
@@ -437,7 +418,6 @@ export class SettingsPage implements OnInit {
       },
     });
   }
-
 
   private openExternalUrl(url: string): void {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -483,7 +463,4 @@ export class SettingsPage implements OnInit {
     this.showLogoutPopup = false;
     this.logout();
   }
-
-
-
 }

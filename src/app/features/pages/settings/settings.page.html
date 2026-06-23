@@ -1,4 +1,8 @@
-<ion-content class="settings-content">
+<ion-content class="settings-content" fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshSettings($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div class="page">
     <section class="hero-card">
       <div class="hero-bg-circle circle-one"></div>
@@ -194,44 +198,43 @@
       <h2>Preferences</h2>
 
       <div class="menu-card">
-<button
-  type="button"
-  class="menu-item"
-  (click)="goToNotifications($event)"
->
-  <span class="left">
-    <span class="menu-icon purple">
-      <ion-icon name="notifications-outline"></ion-icon>
-    </span>
+        <button
+          type="button"
+          class="menu-item"
+          (click)="goToNotifications($event)"
+        >
+          <span class="left">
+            <span class="menu-icon purple">
+              <ion-icon name="notifications-outline"></ion-icon>
+            </span>
 
-    <span>
-      <strong>Notifications</strong>
-      <small>Task and goal reminders</small>
-    </span>
-  </span>
+            <span>
+              <strong>Notifications</strong>
+              <small>Task and goal reminders</small>
+            </span>
+          </span>
 
-  <ion-icon name="chevron-forward-outline"></ion-icon>
-</button>
-        
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
         <button
           type="button"
           class="menu-item"
           (click)="goToAppearance($event)"
         >
-      <span class="left">
-        <span class="menu-icon orange">
-          <ion-icon name="color-palette-outline"></ion-icon>
-        </span>
+          <span class="left">
+            <span class="menu-icon orange">
+              <ion-icon name="color-palette-outline"></ion-icon>
+            </span>
 
-        <span>
-          <strong>Appearance</strong>
-          <small>Theme and display settings</small>
-        </span>
-  </span>
+            <span>
+              <strong>Appearance</strong>
+              <small>Theme and display settings</small>
+            </span>
+          </span>
 
-  <ion-icon name="chevron-forward-outline"></ion-icon>
-</button>
-      
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
       </div>
     </section>
 
@@ -329,16 +332,17 @@
 
     <p class="version">NextStep AI v1.0.0</p>
   </div>
+
   <app-popup
-  [open]="showLogoutPopup"
-  title="Logout?"
-  message="Are you sure you want to logout from NextStep AI?"
-  confirmText="Logout"
-  cancelText="Cancel"
-  type="danger"
-  (close)="closeLogoutPopup()"
-  (confirm)="confirmLogout()"
-></app-popup>
+    [open]="showLogoutPopup"
+    title="Logout?"
+    message="Are you sure you want to logout from NextStep AI?"
+    confirmText="Logout"
+    cancelText="Cancel"
+    type="danger"
+    (close)="closeLogoutPopup()"
+    (confirm)="confirmLogout()"
+  ></app-popup>
 
   <app-footer></app-footer>
 </ion-content>
