@@ -7,7 +7,7 @@ import {
   NavController,
 } from '@ionic/angular/standalone';
 import { AppPopupComponent } from '../../../shared/components/app-popup/app-popup.component';
-
+import { Capacitor } from '@capacitor/core';
 import { PushNotificationService } from '../../../core/services/push-notification.service';
 
 
@@ -172,27 +172,51 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  // connectGoogleCalendar(): void {
+  //   if (this.isGoogleLoading) {
+  //     return;
+  //   }
+
+  //   this.isGoogleLoading = true;
+
+  //   this.apiService.getGoogleConnectUrl().subscribe({
+  //     next: (response) => {
+  //       this.isGoogleLoading = false;
+  //       window.location.href = response.data.url;
+  //     },
+  //     error: (error) => {
+  //       this.isGoogleLoading = false;
+
+  //       this.showError(
+  //         error?.error?.message || 'Unable to connect Google Workspace'
+  //       );
+  //     },
+  //   });
+  // }
+
   connectGoogleCalendar(): void {
-    if (this.isGoogleLoading) {
-      return;
-    }
-
-    this.isGoogleLoading = true;
-
-    this.apiService.getGoogleConnectUrl().subscribe({
-      next: (response) => {
-        this.isGoogleLoading = false;
-        window.location.href = response.data.url;
-      },
-      error: (error) => {
-        this.isGoogleLoading = false;
-
-        this.showError(
-          error?.error?.message || 'Unable to connect Google Workspace'
-        );
-      },
-    });
+  if (this.isGoogleLoading) {
+    return;
   }
+
+  this.isGoogleLoading = true;
+
+  const platform = Capacitor.isNativePlatform() ? 'mobile' : 'web';
+
+  this.apiService.getGoogleConnectUrl(undefined, platform).subscribe({
+    next: (response) => {
+      this.isGoogleLoading = false;
+      window.location.href = response.data.url;
+    },
+    error: (error) => {
+      this.isGoogleLoading = false;
+
+      this.showError(
+        error?.error?.message || 'Unable to connect Google Workspace'
+      );
+    },
+  });
+}
 
   selectAccount(accountId: string): void {
     this.selectedAccountId = accountId;

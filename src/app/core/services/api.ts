@@ -265,10 +265,16 @@ export class ApiService {
  * Google Integrations
  */
 getGoogleConnectUrl(
-  accountType: GoogleAccountType = 'PERSONAL'
+  accountType: GoogleAccountType = 'PERSONAL',
+  platform: 'web' | 'mobile' = 'web'
 ): Observable<GoogleConnectResponse> {
+  const params = [
+    `accountType=${encodeURIComponent(accountType)}`,
+    `platform=${encodeURIComponent(platform)}`,
+  ];
+
   return this.http.get<GoogleConnectResponse>(
-    `${this.clientUrl}/integrations/google/connect?accountType=${accountType}`
+    `${this.clientUrl}/integrations/google/connect?${params.join('&')}`
   );
 }
 
