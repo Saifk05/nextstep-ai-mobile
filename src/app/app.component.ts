@@ -1,19 +1,8 @@
-// import { Component } from '@angular/core';
-// import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-// import { AppToastComponent } from './shared/components/app-toast/app-toast.component';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: 'app.component.html',
-//   imports: [IonApp, IonRouterOutlet, AppToastComponent],
-// })
-// export class AppComponent {
-//   constructor() {}
-// }
-
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Preferences } from '@capacitor/preferences';
+import { App } from '@capacitor/app';
 
 import { AppToastComponent } from './shared/components/app-toast/app-toast.component';
 
@@ -24,8 +13,23 @@ import { AppToastComponent } from './shared/components/app-toast/app-toast.compo
   imports: [IonApp, IonRouterOutlet, AppToastComponent],
 })
 export class AppComponent implements OnInit {
+  constructor(private readonly router: Router) {}
+
   async ngOnInit(): Promise<void> {
     await this.loadTheme();
+    this.listenForAppDeepLinks();
+  }
+
+  private listenForAppDeepLinks(): void {
+    App.addListener('appUrlOpen', (event) => {
+      const url = event.url || '';
+
+      if (url.includes('settings') && url.includes('google=connected')) {
+        this.router.navigate(['/settings'], {
+          queryParams: { google: 'connected' },
+        });
+      }
+    });
   }
 
   private async loadTheme(): Promise<void> {
