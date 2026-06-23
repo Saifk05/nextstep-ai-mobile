@@ -323,9 +323,12 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  // goToGoogleOtp(): void {
+  //   this.router.navigate(['/settings/google-connect']);
+  // }
   goToGoogleOtp(): void {
-    this.router.navigate(['/settings/google-connect']);
-  }
+  this.connectGoogleCalendar();
+}
 
   openPrivacyPolicy(): void {
     this.openExternalUrl(this.privacyPolicyUrl);
