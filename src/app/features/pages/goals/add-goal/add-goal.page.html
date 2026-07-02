@@ -1,0 +1,77 @@
+<ion-content class="add-goal-content">
+  <div class="page">
+    <section class="hero-card">
+      <button class="hero-icon-btn" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+
+      <div class="hero-text">
+        <p class="eyebrow">GOAL ENGINE</p>
+        <h1>Create Goal</h1>
+        <p class="subtitle">
+          Define your goal and let AI generate an execution plan.
+        </p>
+      </div>
+
+      <div></div>
+    </section>
+
+    <section class="form-card">
+      <div class="form-group">
+        <label>Goal Title</label>
+        <input
+          type="text"
+          [(ngModel)]="form.title"
+          placeholder="Get a Software Engineer Job"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          rows="4"
+          [(ngModel)]="form.description"
+          placeholder="Describe your goal..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Goal Type</label>
+
+        <select [(ngModel)]="form.goalType">
+          <option value="JOB_SEARCH">Job Search</option>
+          <option value="CAREER_GROWTH">Career Growth</option>
+          <option value="SKILL_DEVELOPMENT">Skill Development</option>
+          <option value="CERTIFICATION">Certification</option>
+          <option value="PERSONAL">Personal</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Target Date</label>
+
+        <input
+          type="date"
+          [(ngModel)]="form.targetDate"
+        />
+      </div>
+
+      <div class="toggle-card">
+        <div>
+          <h4>Generate AI Plan</h4>
+          <p>Create milestones, daily and weekly actions automatically.</p>
+        </div>
+
+        <ion-toggle [(ngModel)]="form.useAiPlan"></ion-toggle>
+      </div>
+
+      <button
+        class="primary-btn"
+        [disabled]="loading"
+        (click)="createGoal()"
+      >
+        {{ loading ? 'Creating Goal...' : 'Create Goal' }}
+      </button>
+    </section>
+  </div>
+</ion-content>

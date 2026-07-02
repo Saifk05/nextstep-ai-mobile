@@ -20,6 +20,7 @@ import {
   personOutline,
   locationOutline,
   notificationsOutline,
+  flagOutline,
   colorPaletteOutline,
   helpCircleOutline,
   informationCircleOutline,
@@ -99,6 +100,7 @@ export class SettingsPage implements OnInit {
     addIcons({
       arrowBackOutline,
       personOutline,
+      flagOutline,
       locationOutline,
       notificationsOutline,
       colorPaletteOutline,
@@ -353,6 +355,14 @@ checkGoogleStatus(event?: RefresherCustomEvent): void {
     this.blurActiveElement(event);
 
     this.router.navigate(['/settings/profile'], {
+      replaceUrl: true,
+    });
+  }
+
+  goToGoals(event?: Event): void {
+    this.blurActiveElement(event);
+
+    this.router.navigate(['/goals'], {
       replaceUrl: true,
     });
   }

@@ -977,3 +977,82 @@ button {
 .activity-arrow ion-icon {
   font-size: 18px;
 }
+
+.goal-summary-card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.goal-summary-card > div {
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow);
+}
+
+.goal-summary-card span {
+  display: block;
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.goal-summary-card strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--app-text);
+  font-size: 24px;
+  font-weight: 950;
+}
+
+.goal-list {
+  display: grid;
+  gap: 12px;
+}
+
+.goal-card {
+  padding: 16px;
+  border-radius: 24px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.goal-card h4 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: 15px;
+  font-weight: 950;
+  line-height: 1.3;
+}
+
+.goal-card p {
+  margin: 6px 0 0;
+  color: var(--app-text-secondary);
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.goal-progress {
+  min-width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.goal-card:active {
+  transform: scale(0.985);
+}

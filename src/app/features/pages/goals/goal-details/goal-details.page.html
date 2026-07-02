@@ -1,0 +1,137 @@
+<ion-content class="goal-details-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page">
+    <section class="hero-card">
+      <button type="button" class="hero-icon-btn" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+
+      <div class="hero-text">
+        <p class="eyebrow">GOAL DETAILS</p>
+        <h1>{{ goal?.title || 'Goal' }}</h1>
+        <p class="subtitle">
+          {{ goal ? formatGoalType(goal.goalType) : 'Track progress and plans' }}
+        </p>
+      </div>
+
+      <div class="hero-icon-spacer"></div>
+    </section>
+
+    @if (loading) {
+      <section class="empty-card">
+        <div class="empty-icon">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </div>
+        <h3>Loading goal...</h3>
+        <p>Please wait while we fetch goal details.</p>
+      </section>
+    } @else if (errorMessage) {
+      <section class="empty-card">
+        <div class="empty-icon">!</div>
+        <h3>Unable to load goal</h3>
+        <p>{{ errorMessage }}</p>
+        <button class="primary-btn" (click)="loadGoalDetails()">Retry</button>
+      </section>
+    } @else if (goal) {
+      <section class="summary-card">
+        <div class="summary-top">
+          <div>
+            <p>Status</p>
+            <h3>{{ goal.status }}</h3>
+          </div>
+
+          <div class="progress-badge">
+            {{ goal.progressPercentage }}%
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="goal.progressPercentage"
+          ></div>
+        </div>
+
+        <div class="target-row">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Target {{ goal.targetDate | date:'dd MMM yyyy' }}</span>
+        </div>
+      </section>
+
+      @if (goal.description) {
+        <section class="section-card">
+          <h3>Description</h3>
+          <p>{{ goal.description }}</p>
+        </section>
+      }
+
+      @if (goal.aiPlanSummary) {
+        <section class="section-card ai-card">
+          <h3>AI Summary</h3>
+          <p>{{ goal.aiPlanSummary }}</p>
+        </section>
+      }
+
+      @if (goal.metrics) {
+        <section class="metrics-grid">
+          <div>
+            <span>Emails</span>
+            <strong>{{ goal.metrics.emailsSent || 0 }}</strong>
+          </div>
+
+          <div>
+            <span>Replies</span>
+            <strong>{{ goal.metrics.replies || 0 }}</strong>
+          </div>
+
+          <div>
+            <span>Interviews</span>
+            <strong>{{ goal.metrics.interviews || 0 }}</strong>
+          </div>
+
+          <div>
+            <span>Offers</span>
+            <strong>{{ goal.metrics.offers || 0 }}</strong>
+          </div>
+        </section>
+      }
+
+      <section class="section-card">
+        <h3>Recent Activity</h3>
+
+        @if (activityLoading) {
+          <p>Loading activity...</p>
+        } @else if (activities.length) {
+          <div class="activity-list">
+          @for (activity of activities; track activity.id || $any(activity).date || $index) {
+            <article class="activity-item">
+              <div class="activity-icon">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+              </div>
+
+              <div>
+                <h4>{{ $any(activity).title || $any(activity).type || 'Goal activity' }}</h4>
+
+                <p>
+                  {{ $any(activity).description || $any(activity).message || 'Activity recorded for this goal.' }}
+                </p>
+
+                <small>
+                  {{ ($any(activity).date || $any(activity).createdAt) | date:'dd MMM yyyy, h:mm a' }}
+                </small>
+              </div>
+            </article>
+          }
+          </div>
+        } @else {
+          <p>No activity yet.</p>
+        }
+      </section>
+    }
+  </div>
+
+  <app-footer></app-footer>
+</ion-content>

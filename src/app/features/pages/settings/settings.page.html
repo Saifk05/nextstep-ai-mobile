@@ -43,7 +43,7 @@
       </button>
     </section>
 
-    <section class="menu-section">
+    <!-- <section class="menu-section">
       <h2>Account</h2>
 
       <div class="menu-card">
@@ -62,7 +62,43 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
       </div>
-    </section>
+    </section> -->
+
+  <section class="menu-section">
+  <h2>Account</h2>
+
+  <div class="menu-card">
+    <button type="button" class="menu-item" (click)="goToProfile($event)">
+      <span class="left">
+        <span class="menu-icon">
+          <ion-icon name="person-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>My Profile</strong>
+          <small>View and update profile details</small>
+        </span>
+      </span>
+
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+
+    <button type="button" class="menu-item" (click)="goToGoals($event)">
+      <span class="left">
+        <span class="menu-icon green">
+          <ion-icon name="flag-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>Goals</strong>
+          <small>Manage your active goals and plans</small>
+        </span>
+      </span>
+
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  </div>
+</section>  
 
     <section class="menu-section">
       <div class="section-title-row">

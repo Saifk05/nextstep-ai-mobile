@@ -1,5 +1,8 @@
 <ion-content class="dashboard-content">
-  @if (loading) {
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+    @if (loading) {
     <div class="loader-page">
       <div class="loader-card">
         <div class="loader-ring"></div>
@@ -25,7 +28,8 @@
           </h1>
 
           <p class="date">
-            {{ dashboard.greeting.day }} • {{ dashboard.greeting.date | date:'dd-MM-yyyy' }}
+            {{ dashboard.greeting.day }} •
+            {{ dashboard.greeting.date | date:'dd-MM-yyyy' }}
           </p>
 
           <p class="subtitle">Ready to take your next step today?</p>
@@ -66,8 +70,8 @@
         </div>
 
         <div class="stat-card">
-          <span>Pending</span>
-          <strong>{{ dashboard.summary.pendingTasks }}</strong>
+          <span>Active Goals</span>
+          <strong>{{ dashboard.summary.activeGoals }}</strong>
         </div>
 
         <div class="stat-card highlight">
@@ -87,6 +91,53 @@
           <span>{{ dashboard.productivity.currentStreak }}</span>
           <small>day streak</small>
         </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h3>Active Goals</h3>
+        </div>
+
+       @if (dashboard.goals.items.length) {
+          <div class="goal-summary-card">
+            <div>
+              <span>Active Goals</span>
+              <strong>{{ dashboard.goals.activeGoals }}</strong>
+            </div>
+
+            <div>
+              <span>Overall Progress</span>
+              <strong>{{ dashboard.goals.overallProgress }}%</strong>
+            </div>
+          </div>
+
+          <div class="goal-list">
+            @for (goal of dashboard.goals.items.slice(0, 2); track goal.id) {
+              <article class="goal-card" (click)="goToGoalDetails(goal.id)">
+                <div>
+                  <h4>{{ goal.title }}</h4>
+                  <p>
+                    {{ goal.goalType }} •
+                    {{ goal.targetDate | date:'dd MMM yyyy' }}
+                  </p>
+                </div>
+
+                <span class="goal-progress">
+                  {{ goal.progressPercentage }}%
+                </span>
+              </article>
+            }
+          </div>
+        } @else {
+          <section class="empty-card">
+            <div class="empty-icon">🎯</div>
+            <h3>{{ dashboard.goals.emptyState?.title || 'No goals yet' }}</h3>
+            <p>
+              {{ dashboard.goals.emptyState?.description || 'Create your first goal to track progress.' }}
+            </p>
+            <button class="primary-btn" (click)="createGoal()">Create Goal</button>
+          </section>
+        }
       </section>
 
       @if (dashboard.tasks.todayTasks.length) {
@@ -128,7 +179,7 @@
 
           <button class="action-btn" (click)="createGoal()">
             <span>＋</span>
-            Create your first goal
+            Add another goal
           </button>
         </div>
       </section>
@@ -275,87 +326,39 @@
         }
       </section>
 
-
       <section class="section">
-
-  <div class="section-header">
-    <h3>Recent Activity</h3>
-  </div>
-
-  @if ($any(dashboard).recentActivity?.length) {
-
-    <div class="activity-list">
-
-      @for (activity of $any(dashboard).recentActivity; track activity.date) {
-
-        <article class="activity-card">
-
-          <div class="activity-icon">
-            <ion-icon
-              [name]="activity.icon || 'checkmark-circle'">
-            </ion-icon>
-          </div>
-
-          <div class="activity-info">
-
-            <h4>{{ activity.title }}</h4>
-
-            <p>{{ activity.description }}</p>
-
-            <span>
-              {{ activity.date | date:'dd MMM yyyy, h:mm a' }}
-            </span>
-
-          </div>
-
-          <div class="activity-arrow">
-            <ion-icon name="chevron-forward"></ion-icon>
-          </div>
-
-        </article>
-
-      }
-
-    </div>
-
-  } @else {
-
-    <section class="empty-card">
-
-      <div class="empty-icon">☁</div>
-
-      <h3>No activity yet</h3>
-
-      <p>
-        Add your first task or goal to start building your daily progress.
-      </p>
-
-    </section>
-
-  }
-
-</section>
-      <!-- <section class="section">
         <div class="section-header">
           <h3>Recent Activity</h3>
         </div>
 
-          @if ($any(dashboard).recentActivity?.length) {
-            <div class="activity-list">
-              @for (activity of $any(dashboard).recentActivity; track activity.id) {
-                <article class="activity-card">
+        @if (dashboard.recentActivity.length) {
+          <div class="activity-list">
+            @for (activity of dashboard.recentActivity; track activity.id || activity.date) {
+              <article class="activity-card">
+                <div class="activity-icon">
+                  <ion-icon [name]="activity.icon || 'checkmark-circle'"></ion-icon>
+                </div>
+
+                <div class="activity-info">
                   <h4>{{ activity.title }}</h4>
-                </article>
-              }
-            </div>
-          } @else {
+                  <p>{{ activity.description }}</p>
+                  <span>{{ activity.date | date:'dd MMM yyyy, h:mm a' }}</span>
+                </div>
+
+                <div class="activity-arrow">
+                  <ion-icon name="chevron-forward"></ion-icon>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
           <section class="empty-card">
             <div class="empty-icon">☁</div>
             <h3>No activity yet</h3>
             <p>Add your first task or goal to start building your daily progress.</p>
           </section>
         }
-      </section> -->
+      </section>
     </div>
   }
 

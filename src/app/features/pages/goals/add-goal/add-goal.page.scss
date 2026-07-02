@@ -1,0 +1,133 @@
+.add-goal-content {
+  --background: var(--app-bg);
+}
+
+.page {
+  padding: 18px 16px 120px;
+}
+
+.hero-card {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  gap: 14px;
+  align-items: center;
+
+  padding: 20px;
+  margin-bottom: 18px;
+
+  border-radius: 28px;
+
+  background: linear-gradient(
+    135deg,
+    var(--app-primary),
+    var(--app-primary-dark)
+  );
+
+  color: var(--app-primary-contrast);
+
+  box-shadow: var(--app-shadow-lg);
+}
+
+.hero-icon-btn {
+  width: 48px;
+  height: 48px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: var(--app-primary-contrast);
+  color: var(--app-primary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.hero-card h1 {
+  margin: 4px 0;
+  color: var(--app-primary-contrast);
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.subtitle {
+  color: var(--app-focus-muted);
+  font-size: 13px;
+}
+
+.form-card {
+  padding: 18px;
+  border-radius: 24px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--app-text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 14px;
+
+  border-radius: 14px;
+  border: 1px solid var(--app-border);
+
+  background: var(--app-bg);
+  color: var(--app-text);
+
+  font-family: inherit;
+}
+
+.toggle-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 20px 0;
+  padding: 16px;
+
+  border-radius: 16px;
+
+  background: var(--app-primary-soft);
+}
+
+.toggle-card h4 {
+  margin: 0 0 4px;
+}
+
+.toggle-card p {
+  color: var(--app-text-secondary);
+  font-size: 12px;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  border-radius: 18px;
+
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
+
+  font-size: 15px;
+  font-weight: 900;
+}
