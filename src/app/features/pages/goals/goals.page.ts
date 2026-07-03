@@ -57,7 +57,7 @@ export class GoalsPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadGoals();
+    // this.loadGoals();
   }
 
   ionViewWillEnter(): void {

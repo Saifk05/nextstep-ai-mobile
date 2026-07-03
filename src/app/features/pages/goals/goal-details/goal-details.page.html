@@ -4,55 +4,42 @@
   </ion-refresher>
 
   <div class="page">
-    <section class="hero-card">
-      <button type="button" class="hero-icon-btn" (click)="goBack()">
-        <ion-icon name="chevron-back-outline"></ion-icon>
-      </button>
-
-      <div class="hero-text">
-        <p class="eyebrow">GOAL DETAILS</p>
-        <h1>{{ goal?.title || 'Goal' }}</h1>
-        <p class="subtitle">
-          {{ goal ? formatGoalType(goal.goalType) : 'Track progress and plans' }}
-        </p>
-      </div>
-
-      <div class="hero-icon-spacer"></div>
-    </section>
-
     @if (loading) {
-      <section class="empty-card">
-        <div class="empty-icon">
-          <ion-icon name="refresh-outline"></ion-icon>
-        </div>
+      <section class="state-card">
         <h3>Loading goal...</h3>
         <p>Please wait while we fetch goal details.</p>
       </section>
     } @else if (errorMessage) {
-      <section class="empty-card">
-        <div class="empty-icon">!</div>
+      <section class="state-card">
         <h3>Unable to load goal</h3>
         <p>{{ errorMessage }}</p>
         <button class="primary-btn" (click)="loadGoalDetails()">Retry</button>
       </section>
     } @else if (goal) {
-      <section class="summary-card">
-        <div class="summary-top">
+      <section class="hero-card">
+        <button type="button" class="back-btn" (click)="goBack()">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+
+        <div>
+          <p class="eyebrow">GOAL DETAILS</p>
+          <h1>{{ goal.title }}</h1>
+          <span class="type-pill">{{ formatGoalType(goal.goalType) }}</span>
+        </div>
+      </section>
+
+      <section class="progress-card">
+        <div class="progress-head">
           <div>
-            <p>Status</p>
-            <h3>{{ goal.status }}</h3>
+            <span>Status</span>
+            <strong>{{ goal.status }}</strong>
           </div>
 
-          <div class="progress-badge">
-            {{ goal.progressPercentage }}%
-          </div>
+          <div class="percent">{{ goal.progressPercentage }}%</div>
         </div>
 
         <div class="progress-track">
-          <div
-            class="progress-fill"
-            [style.width.%]="goal.progressPercentage"
-          ></div>
+          <div class="progress-fill" [style.width.%]="goal.progressPercentage"></div>
         </div>
 
         <div class="target-row">
@@ -61,73 +48,126 @@
         </div>
       </section>
 
-      @if (goal.description) {
-        <section class="section-card">
-          <h3>Description</h3>
-          <p>{{ goal.description }}</p>
+      @if (goal.aiPlanSummary) {
+        <section class="ai-card">
+          <p>AI PLAN</p>
+          <h3>Smart Summary</h3>
+          <span>{{ goal.aiPlanSummary }}</span>
         </section>
       }
 
-      @if (goal.aiPlanSummary) {
-        <section class="section-card ai-card">
-          <h3>AI Summary</h3>
-          <p>{{ goal.aiPlanSummary }}</p>
+      @if (goal.plan) {
+        <section class="section-card">
+          <div class="section-title">
+            <h3>Action Plan</h3>
+            <p>Daily and weekly execution steps</p>
+          </div>
+
+          <div class="action-block">
+            <h4>Daily Actions</h4>
+
+            @if (goal.plan.dailyActions.length) {
+              <div class="clean-list">
+                @for (action of goal.plan.dailyActions; track action._id || action.id || action.title || $index) {
+                  <div class="clean-item">
+                    <span class="dot"></span>
+                    <p>{{ action.title }}</p>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="muted">No daily actions available.</p>
+            }
+          </div>
+
+          <div class="action-block">
+            <h4>Weekly Actions</h4>
+
+            @if (goal.plan.weeklyActions.length) {
+              <div class="clean-list">
+                @for (action of goal.plan.weeklyActions; track action._id || action.id || action.title || $index) {
+                  <div class="clean-item">
+                    <span class="dot"></span>
+                    <p>{{ action.title }}</p>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="muted">No weekly actions available.</p>
+            }
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-title">
+            <h3>Milestones</h3>
+            <p>Important checkpoints</p>
+          </div>
+
+          @if (goal.plan.milestones.length) {
+            <div class="timeline">
+              @for (milestone of goal.plan.milestones; track milestone._id || milestone.id || milestone.title || $index) {
+                <div class="timeline-item">
+                  <div class="timeline-icon">
+                    <ion-icon name="flag-outline"></ion-icon>
+                  </div>
+                  <p>{{ milestone.title }}</p>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="muted">No milestones available.</p>
+          }
         </section>
       }
 
       @if (goal.metrics) {
         <section class="metrics-grid">
-          <div>
-            <span>Emails</span>
-            <strong>{{ goal.metrics.emailsSent || 0 }}</strong>
-          </div>
+          @for (metric of goalMetrics; track metric.label) {
+            <div
+              class="metric-card"
+              [class.highlight]="metric.label === 'Offers'"
+            >
+              <div class="metric-top">
+                <span>{{ metric.label }}</span>
 
-          <div>
-            <span>Replies</span>
-            <strong>{{ goal.metrics.replies || 0 }}</strong>
-          </div>
+                <div class="metric-icon">
+                  <ion-icon [name]="metric.icon"></ion-icon>
+                </div>
+              </div>
 
-          <div>
-            <span>Interviews</span>
-            <strong>{{ goal.metrics.interviews || 0 }}</strong>
-          </div>
-
-          <div>
-            <span>Offers</span>
-            <strong>{{ goal.metrics.offers || 0 }}</strong>
-          </div>
+              <strong>{{ metric.value }}</strong>
+            </div>
+          }
         </section>
       }
 
       <section class="section-card">
-        <h3>Recent Activity</h3>
+        <div class="section-title">
+          <h3>Recent Activity</h3>
+          <p>Latest goal updates</p>
+        </div>
 
         @if (activityLoading) {
-          <p>Loading activity...</p>
+          <p class="muted">Loading activity...</p>
         } @else if (activities.length) {
           <div class="activity-list">
-          @for (activity of activities; track activity.id || $any(activity).date || $index) {
-            <article class="activity-item">
-              <div class="activity-icon">
-                <ion-icon name="checkmark-circle-outline"></ion-icon>
-              </div>
+            @for (activity of activities; track activity.id || $any(activity)._id || $index) {
+              <article class="activity-item">
+                <div class="activity-icon">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </div>
 
-              <div>
-                <h4>{{ $any(activity).title || $any(activity).type || 'Goal activity' }}</h4>
-
-                <p>
-                  {{ $any(activity).description || $any(activity).message || 'Activity recorded for this goal.' }}
-                </p>
-
-                <small>
-                  {{ ($any(activity).date || $any(activity).createdAt) | date:'dd MMM yyyy, h:mm a' }}
-                </small>
-              </div>
-            </article>
-          }
+                <div>
+                  <h4>{{ $any(activity).title || $any(activity).type || 'Goal activity' }}</h4>
+                  <p>{{ $any(activity).description || $any(activity).message || 'Activity recorded for this goal.' }}</p>
+                  <small>{{ ($any(activity).date || $any(activity).createdAt) | date:'dd MMM yyyy, h:mm a' }}</small>
+                </div>
+              </article>
+            }
           </div>
         } @else {
-          <p>No activity yet.</p>
+          <p class="muted">No activity yet.</p>
         }
       </section>
     }

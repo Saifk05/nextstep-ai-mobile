@@ -9,7 +9,7 @@
         <p class="eyebrow">GOAL ENGINE</p>
         <h1>Create Goal</h1>
         <p class="subtitle">
-          Define your goal and let AI generate an execution plan.
+          Define your goal and let AI generate daily actions, weekly actions, and milestones.
         </p>
       </div>
 
@@ -17,12 +17,16 @@
     </section>
 
     <section class="form-card">
+      <p class="error-text" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
       <div class="form-group">
         <label>Goal Title</label>
         <input
           type="text"
           [(ngModel)]="form.title"
-          placeholder="Get a Software Engineer Job"
+          placeholder="Get a Backend Developer Job"
         />
       </div>
 
@@ -31,7 +35,7 @@
         <textarea
           rows="4"
           [(ngModel)]="form.description"
-          placeholder="Describe your goal..."
+          placeholder="Example: I want to apply for backend developer roles and get hired before the target date."
         ></textarea>
       </div>
 
@@ -44,16 +48,13 @@
           <option value="SKILL_DEVELOPMENT">Skill Development</option>
           <option value="CERTIFICATION">Certification</option>
           <option value="PERSONAL">Personal</option>
+          <option value="BUSINESS">Business</option>
         </select>
       </div>
 
       <div class="form-group">
         <label>Target Date</label>
-
-        <input
-          type="date"
-          [(ngModel)]="form.targetDate"
-        />
+        <input type="date" [(ngModel)]="form.targetDate" />
       </div>
 
       <div class="toggle-card">

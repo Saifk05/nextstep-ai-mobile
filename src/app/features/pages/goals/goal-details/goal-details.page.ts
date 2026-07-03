@@ -16,12 +16,22 @@ import {
   flagOutline,
   refreshOutline,
   calendarOutline,
+  mailOutline,
+  chatbubbleOutline,
+  peopleOutline,
+  trophyOutline,
   checkmarkCircleOutline,
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../../core/services/api';
 import { Goal, GoalActivity } from '../../../../core/models/goal.model';
 import { AppFooterComponent } from '../../../../shared/components/app-footer/app-footer.component';
+
+type GoalMetric = {
+  label: string;
+  value: number;
+  icon: string;
+};
 
 @Component({
   selector: 'app-goal-details',
@@ -57,6 +67,10 @@ export class GoalDetailsPage implements OnInit {
       flagOutline,
       refreshOutline,
       calendarOutline,
+      mailOutline,
+      chatbubbleOutline,
+      peopleOutline,
+      trophyOutline,
       checkmarkCircleOutline,
     });
   }
@@ -71,6 +85,33 @@ export class GoalDetailsPage implements OnInit {
 
     this.loadGoalDetails();
     this.loadGoalActivity();
+  }
+
+  get goalMetrics(): GoalMetric[] {
+    if (!this.goal?.metrics) return [];
+
+    return [
+      {
+        label: 'Emails Sent',
+        value: this.goal.metrics.emailsSent || 0,
+        icon: 'mail-outline',
+      },
+      {
+        label: 'Replies',
+        value: this.goal.metrics.replies || 0,
+        icon: 'chatbubble-outline',
+      },
+      {
+        label: 'Interviews',
+        value: this.goal.metrics.interviews || 0,
+        icon: 'people-outline',
+      },
+      {
+        label: 'Offers',
+        value: this.goal.metrics.offers || 0,
+        icon: 'trophy-outline',
+      },
+    ];
   }
 
   loadGoalDetails(): void {

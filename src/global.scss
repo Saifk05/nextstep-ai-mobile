@@ -238,3 +238,17 @@ body.dark-theme {
 .cdk-overlay-pane:has(.mat-datepicker-content) {
   transform: translateY(130px) !important;
 }
+
+:root {
+  --metric-1: #2563eb;
+  --metric-2: #10b981;
+  --metric-3: #f59e0b;
+  --metric-4: #8b5cf6;
+}
+
+body.dark-theme {
+  --metric-1: #facc15; // yellow
+  --metric-2: #facc15; // yellow
+  --metric-3: #facc15; // yellow
+  --metric-4: #facc15; // yellow
+}
