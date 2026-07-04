@@ -108,11 +108,15 @@
                       }
 
                       @if (action.metadata?.defaultDailyTarget) {
-                        <small>Target: {{ action.metadata?.defaultDailyTarget }}/day</small>
+                        <small class="action-target">
+                          Target: {{ action.metadata?.defaultDailyTarget }}/day
+                        </small>
                       }
 
                       @if (action.metadata?.defaultMinutes) {
-                        <small>Target: {{ action.metadata?.defaultMinutes }} mins/day</small>
+                        <small class="action-target">
+                          Target: {{ action.metadata?.defaultMinutes }} mins/day
+                        </small>
                       }
                     </div>
                   </div>
