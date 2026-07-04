@@ -13,7 +13,9 @@
       <section class="state-card">
         <h3>Unable to load goal</h3>
         <p>{{ errorMessage }}</p>
-        <button class="primary-btn" (click)="loadGoalDetails()">Retry</button>
+        <button type="button" class="primary-btn" (click)="loadGoalDetails()">
+          Retry
+        </button>
       </section>
     } @else if (goal) {
       <section class="hero-card">
@@ -24,7 +26,9 @@
         <div>
           <p class="eyebrow">GOAL DETAILS</p>
           <h1>{{ goal.title }}</h1>
-          <span class="type-pill">{{ formatGoalType(goal.goalType) }}</span>
+          <span class="type-pill">
+            {{ formatCategory(goal.category) }} · {{ formatGoalType(goal.goalType) }}
+          </span>
         </div>
       </section>
 
@@ -32,27 +36,30 @@
         <div class="progress-head">
           <div>
             <span>Status</span>
-            <strong>{{ goal.status }}</strong>
+            <strong>{{ goal.status || 'ACTIVE' }}</strong>
           </div>
 
-          <div class="percent">{{ goal.progressPercentage }}%</div>
+          <div class="percent">{{ getProgress(goal.progressPercentage) }}%</div>
         </div>
 
         <div class="progress-track">
-          <div class="progress-fill" [style.width.%]="goal.progressPercentage"></div>
+          <div
+            class="progress-fill"
+            [style.width.%]="getProgress(goal.progressPercentage)"
+          ></div>
         </div>
 
         <div class="target-row">
           <ion-icon name="calendar-outline"></ion-icon>
-          <span>Target {{ goal.targetDate | date:'dd MMM yyyy' }}</span>
+          <span>Target {{ goal.targetDate | date: 'dd MMM yyyy' }}</span>
         </div>
       </section>
 
-      @if (goal.aiPlanSummary) {
+      @if (goal.plan?.strategySummary || goal.aiPlanSummary) {
         <section class="ai-card">
-          <p>AI PLAN</p>
-          <h3>Smart Summary</h3>
-          <span>{{ goal.aiPlanSummary }}</span>
+          <p>STRATEGY SUMMARY</p>
+          <h3>Smart Plan</h3>
+          <span>{{ goal.plan?.strategySummary || goal.aiPlanSummary }}</span>
         </section>
       }
 
@@ -124,10 +131,7 @@
       @if (goal.metrics) {
         <section class="metrics-grid">
           @for (metric of goalMetrics; track metric.label) {
-            <div
-              class="metric-card"
-              [class.highlight]="metric.label === 'Offers'"
-            >
+            <div class="metric-card" [class.highlight]="metric.label === 'Offers'">
               <div class="metric-top">
                 <span>{{ metric.label }}</span>
 
@@ -148,9 +152,7 @@
           <p>Latest goal updates</p>
         </div>
 
-        @if (activityLoading) {
-          <p class="muted">Loading activity...</p>
-        } @else if (activities.length) {
+        @if (activities.length) {
           <div class="activity-list">
             @for (activity of activities; track activity.id || $any(activity)._id || $index) {
               <article class="activity-item">
@@ -159,9 +161,9 @@
                 </div>
 
                 <div>
-                  <h4>{{ $any(activity).title || $any(activity).type || 'Goal activity' }}</h4>
-                  <p>{{ $any(activity).description || $any(activity).message || 'Activity recorded for this goal.' }}</p>
-                  <small>{{ ($any(activity).date || $any(activity).createdAt) | date:'dd MMM yyyy, h:mm a' }}</small>
+                  <h4>{{ formatActivityType(activity.type) }}</h4>
+                  <p>{{ activity.message || 'Activity recorded for this goal.' }}</p>
+                  <small>{{ activity.createdAt | date: 'dd MMM yyyy, h:mm a' }}</small>
                 </div>
               </article>
             }

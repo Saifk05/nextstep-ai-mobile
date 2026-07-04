@@ -56,9 +56,7 @@ export class GoalsPage implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // this.loadGoals();
-  }
+  ngOnInit(): void {}
 
   ionViewWillEnter(): void {
     this.loadGoals();
@@ -109,19 +107,46 @@ export class GoalsPage implements OnInit {
     this.router.navigateByUrl(`/goals/${goalId}`);
   }
 
-  formatGoalType(type: string): string {
+  goBack(): void {
+    this.router.navigateByUrl('/dashboard');
+  }
+
+  formatGoalType(type?: string): string {
     if (!type) {
       return 'Goal';
     }
 
-    return type.replace(/_/g, ' ');
+    return this.toTitleCase(type);
   }
 
-  trackGoal(index: number, goal: Goal): string {
-    return goal.id;
+  formatCategory(category?: string): string {
+    if (!category) {
+      return 'Goal';
+    }
+
+    return this.toTitleCase(category);
   }
 
-  goBack(): void {
-    this.router.navigateByUrl('/settings');
+  getProgress(progress?: number): number {
+    if (progress === null || progress === undefined || Number.isNaN(progress)) {
+      return 0;
+    }
+
+    if (progress < 0) {
+      return 0;
+    }
+
+    if (progress > 100) {
+      return 100;
+    }
+
+    return Math.round(progress);
+  }
+
+  private toTitleCase(value: string): string {
+    return value
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, char => char.toUpperCase());
   }
 }

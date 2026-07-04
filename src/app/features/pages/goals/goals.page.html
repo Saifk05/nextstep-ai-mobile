@@ -5,20 +5,20 @@
 
   <div class="page">
     <section class="hero-card">
-  <button type="button" class="hero-icon-btn" (click)="goBack()">
-    <ion-icon name="chevron-back-outline"></ion-icon>
-  </button>
+      <button type="button" class="hero-icon-btn" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
 
-  <div class="hero-text">
-    <p class="eyebrow">GOAL ENGINE</p>
-    <h1>Your Goals</h1>
-    <p class="subtitle">Track progress, plans and target dates.</p>
-  </div>
+      <div class="hero-text">
+        <p class="eyebrow">GOAL ENGINE</p>
+        <h1>Your Goals</h1>
+        <p class="subtitle">Track active goals, progress and plans.</p>
+      </div>
 
-  <button type="button" class="hero-icon-btn" (click)="goToCreateGoal()">
-    <ion-icon name="add-outline"></ion-icon>
-  </button>
-</section>
+      <button type="button" class="hero-icon-btn" (click)="goToCreateGoal()">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+    </section>
 
     @if (loading) {
       <section class="empty-card">
@@ -33,7 +33,9 @@
         <div class="empty-icon">!</div>
         <h3>Unable to load goals</h3>
         <p>{{ errorMessage }}</p>
-        <button class="primary-btn" (click)="loadGoals()">Retry</button>
+        <button type="button" class="primary-btn" (click)="loadGoals()">
+          Retry
+        </button>
       </section>
     } @else if (!goals.length) {
       <section class="empty-card">
@@ -42,7 +44,7 @@
         </div>
         <h3>No active goals yet</h3>
         <p>Create your first goal and let NextStep AI build your plan.</p>
-        <button class="primary-btn" (click)="goToCreateGoal()">
+        <button type="button" class="primary-btn" (click)="goToCreateGoal()">
           Create Goal
         </button>
       </section>
@@ -57,7 +59,12 @@
 
               <div class="goal-info">
                 <h3>{{ goal.title }}</h3>
-                <p>{{ formatGoalType(goal.goalType) }}</p>
+                <p>
+                  {{ formatCategory(goal.category) }}
+                  @if (goal.goalType) {
+                    · {{ formatGoalType(goal.goalType) }}
+                  }
+                </p>
               </div>
 
               <ion-icon
@@ -69,20 +76,20 @@
             <div class="progress-wrap">
               <div class="progress-top">
                 <span>Progress</span>
-                <strong>{{ goal.progressPercentage }}%</strong>
+                <strong>{{ getProgress(goal.progressPercentage) }}%</strong>
               </div>
 
               <div class="progress-track">
                 <div
                   class="progress-fill"
-                  [style.width.%]="goal.progressPercentage"
+                  [style.width.%]="getProgress(goal.progressPercentage)"
                 ></div>
               </div>
             </div>
 
             <div class="goal-footer">
-              <span>{{ goal.status }}</span>
-              <small>Target {{ goal.targetDate | date:'dd MMM yyyy' }}</small>
+              <span>{{ goal.status || 'ACTIVE' }}</span>
+              <small>Target {{ goal.targetDate | date: 'dd MMM yyyy' }}</small>
             </div>
           </article>
         }

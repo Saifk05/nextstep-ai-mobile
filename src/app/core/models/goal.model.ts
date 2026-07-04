@@ -1,3 +1,11 @@
+export type GoalCategory =
+  | 'CAREER'
+  | 'FITNESS'
+  | 'STUDY'
+  | 'FINANCE'
+  | 'BUSINESS'
+  | 'PERSONAL';
+
 export type GoalType =
   | 'JOB_SEARCH'
   | 'CAREER_GROWTH'
@@ -33,6 +41,34 @@ export type ActivityType =
   | 'OFFER_DETECTED'
   | 'FOLLOW_UP_TASK_CREATED';
 
+export type GoalQuestionType =
+  | 'TEXT'
+  | 'TEXTAREA'
+  | 'SELECT'
+  | 'NUMBER'
+  | 'DATE'
+  | 'BOOLEAN';
+
+export interface GoalSetupQuestion {
+  key: string;
+  label: string;
+  type: GoalQuestionType;
+  required?: boolean;
+  placeholder?: string;
+  options?: string[];
+}
+
+export interface GoalTemplate {
+  key: string;
+  slug: string;
+  category: GoalCategory;
+  goalType: GoalType;
+  title: string;
+  description: string;
+  version: number;
+  setupQuestions: GoalSetupQuestion[];
+}
+
 export interface GoalMetrics {
   emailsSent: number;
   replies: number;
@@ -53,7 +89,10 @@ export interface GoalPlanItem {
 
 export interface GoalPlan {
   id?: string;
+  version?: number;
   strategySummary?: string;
+  actions?: any[];
+
   dailyActions: GoalPlanItem[];
   weeklyActions: GoalPlanItem[];
   milestones: GoalPlanItem[];
@@ -63,35 +102,51 @@ export interface GoalActivity {
   id?: string;
   goalId?: string;
   recruiterId?: string;
+
   type: ActivityType;
   message: string;
+
   metadata?: Record<string, any>;
   createdAt?: string;
 }
 
 export interface Goal {
   id: string;
+
   title: string;
   description?: string;
+
+  category?: GoalCategory;
+  templateKey?: string;
+
   goalType: GoalType;
   status: GoalStatus;
+
   targetDate: string;
+
   progressPercentage: number;
+
+  setupAnswers?: Record<string, any>;
+
   aiPlanSummary?: string;
-  metrics: GoalMetrics;
+
+  metrics?: GoalMetrics;
+
   plan?: GoalPlan | null;
+
   recentActivity?: GoalActivity[];
 }
 
 export interface CreateGoalRequest {
   title: string;
-  description?: string;
-  goalType?: GoalType;
+
+  category: GoalCategory;
+
+  templateKey: string;
+
   targetDate: string;
-  useAiPlan?: boolean;
-  dailyActions?: string[];
-  weeklyActions?: string[];
-  milestones?: string[];
+
+  setupAnswers: Record<string, any>;
 }
 
 export interface UpdateGoalRequest {
@@ -105,6 +160,9 @@ export interface UpdateGoalStatusRequest {
   status: GoalStatus;
 }
 
-
 export type GoalResponse = Goal;
 export type GoalsResponse = Goal[];
+
+export type GoalTemplatesResponse = GoalTemplate[];
+
+export type GoalTemplateResponse = GoalTemplate;
