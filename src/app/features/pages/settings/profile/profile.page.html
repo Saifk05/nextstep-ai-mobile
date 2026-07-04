@@ -1,14 +1,18 @@
 <ion-content class="profile-content">
   <div class="page">
-    <section class="top-bar">
-      <button type="button" class="icon-btn" (click)="goBack()">
-        <ion-icon name="chevron-back-outline"></ion-icon>
-      </button>
+<section class="hero-card">
+  <button type="button" class="back-btn" (click)="goBack()">
+    <ion-icon name="chevron-back-outline"></ion-icon>
+  </button>
 
-      <h2>Personal Information</h2>
-
-      <div class="header-spacer"></div>
-    </section>
+  <div>
+    <p class="eyebrow">PROFILE</p>
+    <h1>Personal Information</h1>
+    <span class="type-pill">
+      Manage your account details
+    </span>
+  </div>
+</section>
 
     @if (isLoading) {
       <div class="loading-card">

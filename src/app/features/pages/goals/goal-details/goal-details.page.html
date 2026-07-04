@@ -67,8 +67,30 @@
         <section class="section-card">
           <div class="section-title">
             <h3>Action Plan</h3>
-            <p>Daily and weekly execution steps</p>
+            <p>One-time, daily and weekly execution steps</p>
           </div>
+
+          @if (goal.plan.actions?.length) {
+            <div class="action-block">
+              <h4>One-time Actions</h4>
+
+              <div class="clean-list">
+                @for (action of goal.plan.actions; track action._id || action.id || action.title || $index) {
+                  @if (action.frequency === 'ONCE') {
+                    <div class="clean-item">
+                      <span class="dot"></span>
+                      <div>
+                        <p>{{ action.title }}</p>
+                        @if (action.description) {
+                          <small>{{ action.description }}</small>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
 
           <div class="action-block">
             <h4>Daily Actions</h4>
@@ -78,7 +100,21 @@
                 @for (action of goal.plan.dailyActions; track action._id || action.id || action.title || $index) {
                   <div class="clean-item">
                     <span class="dot"></span>
-                    <p>{{ action.title }}</p>
+                    <div>
+                      <p>{{ action.title }}</p>
+
+                      @if (action.description) {
+                        <small>{{ action.description }}</small>
+                      }
+
+                      @if (action.metadata?.defaultDailyTarget) {
+                        <small>Target: {{ action.metadata?.defaultDailyTarget }}/day</small>
+                      }
+
+                      @if (action.metadata?.defaultMinutes) {
+                        <small>Target: {{ action.metadata?.defaultMinutes }} mins/day</small>
+                      }
+                    </div>
                   </div>
                 }
               </div>
@@ -95,7 +131,12 @@
                 @for (action of goal.plan.weeklyActions; track action._id || action.id || action.title || $index) {
                   <div class="clean-item">
                     <span class="dot"></span>
-                    <p>{{ action.title }}</p>
+                    <div>
+                      <p>{{ action.title }}</p>
+                      @if (action.description) {
+                        <small>{{ action.description }}</small>
+                      }
+                    </div>
                   </div>
                 }
               </div>
@@ -118,7 +159,12 @@
                   <div class="timeline-icon">
                     <ion-icon name="flag-outline"></ion-icon>
                   </div>
-                  <p>{{ milestone.title }}</p>
+                  <div>
+                    <p>{{ milestone.title }}</p>
+                    @if (milestone.description) {
+                      <small>{{ milestone.description }}</small>
+                    }
+                  </div>
                 </div>
               }
             </div>

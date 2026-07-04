@@ -25,6 +25,7 @@ export type GoalStatus =
 export type ActivityType =
   | 'GOAL_CREATED'
   | 'AI_PLAN_GENERATED'
+  | 'TEMPLATE_SELECTED'
   | 'GOAL_UPDATED'
   | 'GOAL_STATUS_UPDATED'
   | 'GOAL_PROGRESS_UPDATED'
@@ -79,10 +80,27 @@ export interface GoalMetrics {
   applicationsSubmitted: number;
 }
 
+export interface GoalPlanItemMetadata {
+  defaultDailyTarget?: number;
+  defaultMinutes?: number;
+  [key: string]: any;
+}
+
 export interface GoalPlanItem {
   _id?: string;
   id?: string;
+
+  key?: string;
   title: string;
+  description?: string;
+
+  frequency?: 'ONCE' | 'DAILY' | 'WEEKLY' | string;
+  priority?: 'LOW' | 'MEDIUM' | 'HIGH' | string;
+  successCriteria?: string;
+  actionType?: string;
+
+  metadata?: GoalPlanItemMetadata;
+
   completed: boolean;
   completedAt?: string;
 }
@@ -91,7 +109,8 @@ export interface GoalPlan {
   id?: string;
   version?: number;
   strategySummary?: string;
-  actions?: any[];
+
+  actions?: GoalPlanItem[];
 
   dailyActions: GoalPlanItem[];
   weeklyActions: GoalPlanItem[];
@@ -99,7 +118,9 @@ export interface GoalPlan {
 }
 
 export interface GoalActivity {
+  _id?: string;
   id?: string;
+  userId?: string;
   goalId?: string;
   recruiterId?: string;
 
@@ -108,9 +129,11 @@ export interface GoalActivity {
 
   metadata?: Record<string, any>;
   createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Goal {
+  _id?: string;
   id: string;
 
   title: string;
@@ -118,6 +141,8 @@ export interface Goal {
 
   category?: GoalCategory;
   templateKey?: string;
+  templateVersion?: number;
+  planSource?: string;
 
   goalType: GoalType;
   status: GoalStatus;
@@ -139,13 +164,9 @@ export interface Goal {
 
 export interface CreateGoalRequest {
   title: string;
-
   category: GoalCategory;
-
   templateKey: string;
-
   targetDate: string;
-
   setupAnswers: Record<string, any>;
 }
 

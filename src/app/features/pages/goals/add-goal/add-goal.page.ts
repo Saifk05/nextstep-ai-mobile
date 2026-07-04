@@ -25,6 +25,7 @@ import {
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../../core/services/api';
+import { ToastService } from '../../../../core/services/toast';
 import {
   CreateGoalRequest,
   GoalCategory,
@@ -79,7 +80,8 @@ export class AddGoalPage implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly toastService: ToastService
   ) {
     addIcons({
       briefcaseOutline,
@@ -111,8 +113,7 @@ export class AddGoalPage implements OnInit {
           this.templates = response || [];
         },
         error: (error) => {
-          this.errorMessage =
-            error?.error?.message || 'Unable to load goal templates.';
+          this.showError(error?.error?.message || 'Unable to load goal templates.');
         },
       });
   }
@@ -140,14 +141,13 @@ export class AddGoalPage implements OnInit {
 
         for (const question of this.selectedTemplate.setupQuestions || []) {
           this.setupAnswers[question.key] =
-            question.type === 'BOOLEAN' ? false : '';
+            this.getQuestionType(question) === 'BOOLEAN' ? false : '';
         }
 
         this.step = 3;
       },
       error: (error) => {
-        this.errorMessage =
-          error?.error?.message || 'Unable to load template details.';
+        this.showError(error?.error?.message || 'Unable to load template details.');
       },
     });
   }
@@ -156,22 +156,22 @@ export class AddGoalPage implements OnInit {
     this.errorMessage = '';
 
     if (!this.selectedCategory) {
-      this.errorMessage = 'Please select a goal category.';
+      this.showError('Please select a goal category.');
       return;
     }
 
     if (!this.selectedTemplate) {
-      this.errorMessage = 'Please select a goal template.';
+      this.showError('Please select a goal template.');
       return;
     }
 
     if (!this.form.title.trim()) {
-      this.errorMessage = 'Please enter goal title.';
+      this.showError('Please enter goal title.');
       return;
     }
 
     if (!this.form.targetDate) {
-      this.errorMessage = 'Please select target date.';
+      this.showError('Please select target date.');
       return;
     }
 
@@ -182,7 +182,7 @@ export class AddGoalPage implements OnInit {
         question.required &&
         (value === null || value === undefined || value === '')
       ) {
-        this.errorMessage = `Please answer: ${question.label}`;
+        this.showError(`Please answer: ${question.label}`);
         return;
       }
     }
@@ -205,6 +205,8 @@ export class AddGoalPage implements OnInit {
           const goal = response?.data || response;
           const goalId = goal?.id || goal?._id;
 
+          this.toastService.success('Goal created successfully.');
+
           if (goalId) {
             this.router.navigateByUrl(`/goals/${goalId}`);
             return;
@@ -213,8 +215,9 @@ export class AddGoalPage implements OnInit {
           this.router.navigateByUrl('/goals');
         },
         error: (error) => {
-          this.errorMessage =
-            error?.error?.message || 'Unable to create goal. Please try again.';
+          this.showError(
+            error?.error?.message || 'Unable to create goal. Please try again.'
+          );
         },
       });
   }
@@ -236,61 +239,65 @@ export class AddGoalPage implements OnInit {
   }
 
   getQuestionType(question: any): string {
-  const type =
-    question?.type ||
-    question?.inputType ||
-    question?.questionType ||
-    question?.fieldType ||
-    'TEXT';
+    const type =
+      question?.type ||
+      question?.inputType ||
+      question?.questionType ||
+      question?.fieldType ||
+      'TEXT';
 
-  const normalized = String(type).toUpperCase();
+    const normalized = String(type).toUpperCase();
 
-  if (normalized === 'STRING') return 'TEXT';
-  if (normalized === 'DROPDOWN') return 'SELECT';
-  if (normalized === 'RADIO') return 'SELECT';
-  if (normalized === 'CHECKBOX') return 'BOOLEAN';
+    if (normalized === 'STRING') return 'TEXT';
+    if (normalized === 'DROPDOWN') return 'SELECT';
+    if (normalized === 'RADIO') return 'SELECT';
+    if (normalized === 'CHECKBOX') return 'BOOLEAN';
 
-  return normalized;
-}
-
-getQuestionOptions(question: any): string[] {
-  if (Array.isArray(question?.options)) {
-    return question.options;
+    return normalized;
   }
 
-  if (Array.isArray(question?.choices)) {
-    return question.choices;
-  }
+  getQuestionOptions(question: any): string[] {
+    if (Array.isArray(question?.options)) {
+      return question.options;
+    }
 
-  if (Array.isArray(question?.values)) {
-    return question.values;
-  }
+    if (Array.isArray(question?.choices)) {
+      return question.choices;
+    }
 
-  return [];
-}
+    if (Array.isArray(question?.values)) {
+      return question.values;
+    }
+
+    return [];
+  }
 
   getPlaceholder(question: any): string {
-  const key = String(question?.key || '').toLowerCase();
+    const key = String(question?.key || '').toLowerCase();
 
-  switch (key) {
-    case 'targetrole':
-      return 'Example: Backend Developer';
+    switch (key) {
+      case 'targetrole':
+        return 'Example: Backend Developer';
 
-    case 'experiencelevel':
-      return 'Select experience level';
+      case 'experiencelevel':
+        return 'Select experience level';
 
-    case 'targetcompanies':
-      return 'Example: Product companies, startups, MNCs';
+      case 'targetcompanies':
+        return 'Example: Product companies, startups, MNCs';
 
-    case 'dailyapplicationtarget':
-      return 'Example: 5';
+      case 'dailyapplicationtarget':
+        return 'Example: 5';
 
-    case 'currentresumestatus':
-      return 'Select resume status';
+      case 'currentresumestatus':
+        return 'Select resume status';
 
-    default:
-      return question?.placeholder || `Enter ${(question?.label || '').toLowerCase()}`;
+      default:
+        return question?.placeholder || `Enter ${(question?.label || '').toLowerCase()}`;
+    }
   }
-}
 
+  private showError(message: string): void {
+    this.errorMessage = message;
+    this.toastService.error(message);
+  }
 }

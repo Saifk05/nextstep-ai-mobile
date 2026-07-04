@@ -21,6 +21,9 @@ import {
   peopleOutline,
   refreshOutline,
   trophyOutline,
+  closeCircleOutline,
+  timeOutline,
+  sendOutline,
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../../core/services/api';
@@ -71,6 +74,9 @@ export class GoalDetailsPage implements OnInit {
       peopleOutline,
       refreshOutline,
       trophyOutline,
+      closeCircleOutline,
+      timeOutline,
+      sendOutline,
     });
   }
 
@@ -86,29 +92,46 @@ export class GoalDetailsPage implements OnInit {
   }
 
   get goalMetrics(): GoalMetric[] {
-    if (!this.goal?.metrics) {
+    const metrics = this.goal?.metrics;
+
+    if (!metrics) {
       return [];
     }
 
     return [
       {
+        label: 'Applications',
+        value: metrics.applicationsSubmitted || 0,
+        icon: 'send-outline',
+      },
+      {
         label: 'Emails Sent',
-        value: this.goal.metrics.emailsSent || 0,
+        value: metrics.emailsSent || 0,
         icon: 'mail-outline',
       },
       {
         label: 'Replies',
-        value: this.goal.metrics.replies || 0,
+        value: metrics.replies || 0,
         icon: 'chatbubble-outline',
       },
       {
         label: 'Interviews',
-        value: this.goal.metrics.interviews || 0,
+        value: metrics.interviews || 0,
         icon: 'people-outline',
       },
       {
+        label: 'Follow-ups Due',
+        value: metrics.followUpsDue || 0,
+        icon: 'time-outline',
+      },
+      {
+        label: 'Rejections',
+        value: metrics.rejections || 0,
+        icon: 'close-circle-outline',
+      },
+      {
         label: 'Offers',
-        value: this.goal.metrics.offers || 0,
+        value: metrics.offers || 0,
         icon: 'trophy-outline',
       },
     ];
@@ -208,6 +231,7 @@ export class GoalDetailsPage implements OnInit {
   private normalizePlan(plan: GoalPlan): GoalPlan {
     return {
       ...plan,
+      actions: plan.actions || [],
       dailyActions: plan.dailyActions || [],
       weeklyActions: plan.weeklyActions || [],
       milestones: plan.milestones || [],
