@@ -36,10 +36,13 @@ export type ActivityType =
   | 'RECRUITER_ADDED'
   | 'RECRUITER_UPDATED'
   | 'EMAIL_SENT_DETECTED'
+  | 'APPLICATION_DETECTED'
   | 'REPLY_DETECTED'
   | 'INTERVIEW_DETECTED'
   | 'REJECTION_DETECTED'
   | 'OFFER_DETECTED'
+  | 'NO_RESPONSE_DETECTED'
+  | 'TASK_COMPLETED'
   | 'FOLLOW_UP_TASK_CREATED';
 
 export type GoalQuestionType =
@@ -49,6 +52,13 @@ export type GoalQuestionType =
   | 'NUMBER'
   | 'DATE'
   | 'BOOLEAN';
+
+export type GoalApplicationStatus =
+  | 'APPLIED'
+  | 'REPLIED'
+  | 'INTERVIEW'
+  | 'OFFER'
+  | 'REJECTED';
 
 export interface GoalSetupQuestion {
   key: string;
@@ -78,6 +88,35 @@ export interface GoalMetrics {
   rejections: number;
   followUpsDue: number;
   applicationsSubmitted: number;
+}
+
+export interface GoalApplication {
+  _id?: string;
+  id?: string;
+  userId?: string;
+  goalId?: string;
+
+  company: string;
+  position: string;
+  status: GoalApplicationStatus;
+
+  appliedAt?: string;
+  lastActivityAt?: string;
+
+  sourceEmailId?: string;
+  sourceThreadId?: string;
+  metadata?: Record<string, any>;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface GoalGmailSyncResponse {
+  detectedApplications: number;
+  detectedReplies: number;
+  detectedInterviews: number;
+  detectedOffers: number;
+  detectedRejections: number;
 }
 
 export interface GoalPlanItemMetadata {
@@ -158,6 +197,8 @@ export interface Goal {
   metrics?: GoalMetrics;
 
   plan?: GoalPlan | null;
+
+  applications?: GoalApplication[];
 
   recentActivity?: GoalActivity[];
 }

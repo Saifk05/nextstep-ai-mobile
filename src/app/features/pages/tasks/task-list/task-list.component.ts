@@ -3,7 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+} from '@ionic/angular/standalone';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -38,6 +43,8 @@ import { Task } from '../../../../core/models/task.model';
     FormsModule,
     IonContent,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -50,7 +57,12 @@ export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
 
   isLoading = false;
+  isLoadingMore = false;
   errorMessage = '';
+
+  nextCursor: string | null = null;
+  hasMore = true;
+  readonly taskLimit = 5;
 
   searchText = '';
   showStatusFilter = false;
@@ -68,7 +80,7 @@ export class TaskListComponent implements OnInit {
     { label: 'All', value: 'ALL' },
     { label: 'Pending', value: 'PENDING' },
     { label: 'Completed', value: 'COMPLETED' },
-    { label: 'Overdue', value: 'OVERDUE' },
+    { label: 'Missed', value: 'MISSED' },
   ];
 
   constructor(
@@ -93,26 +105,64 @@ export class TaskListComponent implements OnInit {
 
   ionViewWillEnter(): void {
     console.log('TaskListComponent Entered:', this.router.url);
-    this.loadTasks();
+    this.loadTasks(true);
   }
 
-  loadTasks(): void {
-    this.isLoading = true;
+  loadTasks(reset = false, event?: any): void {
+    if (reset) {
+      this.allTasks = [];
+      this.tasks = [];
+      this.nextCursor = null;
+      this.hasMore = true;
+    }
+
+    if (!this.hasMore && !reset) {
+      event?.target?.complete();
+      return;
+    }
+
+    this.isLoading = reset;
+    this.isLoadingMore = !reset;
     this.errorMessage = '';
 
-    this.apiService.getTasks().subscribe({
-      next: (response) => {
-        this.allTasks = response.data || [];
-        this.tasks = [...this.allTasks];
-        this.applyFilters();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessage =
-          error?.error?.message || 'Unable to load tasks. Please try again.';
-        this.isLoading = false;
-      },
-    });
+    this.apiService
+      .getTasks(this.nextCursor || undefined, this.taskLimit)
+      .subscribe({
+        next: (response: any) => {
+          const newTasks = response.data || [];
+
+          this.allTasks = reset
+            ? newTasks
+            : [...this.allTasks, ...newTasks];
+
+          this.nextCursor = response.pagination?.nextCursor || null;
+          this.hasMore = !!response.pagination?.hasMore;
+
+          this.applyFilters();
+
+          this.isLoading = false;
+          this.isLoadingMore = false;
+
+          event?.target?.complete();
+
+          if (!this.hasMore && event?.target) {
+            event.target.disabled = true;
+          }
+        },
+        error: (error) => {
+          this.errorMessage =
+            error?.error?.message || 'Unable to load tasks. Please try again.';
+
+          this.isLoading = false;
+          this.isLoadingMore = false;
+
+          event?.target?.complete();
+        },
+      });
+  }
+
+  loadMoreTasks(event: any): void {
+    this.loadTasks(false, event);
   }
 
   goToAddTask(event?: Event): void {
@@ -239,8 +289,8 @@ export class TaskListComponent implements OnInit {
     return this.tasks.filter((task) => task.status === 'PENDING').length;
   }
 
-  get overdueTasks(): number {
-    return this.tasks.filter((task) => task.status === 'OVERDUE').length;
+  get missedTasks(): number {
+    return this.tasks.filter((task) => task.status === 'MISSED').length;
   }
 
   getPriorityClass(priority?: string): string {

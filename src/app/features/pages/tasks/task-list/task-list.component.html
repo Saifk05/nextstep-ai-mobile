@@ -49,8 +49,8 @@
           <ion-icon name="flame-outline"></ion-icon>
         </div>
 
-        <strong>{{ overdueTasks }}</strong>
-        <span>Overdue</span>
+          <strong>{{ missedTasks }}</strong>
+        <span>Missed</span>
       </div>
     </section>
 
@@ -149,8 +149,7 @@
         <h2>Something went wrong</h2>
         <p>{{ errorMessage }}</p>
 
-        <button type="button" (click)="loadTasks()">Try Again</button>
-      </section>
+        <button type="button" (click)="loadTasks(true)">Try Again</button>      </section>
     } @else if (!allTasks.length) {
       <section class="empty-state">
         <div class="empty-icon">
@@ -234,7 +233,19 @@
             </div>
           </article>
         }
-      </section>
+            </section>
+
+      <ion-infinite-scroll
+        threshold="120px"
+        [disabled]="!hasMore"
+        (ionInfinite)="loadMoreTasks($event)"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="Loading more tasks..."
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     }
   </main>
 

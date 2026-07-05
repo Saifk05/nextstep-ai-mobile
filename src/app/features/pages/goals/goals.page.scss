@@ -234,3 +234,32 @@
   font-size: 15px;
   font-weight: 900;
 }
+
+.goal-metrics-preview {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.goal-metrics-preview div {
+  padding: 10px 6px;
+  border-radius: 14px;
+  background: var(--app-primary-soft);
+  text-align: center;
+}
+
+.goal-metrics-preview strong {
+  display: block;
+  color: var(--app-text);
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.goal-metrics-preview span {
+  display: block;
+  margin-top: 3px;
+  color: var(--app-text-secondary);
+  font-size: 9px;
+  font-weight: 800;
+}

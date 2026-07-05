@@ -143,6 +143,14 @@ export class GoalsPage implements OnInit {
     return Math.round(progress);
   }
 
+  getMetricValue(goal: Goal, key: keyof NonNullable<Goal['metrics']>): number {
+    return goal.metrics?.[key] || 0;
+  }
+
+  hasJobMetrics(goal: Goal): boolean {
+    return goal.goalType === 'JOB_SEARCH' && !!goal.metrics;
+  }
+
   private toTitleCase(value: string): string {
     return value
       .replace(/_/g, ' ')

@@ -5,13 +5,11 @@ import { DashboardResponse } from '../models/dashboard.model';
 import { environment } from '../../../environments/environment';
 
 import {
-  CreateGoalRequest,
-  Goal,
-  GoalActivity,
-  GoalPlan,
-  GoalStatus,
-  GoalResponse,
-  GoalsResponse,
+  CreateGoalRequest, Goal,
+  GoalActivity, GoalApplication,
+  GoalGmailSyncResponse,
+  GoalPlan, GoalStatus,
+  GoalResponse, GoalsResponse,
   GoalTemplateResponse,
   GoalTemplatesResponse,
   UpdateGoalRequest,
@@ -208,9 +206,24 @@ export class ApiService {
   /*
    * Tasks
    */
-  getTasks(): Observable<ApiResponse<Task[]>> {
+  getTasks(
+    cursor?: string,
+    limit: number = 20
+  ): Observable<ApiResponse<Task[]>> {
+    const params: string[] = [];
+
+    if (limit) {
+      params.push(`limit=${limit}`);
+    }
+
+    if (cursor) {
+      params.push(`cursor=${encodeURIComponent(cursor)}`);
+    }
+
+    const query = params.length ? `?${params.join('&')}` : '';
+
     return this.http.get<ApiResponse<Task[]>>(
-      `${this.clientUrl}/tasks`
+      `${this.clientUrl}/tasks${query}`
     );
   }
 
@@ -532,91 +545,93 @@ unregisterNotificationDevice(
   );
 }
 
-  /*
-  * Goals
-  */
-  getGoalTemplates(): Observable<GoalTemplatesResponse> {
-    return this.http.get<GoalTemplatesResponse>(
-      `${this.clientUrl}/goals/templates`
-    );
-  }
+/*
+* Goals
+*/
+getGoalTemplates(): Observable<GoalTemplatesResponse> {
+  return this.http.get<GoalTemplatesResponse>(
+    `${this.clientUrl}/goals/templates`
+  );
+}
 
-  getGoalTemplate(
-    slug: string
-  ): Observable<GoalTemplateResponse> {
-    return this.http.get<GoalTemplateResponse>(
-      `${this.clientUrl}/goals/templates/${slug}`
-    );
-  }
+getGoalTemplate(
+  slug: string
+): Observable<GoalTemplateResponse> {
+  return this.http.get<GoalTemplateResponse>(
+    `${this.clientUrl}/goals/templates/${slug}`
+  );
+}
 
-  getActiveGoals(): Observable<GoalsResponse> {
-    return this.http.get<GoalsResponse>(
-      `${this.clientUrl}/goals/active`
-    );
-  }
+getActiveGoals(): Observable<GoalsResponse> {
+  return this.http.get<GoalsResponse>(
+    `${this.clientUrl}/goals/active`
+  );
+}
 
-  getGoalById(goalId: string): Observable<GoalResponse> {
-    return this.http.get<GoalResponse>(
-      `${this.clientUrl}/goals/${goalId}`
-    );
-  }
+getGoalById(goalId: string): Observable<GoalResponse> {
+  return this.http.get<GoalResponse>(
+    `${this.clientUrl}/goals/${goalId}`
+  );
+}
 
-  createGoal(
-    payload: CreateGoalRequest
-  ): Observable<GoalResponse> {
-    return this.http.post<GoalResponse>(
-      `${this.clientUrl}/goals`,
-      payload
-    );
-  }
+createGoal(
+  payload: CreateGoalRequest
+): Observable<GoalResponse> {
+  return this.http.post<GoalResponse>(
+    `${this.clientUrl}/goals`,
+    payload
+  );
+}
 
-  updateGoal(
-    goalId: string,
-    payload: UpdateGoalRequest
-  ): Observable<GoalResponse> {
-    return this.http.patch<GoalResponse>(
-      `${this.clientUrl}/goals/${goalId}`,
-      payload
-    );
-  }
+updateGoal(
+  goalId: string,
+  payload: UpdateGoalRequest
+): Observable<GoalResponse> {
+  return this.http.patch<GoalResponse>(
+    `${this.clientUrl}/goals/${goalId}`,
+    payload
+  );
+}
 
-  updateGoalStatus(
-    goalId: string,
-    status: GoalStatus
-  ): Observable<GoalResponse> {
-    return this.http.patch<GoalResponse>(
-      `${this.clientUrl}/goals/${goalId}/status`,
-      { status }
-    );
-  }
+updateGoalStatus(
+  goalId: string,
+  status: GoalStatus
+): Observable<GoalResponse> {
+  return this.http.patch<GoalResponse>(
+    `${this.clientUrl}/goals/${goalId}/status`,
+    { status }
+  );
+}
 
-  getGoalPlan(goalId: string): Observable<GoalPlan> {
-    return this.http.get<GoalPlan>(
-      `${this.clientUrl}/goals/${goalId}/plan`
-    );
-  }
+getGoalPlan(goalId: string): Observable<GoalPlan> {
+  return this.http.get<GoalPlan>(
+    `${this.clientUrl}/goals/${goalId}/plan`
+  );
+}
 
-  regenerateGoalPlan(goalId: string): Observable<GoalResponse> {
-    return this.http.post<GoalResponse>(
-      `${this.clientUrl}/goals/${goalId}/regenerate-plan`,
-      {}
-    );
-  }
+regenerateGoalPlan(goalId: string): Observable<GoalResponse> {
+  return this.http.post<GoalResponse>(
+    `${this.clientUrl}/goals/${goalId}/regenerate-plan`,
+    {}
+  );
+}
 
-  getGoalActivity(
-    goalId: string
-  ): Observable<GoalActivity[]> {
-    return this.http.get<GoalActivity[]>(
-      `${this.clientUrl}/goals/${goalId}/activity`
-    );
-  }
+getGoalActivity(
+  goalId: string
+): Observable<GoalActivity[]> {
+  return this.http.get<GoalActivity[]>(
+    `${this.clientUrl}/goals/${goalId}/activity`
+  );
+}
 
-  syncGoalGmail(goalId: string): Observable<any> {
-    return this.http.post(
-      `${this.clientUrl}/goals/${goalId}/sync-gmail`,
-      {}
-    );
-  }
+syncGoalGmail(
+  goalId: string
+): Observable<GoalGmailSyncResponse> {
+  return this.http.post<GoalGmailSyncResponse>(
+    `${this.clientUrl}/goals/${goalId}/sync-gmail`,
+    {}
+  );
+}
 
 
 }

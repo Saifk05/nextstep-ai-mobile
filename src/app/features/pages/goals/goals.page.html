@@ -50,8 +50,8 @@
       </section>
     } @else {
       <section class="goals-list">
-        @for (goal of goals; track goal.id) {
-          <article class="goal-card" (click)="goToGoalDetails(goal.id)">
+        @for (goal of goals; track goal.id || goal._id) {
+          <article class="goal-card" (click)="goToGoalDetails(goal.id || goal._id || '')">
             <div class="goal-top">
               <div class="goal-icon">
                 <ion-icon name="flag-outline"></ion-icon>
@@ -86,6 +86,30 @@
                 ></div>
               </div>
             </div>
+
+            @if (hasJobMetrics(goal)) {
+              <div class="goal-metrics-preview">
+                <div>
+                  <strong>{{ getMetricValue(goal, 'applicationsSubmitted') }}</strong>
+                  <span>Applications</span>
+                </div>
+
+                <div>
+                  <strong>{{ getMetricValue(goal, 'replies') }}</strong>
+                  <span>Replies</span>
+                </div>
+
+                <div>
+                  <strong>{{ getMetricValue(goal, 'interviews') }}</strong>
+                  <span>Interviews</span>
+                </div>
+
+                <div>
+                  <strong>{{ getMetricValue(goal, 'offers') }}</strong>
+                  <span>Offers</span>
+                </div>
+              </div>
+            }
 
             <div class="goal-footer">
               <span>{{ goal.status || 'ACTIVE' }}</span>

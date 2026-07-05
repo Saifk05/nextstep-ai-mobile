@@ -24,10 +24,17 @@ import {
   closeCircleOutline,
   timeOutline,
   sendOutline,
+  sparklesOutline,
 } from 'ionicons/icons';
 
 import { ApiService } from '../../../../core/services/api';
-import { Goal, GoalActivity, GoalPlan } from '../../../../core/models/goal.model';
+import {
+  Goal,
+  GoalActivity,
+  GoalApplication,
+  GoalGmailSyncResponse,
+  GoalPlan,
+} from '../../../../core/models/goal.model';
 import { AppFooterComponent } from '../../../../shared/components/app-footer/app-footer.component';
 
 type GoalMetric = {
@@ -53,11 +60,15 @@ type GoalMetric = {
 })
 export class GoalDetailsPage implements OnInit {
   loading = false;
+  syncingGmail = false;
   errorMessage = '';
+  syncMessage = '';
 
   goalId = '';
   goal: Goal | null = null;
   activities: GoalActivity[] = [];
+  applications: GoalApplication[] = [];
+  lastSyncResult: GoalGmailSyncResponse | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -77,6 +88,7 @@ export class GoalDetailsPage implements OnInit {
       closeCircleOutline,
       timeOutline,
       sendOutline,
+      sparklesOutline,
     });
   }
 
@@ -147,12 +159,12 @@ export class GoalDetailsPage implements OnInit {
       .subscribe({
         next: (response: any) => {
           const goal = response?.data || response;
-          this.goal = this.normalizeGoal(goal);
-          this.activities = this.goal?.recentActivity || [];
+          this.setGoalState(goal);
         },
         error: () => {
           this.goal = null;
           this.activities = [];
+          this.applications = [];
           this.errorMessage = 'Unable to load goal details.';
         },
       });
@@ -169,12 +181,35 @@ export class GoalDetailsPage implements OnInit {
       .subscribe({
         next: (response: any) => {
           const goal = response?.data || response;
-          this.goal = this.normalizeGoal(goal);
-          this.activities = this.goal?.recentActivity || [];
+          this.setGoalState(goal);
           this.errorMessage = '';
         },
         error: () => {
           this.errorMessage = 'Unable to refresh goal.';
+        },
+      });
+  }
+
+  syncGmailIntelligence(): void {
+    if (!this.goalId || this.syncingGmail) {
+      return;
+    }
+
+    this.syncingGmail = true;
+    this.syncMessage = '';
+    this.lastSyncResult = null;
+
+    this.apiService
+      .syncGoalGmail(this.goalId)
+      .pipe(finalize(() => (this.syncingGmail = false)))
+      .subscribe({
+        next: (response: GoalGmailSyncResponse) => {
+          this.lastSyncResult = response;
+          this.syncMessage = 'Gmail intelligence sync completed.';
+          this.loadGoalDetails();
+        },
+        error: () => {
+          this.syncMessage = 'Unable to sync Gmail intelligence.';
         },
       });
   }
@@ -195,6 +230,14 @@ export class GoalDetailsPage implements OnInit {
     return this.toTitleCase(type || 'Goal Activity');
   }
 
+  formatApplicationStatus(status?: string): string {
+    return this.toTitleCase(status || 'Applied');
+  }
+
+  getApplicationStatusClass(status?: string): string {
+    return `status-${(status || 'APPLIED').toLowerCase()}`;
+  }
+
   getProgress(progress?: number): number {
     if (progress === null || progress === undefined || Number.isNaN(progress)) {
       return 0;
@@ -211,6 +254,12 @@ export class GoalDetailsPage implements OnInit {
     return Math.round(progress);
   }
 
+  private setGoalState(goal: Goal): void {
+    this.goal = this.normalizeGoal(goal);
+    this.activities = this.goal.recentActivity || [];
+    this.applications = this.goal.applications || [];
+  }
+
   private normalizeGoal(goal: Goal): Goal {
     return {
       ...goal,
@@ -224,6 +273,7 @@ export class GoalDetailsPage implements OnInit {
         applicationsSubmitted: 0,
       },
       plan: goal.plan ? this.normalizePlan(goal.plan) : null,
+      applications: goal.applications || [],
       recentActivity: goal.recentActivity || [],
     };
   }
