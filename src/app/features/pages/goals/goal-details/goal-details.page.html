@@ -4,12 +4,12 @@
   </ion-refresher>
 
   <div class="page">
-    @if (loading) {
-      <section class="state-card">
-        <h3>Loading goal...</h3>
-        <p>Please wait while we fetch goal details.</p>
-      </section>
-    } @else if (errorMessage) {
+      @if (loading) {
+        <div class="loading-overlay">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Loading goal details...</p>
+        </div>
+      } @else if (errorMessage) {
       <section class="state-card">
         <h3>Unable to load goal</h3>
         <p>{{ errorMessage }}</p>
@@ -32,136 +32,68 @@
         </div>
       </section>
 
-      <section class="progress-card">
-        <div class="progress-head">
-          <div>
-            <span>Status</span>
-            <strong>{{ goal.status || 'ACTIVE' }}</strong>
-          </div>
-
-          <div class="percent">{{ getProgress(goal.progressPercentage) }}%</div>
-        </div>
-
-        <div class="progress-track">
-          <div
-            class="progress-fill"
-            [style.width.%]="getProgress(goal.progressPercentage)"
-          ></div>
-        </div>
-
-        <div class="target-row">
-          <ion-icon name="calendar-outline"></ion-icon>
-          <span>Target {{ goal.targetDate | date: 'dd MMM yyyy' }}</span>
-        </div>
-      </section>
-
-      @if (goal.goalType === 'JOB_SEARCH') {
-        <section class="section-card intelligence-card">
-          <div class="section-title">
-            <h3>Gmail Intelligence</h3>
-            <p>Scan Gmail and update your job search metrics automatically.</p>
-          </div>
-
-          <button
-            type="button"
-            class="primary-btn"
-            [disabled]="syncingGmail"
-            (click)="syncGmailIntelligence()"
-          >
-            @if (syncingGmail) {
-              Syncing Gmail...
-            } @else {
-              Sync Gmail Intelligence
-            }
-          </button>
-
-          @if (syncMessage) {
-            <p class="sync-message">{{ syncMessage }}</p>
-          }
-
-          @if (lastSyncResult) {
-            <div class="sync-summary">
-              <ion-icon name="sparkles-outline"></ion-icon>
-              <span>
-                Gmail sync completed. Your metrics below are now updated.
-              </span>
-            </div>
-          }
-        </section>
-      }
-
       @if (goal.metrics) {
-        <section class="section-card">
-          <div class="section-title">
-            <h3>Goal Metrics</h3>
-            <p>Current progress from tasks and Gmail intelligence.</p>
-          </div>
+  <section class="section-card">
 
-          <div class="metrics-grid">
-            @for (metric of goalMetrics; track metric.label) {
-              <div class="metric-card" [class.highlight]="metric.label === 'Offers'">
-                <div class="metric-top">
-                  <span>{{ metric.label }}</span>
+    <div class="metrics-header">
 
-                  <div class="metric-icon">
-                    <ion-icon [name]="metric.icon"></ion-icon>
-                  </div>
-                </div>
-
-                <strong>{{ metric.value }}</strong>
-              </div>
-            }
-          </div>
-        </section>
-      }
+      <div class="section-title">
+        <h3>Goal Metrics</h3>
+        <p>Current progress from tasks and Gmail intelligence.</p>
+      </div>
 
       @if (goal.goalType === 'JOB_SEARCH') {
-        <section class="section-card">
-          <div class="section-title">
-            <h3>Applications</h3>
-            <p>Detected job applications and their latest status.</p>
+        <button
+          type="button"
+          class="metrics-sync-btn"
+          [disabled]="syncingGmail"
+          (click)="syncGmailIntelligence()"
+        >
+          <ion-icon name="sync-outline"></ion-icon>
+
+          @if (syncingGmail) {
+            Syncing...
+          } @else {
+            Sync Gmail
+          }
+        </button>
+      }
+
+    </div>
+
+    @if (syncMessage) {
+      <div class="metrics-sync-message">
+        {{ syncMessage }}
+      </div>
+    }
+
+    <div class="metrics-grid">
+      @for (metric of goalMetrics; track metric.label) {
+
+        <div
+          class="metric-card"
+          [class.highlight]="metric.label === 'Offers'"
+        >
+          <div class="metric-top">
+
+            <span>{{ metric.label }}</span>
+
+            <div class="metric-icon">
+              <ion-icon [name]="metric.icon"></ion-icon>
+            </div>
+
           </div>
 
-          @if (applications.length) {
-            <div class="application-list">
-              @for (application of applications; track application.id || application._id || $index) {
-                <article class="application-item">
-                  <div>
-                    <h4>{{ application.company || 'Unknown Company' }}</h4>
-                    <p>{{ application.position || 'Position not detected' }}</p>
+          <strong>{{ metric.value }}</strong>
 
-                    @if (application.lastActivityAt || application.appliedAt) {
-                      <small>
-                        Last update
-                        {{ (application.lastActivityAt || application.appliedAt) | date: 'dd MMM yyyy, h:mm a' }}
-                      </small>
-                    }
-                  </div>
+        </div>
 
-                  <span
-                    class="application-status"
-                    [class]="getApplicationStatusClass(application.status)"
-                  >
-                    {{ formatApplicationStatus(application.status) }}
-                  </span>
-                </article>
-              }
-            </div>
-          } @else {
-            <p class="muted">
-              No applications detected yet. Run Gmail sync to scan your inbox.
-            </p>
-          }
-        </section>
       }
+    </div>
 
-      @if (goal.plan?.strategySummary || goal.aiPlanSummary) {
-        <section class="ai-card">
-          <p>STRATEGY SUMMARY</p>
-          <h3>Smart Plan</h3>
-          <span>{{ goal.plan?.strategySummary || goal.aiPlanSummary }}</span>
-        </section>
-      }
+  </section>
+}
+
 
       @if (goal.plan) {
         <section class="section-card">
