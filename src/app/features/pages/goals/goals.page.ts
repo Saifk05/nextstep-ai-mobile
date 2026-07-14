@@ -108,7 +108,7 @@ export class GoalsPage implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigateByUrl('/dashboard');
+    this.router.navigateByUrl('/settings');
   }
 
   formatGoalType(type?: string): string {

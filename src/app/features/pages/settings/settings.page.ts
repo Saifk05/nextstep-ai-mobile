@@ -36,7 +36,7 @@ import {
   addCircleOutline,
   shieldCheckmarkOutline,
   documentTextOutline,
-  
+  walletOutline,
   lockClosedOutline,
   chevronDownCircleOutline,
 } from 'ionicons/icons';
@@ -115,6 +115,7 @@ export class SettingsPage implements OnInit {
       linkOutline,
       mailOutline,
       trashOutline,
+      walletOutline,
       addCircleOutline,
       shieldCheckmarkOutline,
       documentTextOutline,

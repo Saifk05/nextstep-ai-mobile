@@ -206,26 +206,65 @@ export class ApiService {
   /*
    * Tasks
    */
+  // getTasks(
+  //   cursor?: string,
+  //   limit: number = 20
+  // ): Observable<ApiResponse<Task[]>> {
+  //   const params: string[] = [];
+
+  //   if (limit) {
+  //     params.push(`limit=${limit}`);
+  //   }
+
+  //   if (cursor) {
+  //     params.push(`cursor=${encodeURIComponent(cursor)}`);
+  //   }
+
+  //   const query = params.length ? `?${params.join('&')}` : '';
+
+  //   return this.http.get<ApiResponse<Task[]>>(
+  //     `${this.clientUrl}/tasks${query}`
+  //   );
+  // }
+
   getTasks(
-    cursor?: string,
-    limit: number = 20
-  ): Observable<ApiResponse<Task[]>> {
-    const params: string[] = [];
+  cursor?: string, limit: number = 10,
+  status: 'ALL' | 'PENDING' | 'COMPLETED' | 'MISSED' = 'ALL',
+  date?: string ): Observable<ApiResponse<Task[]>> 
+  {
+  const params: string[] = [];
 
-    if (limit) {
-      params.push(`limit=${limit}`);
-    }
+  if (limit) {
+    params.push(`limit=${limit}`);
+  }
 
-    if (cursor) {
-      params.push(`cursor=${encodeURIComponent(cursor)}`);
-    }
-
-    const query = params.length ? `?${params.join('&')}` : '';
-
-    return this.http.get<ApiResponse<Task[]>>(
-      `${this.clientUrl}/tasks${query}`
+  if (cursor) {
+    params.push(
+      `cursor=${encodeURIComponent(cursor)}`,
     );
   }
+
+  if (status && status !== 'ALL') {
+    params.push(
+      `status=${encodeURIComponent(status)}`,
+    );
+  }
+
+  if (date?.trim()) {
+    params.push(
+      `date=${encodeURIComponent(date.trim())}`,
+    );
+  }
+
+  const query =
+    params.length > 0
+      ? `?${params.join('&')}`
+      : '';
+
+  return this.http.get<ApiResponse<Task[]>>(
+    `${this.clientUrl}/tasks${query}`,
+  );
+}
 
   getTodayTasks(): Observable<ApiResponse<Task[]>> {
     return this.http.get<ApiResponse<Task[]>>(

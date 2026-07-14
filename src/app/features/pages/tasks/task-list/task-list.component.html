@@ -1,5 +1,20 @@
 <ion-content class="tasks-content">
   <main class="page">
+    @if (isLoading) {
+      <div
+        class="loading-overlay"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading tasks"
+      >
+        <div class="loading-card">
+          <div class="app-spinner" aria-hidden="true"></div>
+          <!-- <ion-spinner name="crescent"></ion-spinner> -->
+          <span>Loading tasks...</span>
+        </div>
+      </div>
+    }
+
     <section class="hero">
       <div>
         <p class="greeting">Task Manager</p>
@@ -11,7 +26,12 @@
         </p>
       </div>
 
-      <button class="add-btn" type="button" (click)="goToAddTask($event)">
+      <button
+        class="add-btn"
+        type="button"
+        aria-label="Add task"
+        (click)="goToAddTask($event)"
+      >
         <ion-icon name="add-outline"></ion-icon>
       </button>
     </section>
@@ -49,27 +69,31 @@
           <ion-icon name="flame-outline"></ion-icon>
         </div>
 
-          <strong>{{ missedTasks }}</strong>
+        <strong>{{ missedTasks }}</strong>
         <span>Missed</span>
       </div>
     </section>
 
     <section class="search-row">
-      <button class="calendar-btn" type="button" (click)="picker.open()">
+      <button
+        class="calendar-btn"
+        type="button"
+        aria-label="Filter tasks by date"
+        [class.active]="isDateFilterActive"
+        (click)="picker.open()"
+      >
         <ion-icon name="calendar-outline"></ion-icon>
       </button>
 
       <mat-form-field class="hidden-date-range">
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate [(ngModel)]="dateRange.start" />
-          <input
-            matEndDate
-            [(ngModel)]="dateRange.end"
-            (dateChange)="applyFilters()"
-          />
-        </mat-date-range-input>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [(ngModel)]="dateRange.start"
+          (dateChange)="onDateFilterChange()"
+        />
 
-        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
       <div class="search-box">
@@ -79,14 +103,27 @@
           type="text"
           placeholder="Search tasks..."
           [(ngModel)]="searchText"
-          (input)="applyFilters()"
+          (input)="onSearchChange()"
         />
+
+        @if (searchText) {
+          <button
+            class="clear-search-btn"
+            type="button"
+            aria-label="Clear search"
+            (click)="clearSearch()"
+          >
+            ×
+          </button>
+        }
       </div>
 
       <div class="filter-wrapper">
         <button
           class="filter-btn"
           type="button"
+          aria-label="Filter tasks by status"
+          [class.active]="selectedStatus !== 'ALL'"
           (click)="toggleStatusFilter($event)"
         >
           <ion-icon name="funnel-outline"></ion-icon>
@@ -108,78 +145,145 @@
       </div>
     </section>
 
-    @if (isDateFilterActive || selectedStatus !== 'ALL' || searchText) {
+    @if (
+      isDateFilterActive ||
+      selectedStatus !== 'ALL' ||
+      searchText
+    ) {
       <section class="active-filters">
         @if (searchText) {
           <span>
             Search: {{ searchText }}
-            <button type="button" (click)="clearSearch()">×</button>
+
+            <button
+              type="button"
+              aria-label="Remove search filter"
+              (click)="clearSearch()"
+            >
+              ×
+            </button>
           </span>
         }
 
         @if (selectedStatus !== 'ALL') {
           <span>
             {{ formatLabel(selectedStatus) }}
-            <button type="button" (click)="clearStatusFilter()">×</button>
+
+            <button
+              type="button"
+              aria-label="Remove status filter"
+              (click)="clearStatusFilter()"
+            >
+              ×
+            </button>
           </span>
         }
 
         @if (isDateFilterActive) {
           <span>
-            {{ dateRange.start | date: 'dd MMM' }} -
-            {{ dateRange.end | date: 'dd MMM' }}
-            <button type="button" (click)="clearDateFilter()">×</button>
+            {{ dateRange.start | date: 'dd MMM yyyy' }}
+
+            <button
+              type="button"
+              aria-label="Remove date filter"
+              (click)="clearDateFilter()"
+            >
+              ×
+            </button>
           </span>
         }
+
+        <button
+          class="clear-all-btn"
+          type="button"
+          (click)="clearAllFilters()"
+        >
+          Clear all
+        </button>
       </section>
     }
 
-    @if (isLoading) {
-      <section class="skeleton-list">
-        @for (item of [1, 2, 3, 4]; track item) {
-          <div class="skeleton-card"></div>
-        }
-      </section>
-    } @else if (errorMessage) {
+    @if (!isLoading && errorMessage) {
       <section class="empty-state">
         <div class="empty-icon">
           <ion-icon name="clipboard-outline"></ion-icon>
         </div>
 
         <h2>Something went wrong</h2>
+
         <p>{{ errorMessage }}</p>
 
-        <button type="button" (click)="loadTasks(true)">Try Again</button>      </section>
-    } @else if (!allTasks.length) {
-      <section class="empty-state">
-        <div class="empty-icon">
-          <ion-icon name="checkmark-circle-outline"></ion-icon>
-        </div>
-
-        <h2>No tasks yet</h2>
-        <p>Create your first task and start building your streak.</p>
-
-        <button type="button" (click)="goToAddTask($event)">
-          Create Task
+        <button
+          type="button"
+          (click)="loadTasks(true)"
+        >
+          Try Again
         </button>
       </section>
-    } @else if (!tasks.length) {
+    } @else if (
+      !isLoading &&
+      !tasks.length &&
+      (
+        isDateFilterActive ||
+        selectedStatus !== 'ALL' ||
+        searchText
+      )
+    ) {
       <section class="empty-state">
         <div class="empty-icon">
           <ion-icon name="search-outline"></ion-icon>
         </div>
 
         <h2>No matching tasks</h2>
-        <p>Try changing your search, status, or date filter.</p>
 
-        <button type="button" (click)="clearAllFilters()">
+        <p>
+          No tasks match the selected search, status, or date.
+        </p>
+
+        <button
+          type="button"
+          (click)="clearAllFilters()"
+        >
           Clear Filters
         </button>
       </section>
-    } @else {
+    } @else if (
+      !isLoading &&
+      !tasks.length
+    ) {
+      <section class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+
+        <h2>No tasks yet</h2>
+
+        <p>
+          Create your first task and start building your streak.
+        </p>
+
+        <button
+          type="button"
+          (click)="goToAddTask($event)"
+        >
+          Create Task
+        </button>
+      </section>
+    } @else if (
+      !isLoading &&
+      tasks.length
+    ) {
       <section class="task-list">
-        @for (task of tasks; track trackByTaskId($index, task)) {
-          <article class="task-card" (click)="openTask(task, $event)">
+        @for (
+          task of tasks;
+          track trackByTaskId($index, task)
+        ) {
+          <article
+            class="task-card"
+            tabindex="0"
+            (click)="openTask(task, $event)"
+            (keyup.enter)="openTask(task, $event)"
+          >
             <div class="task-icon">
               <ion-icon name="clipboard-outline"></ion-icon>
             </div>
@@ -188,7 +292,10 @@
               <div class="task-header">
                 <div>
                   <h2>{{ task.title }}</h2>
-                  <p>{{ formatLabel(task.category || 'GENERAL') }}</p>
+
+                  <p>
+                    {{ formatLabel(task.category || 'GENERAL') }}
+                  </p>
                 </div>
 
                 <ion-icon
@@ -201,7 +308,9 @@
                 <ion-icon name="calendar-outline"></ion-icon>
 
                 @if (task.dueDate) {
-                  <span>{{ task.dueDate | date: 'dd MMM yyyy' }}</span>
+                  <span>
+                    {{ task.dueDate | date: 'dd MMM yyyy' }}
+                  </span>
                 } @else {
                   <span>No due date</span>
                 }
@@ -223,21 +332,25 @@
                 </span>
 
                 @if (task.completionType === 'PHOTO_PROOF') {
-                  <span class="badge proof-badge">Photo Proof</span>
+                  <span class="badge proof-badge">
+                    Photo Proof
+                  </span>
                 }
 
                 @if (task.completionType === 'SELF_CONFIRM') {
-                  <span class="badge self-badge">Self Confirm</span>
+                  <span class="badge self-badge">
+                    Self Confirm
+                  </span>
                 }
               </div>
             </div>
           </article>
         }
-            </section>
+      </section>
 
       <ion-infinite-scroll
         threshold="120px"
-        [disabled]="!hasMore"
+        [disabled]="!hasMore || isLoadingMore"
         (ionInfinite)="loadMoreTasks($event)"
       >
         <ion-infinite-scroll-content
