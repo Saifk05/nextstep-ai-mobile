@@ -601,8 +601,8 @@
   align-items: center;
   gap: 6px;
 
-  background: #04f734;
-  color: #000;
+  background: var(--app-primary);
+  color: var(--app-bg);
 
   font-size: 13px;
   font-weight: 800;
