@@ -1,0 +1,195 @@
+<ion-content class="add-goal-content">
+  <div class="page">
+    <section class="hero-card">
+      <button type="button" class="hero-icon-btn" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+
+      <div class="hero-text">
+        <p class="eyebrow">GOAL ENGINE</p>
+        <h1>Create Goal</h1>
+        <p class="subtitle">Choose a template and answer setup questions.</p>
+      </div>
+
+      <div></div>
+    </section>
+
+    <section class="step-card">
+      <div class="step-item" [class.active]="step === 1">1</div>
+      <div class="step-line"></div>
+      <div class="step-item" [class.active]="step === 2">2</div>
+      <div class="step-line"></div>
+      <div class="step-item" [class.active]="step === 3">3</div>
+    </section>
+
+    <!-- @if (errorMessage) {
+      <section class="error-card">
+        {{ errorMessage }}
+      </section>
+    } -->
+
+    @if (loadingTemplates) {
+      <section class="empty-card">
+        <ion-icon name="refresh-outline"></ion-icon>
+        <h3>Loading templates...</h3>
+        <p>Please wait while we fetch goal templates.</p>
+      </section>
+    } @else {
+      @if (step === 1) {
+        <section class="form-card">
+          <h2>Select Category</h2>
+          <p class="section-subtitle">Start by choosing the goal category.</p>
+
+          <div class="category-grid">
+            @for (category of categories; track category.key) {
+              <button
+                type="button"
+                class="category-card"
+                [class.selected]="selectedCategory === category.key"
+                (click)="selectCategory(category.key)"
+              >
+                <ion-icon [name]="category.icon"></ion-icon>
+                <span>{{ category.label }}</span>
+              </button>
+            }
+          </div>
+        </section>
+      }
+
+      @if (step === 2) {
+        <section class="form-card">
+          <div class="section-header">
+            <div>
+              <h2>Select Template</h2>
+              <p class="section-subtitle">
+                Choose how NextStep AI should build your goal.
+              </p>
+            </div>
+
+            <button type="button" class="text-btn" (click)="step = 1">
+              Change
+            </button>
+          </div>
+
+          @if (!filteredTemplates.length) {
+            <div class="empty-mini">
+              No templates available for this category yet.
+            </div>
+          } @else {
+            <div class="template-list">
+              @for (template of filteredTemplates; track template.key) {
+                <button
+                  type="button"
+                  class="template-card"
+                  [class.selected]="selectedTemplate?.key === template.key"
+                  (click)="selectTemplate(template)"
+                >
+                  <div>
+                    <h3>{{ template.title }}</h3>
+                    <p>{{ template.description }}</p>
+                  </div>
+
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      @if (step === 3 && selectedTemplate) {
+        <section class="form-card">
+          <div class="section-header">
+            <div>
+              <h2>{{ selectedTemplate.title }}</h2>
+              <p class="section-subtitle">
+                Complete setup details to generate your plan.
+              </p>
+            </div>
+
+            <button type="button" class="text-btn" (click)="step = 2">
+              Change
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label>Goal Title</label>
+            <input
+              type="text"
+              [(ngModel)]="form.title"
+              placeholder="Backend Developer Job"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Target Date</label>
+            <input type="date" [(ngModel)]="form.targetDate" />
+          </div>
+
+          @for (question of selectedTemplate.setupQuestions; track question.key) {
+            <div class="form-group">
+              <label>
+                {{ question.label }}
+                @if (question.required) {
+                  <span>*</span>
+                }
+              </label>
+
+              @if (getQuestionType(question) === 'TEXT') {
+                <input
+                  type="text"
+                  [(ngModel)]="setupAnswers[question.key]"
+                  [placeholder]="getPlaceholder(question)"
+                />
+              } @else if (getQuestionType(question) === 'TEXTAREA') {
+                <textarea
+                  rows="4"
+                  [(ngModel)]="setupAnswers[question.key]"
+                  [placeholder]="getPlaceholder(question)"
+                ></textarea>
+              } @else if (getQuestionType(question) === 'NUMBER') {
+                <input
+                  type="number"
+                  [(ngModel)]="setupAnswers[question.key]"
+                  [placeholder]="getPlaceholder(question)"
+                />
+              } @else if (getQuestionType(question) === 'DATE') {
+                <input
+                  type="date"
+                  [(ngModel)]="setupAnswers[question.key]"
+                />
+              } @else if (getQuestionType(question) === 'SELECT') {
+                <select [(ngModel)]="setupAnswers[question.key]">
+                  <option value="">{{ getPlaceholder(question) }}</option>
+                  @for (option of getQuestionOptions(question); track option) {
+                    <option [value]="option">{{ formatOption(option) }}</option>
+                  }
+                </select>
+              } @else if (getQuestionType(question) === 'BOOLEAN') {
+                <div class="toggle-card compact">
+                  <p>{{ getPlaceholder(question) }}</p>
+                  <ion-toggle [(ngModel)]="setupAnswers[question.key]"></ion-toggle>
+                </div>
+              } @else {
+                <input
+                  type="text"
+                  [(ngModel)]="setupAnswers[question.key]"
+                  [placeholder]="getPlaceholder(question)"
+                />
+              }
+            </div>
+          }
+
+          <button
+            type="button"
+            class="primary-btn"
+            [disabled]="creating"
+            (click)="createGoal()"
+          >
+            {{ creating ? 'Creating Goal...' : 'Create Goal' }}
+          </button>
+        </section>
+      }
+    }
+  </div>
+</ion-content>

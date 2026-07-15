@@ -1,11 +1,11 @@
 export interface DashboardUser {
   id: string;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   profilePicture: string | null;
-  status: string;
+  status?: string;
 }
 
 export interface Greeting {
@@ -19,7 +19,7 @@ export interface Summary {
   completedTasks: number;
   pendingTasks: number;
   activeGoals: number;
-  monthlyExpense: number;
+  monthlyExpense?: number;
   productivityScore: number;
 }
 
@@ -32,8 +32,20 @@ export interface Tasks {
   total: number;
   completed: number;
   pending: number;
+  missed?: number;
   completionPercentage: number;
   todayTasks: any[];
+  todayTasksCount?: number;
+  emptyState?: EmptyState;
+}
+
+export interface GoalDashboardItem {
+  id: string;
+  title: string;
+  goalType: string;
+  status: string;
+  targetDate: string;
+  progressPercentage: number;
 }
 
 export interface Goals {
@@ -41,14 +53,14 @@ export interface Goals {
   activeGoals: number;
   completedGoals: number;
   overallProgress: number;
-  items: any[];
+  items: GoalDashboardItem[];
+  emptyState?: EmptyState;
 }
 
-export interface Budget {
-  monthlyIncome: number;
-  monthlyExpense: number;
-  monthlySavings: number;
-  currency: string;
+export interface EmptyState {
+  title: string;
+  description: string;
+  cta: string;
 }
 
 export interface Productivity {
@@ -61,18 +73,28 @@ export interface Productivity {
 export interface QuickAction {
   type: string;
   title: string;
+  description?: string;
+}
+
+export interface RecentActivity {
+  id?: string;
+  title: string;
+  description: string;
+  date: string;
+  icon?: string;
 }
 
 export interface DashboardData {
+  isNewUser?: boolean;
   user: DashboardUser;
   greeting: Greeting;
   summary: Summary;
   todayFocus: TodayFocus;
   tasks: Tasks;
   goals: Goals;
-  budget: Budget;
   productivity: Productivity;
   quickActions: QuickAction[];
+  recentActivity: RecentActivity[];
 }
 
 export interface DashboardResponse {

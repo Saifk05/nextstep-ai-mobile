@@ -2,19 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { finalize } from 'rxjs';
 import { AppFooterComponent } from '../../../shared/components/app-footer/app-footer.component';
-import { IonContent, IonIcon } from '@ionic/angular/standalone';
+// import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { ToastService } from '../../../core/services/toast';
 import { ApiService } from '../../../core/services/api';
+
 import {
   DashboardData,
   DashboardResponse,
 } from '../../../core/models/dashboard.model';
-import { addIcons } from 'ionicons';
-import {
-  checkmarkCircle,
-  createOutline,
-} from 'ionicons/icons';
 
 import {
   GmailMessage,
@@ -23,12 +18,26 @@ import {
   GoogleConnectedAccount,
 } from '../../../core/models/integration.model';
 
+import { addIcons } from 'ionicons';
+import {
+  checkmarkCircle,
+  createOutline,
+  chevronForward,
+} from 'ionicons/icons';
+
+import {
+  IonContent,
+  IonIcon,
+  IonRefresher,
+  IonRefresherContent,
+} from '@ionic/angular/standalone';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, DatePipe, IonContent, IonIcon, AppFooterComponent],
+  imports: [CommonModule, DatePipe, IonContent, IonIcon, AppFooterComponent, IonRefresher, IonRefresherContent],
 })
 export class DashboardPage implements OnInit {
   loading = false;
@@ -49,12 +58,12 @@ export class DashboardPage implements OnInit {
 
   constructor(
     private readonly apiService: ApiService,
-    private readonly router: Router,
-    private readonly toastService: ToastService
+    private readonly router: Router
   ) {
     addIcons({
       checkmarkCircle,
       createOutline,
+      chevronForward,
     });
   }
 
@@ -67,6 +76,16 @@ export class DashboardPage implements OnInit {
   private loadSelectedGoogleAccount(): void {
     this.selectedAccountId =
       localStorage.getItem('selectedGoogleAccountId') || '';
+  }
+
+  private getAccountId(account: GoogleConnectedAccount): string {
+    return account.id || (account as any)._id || '';
+  }
+
+  get selectedAccount(): GoogleConnectedAccount | undefined {
+    return this.connectedAccounts.find(
+      (account) => this.getAccountId(account) === this.selectedAccountId
+    );
   }
 
   loadDashboard(): void {
@@ -96,75 +115,45 @@ export class DashboardPage implements OnInit {
       next: (statusResponse) => {
         this.connectedAccounts = statusResponse.data.accounts || [];
 
-        if (this.connectedAccounts.length === 0) {
-          this.selectedAccountId = '';
-          localStorage.removeItem('selectedGoogleAccountId');
-
-          this.isGoogleCalendarConnected = false;
-          this.isGmailConnected = false;
-          this.calendarEvents = [];
-          this.gmailSummary = null;
-          this.gmailMessages = [];
-          this.calendarLoading = false;
-          this.gmailLoading = false;
+        if (!this.connectedAccounts.length) {
+          this.resetGoogleWorkspaceState();
           return;
         }
 
         const selectedExists = this.connectedAccounts.some(
-          (account) => account.id === this.selectedAccountId
+          (account) => this.getAccountId(account) === this.selectedAccountId
         );
 
         if (!this.selectedAccountId || !selectedExists) {
-          this.selectGoogleAccount(this.connectedAccounts[0].id);
+          const firstAccountId = this.getAccountId(this.connectedAccounts[0]);
+
+          if (firstAccountId) {
+            this.selectGoogleAccount(firstAccountId);
+            return;
+          }
         }
 
-        const selectedAccount = this.selectedAccount;
-
-        this.isGoogleCalendarConnected =
-          selectedAccount?.calendarConnected ||
-          selectedAccount?.enabledServices?.includes('CALENDAR') ||
-          false;
-
-        this.isGmailConnected =
-          selectedAccount?.gmailConnected ||
-          selectedAccount?.enabledServices?.includes('GMAIL') ||
-          false;
-
-        if (this.isGoogleCalendarConnected) {
-          this.loadGoogleCalendarEvents();
-        } else {
-          this.calendarEvents = [];
-          this.calendarLoading = false;
-        }
-
-        if (this.isGmailConnected) {
-          this.loadGmailDashboardData();
-        } else {
-          this.gmailSummary = null;
-          this.gmailMessages = [];
-          this.gmailLoading = false;
-        }
+        this.loadSelectedAccountServices();
       },
       error: () => {
-        this.connectedAccounts = [];
-        this.selectedAccountId = '';
-        localStorage.removeItem('selectedGoogleAccountId');
-
-        this.isGoogleCalendarConnected = false;
-        this.isGmailConnected = false;
-        this.calendarEvents = [];
-        this.gmailSummary = null;
-        this.gmailMessages = [];
-        this.calendarLoading = false;
-        this.gmailLoading = false;
+        this.resetGoogleWorkspaceState();
       },
     });
   }
 
   selectGoogleAccount(accountId: string): void {
+    if (!accountId) {
+      this.resetGoogleWorkspaceState();
+      return;
+    }
+
     this.selectedAccountId = accountId;
     localStorage.setItem('selectedGoogleAccountId', accountId);
 
+    this.loadSelectedAccountServices();
+  }
+
+  private loadSelectedAccountServices(): void {
     const account = this.selectedAccount;
 
     this.isGoogleCalendarConnected =
@@ -181,6 +170,7 @@ export class DashboardPage implements OnInit {
       this.loadGoogleCalendarEvents();
     } else {
       this.calendarEvents = [];
+      this.calendarLoading = false;
     }
 
     if (this.isGmailConnected) {
@@ -188,13 +178,24 @@ export class DashboardPage implements OnInit {
     } else {
       this.gmailSummary = null;
       this.gmailMessages = [];
+      this.gmailLoading = false;
     }
   }
 
-  get selectedAccount(): GoogleConnectedAccount | undefined {
-    return this.connectedAccounts.find(
-      (account) => account.id === this.selectedAccountId
-    );
+  private resetGoogleWorkspaceState(): void {
+    this.connectedAccounts = [];
+    this.selectedAccountId = '';
+    localStorage.removeItem('selectedGoogleAccountId');
+
+    this.isGoogleCalendarConnected = false;
+    this.isGmailConnected = false;
+
+    this.calendarEvents = [];
+    this.gmailSummary = null;
+    this.gmailMessages = [];
+
+    this.calendarLoading = false;
+    this.gmailLoading = false;
   }
 
   loadGoogleCalendarEvents(): void {
@@ -219,34 +220,30 @@ export class DashboardPage implements OnInit {
       });
   }
 
-
   loadGmailDashboardData(): void {
-  if (!this.selectedAccountId) {
-    this.gmailSummary = null;
-    this.gmailMessages = [];
-    this.gmailLoading = false;
-    return;
+    if (!this.selectedAccountId) {
+      this.gmailSummary = null;
+      this.gmailMessages = [];
+      this.gmailLoading = false;
+      return;
+    }
+
+    this.gmailLoading = true;
+
+    this.apiService
+      .getGoogleGmailSummary(this.selectedAccountId)
+      .pipe(finalize(() => (this.gmailLoading = false)))
+      .subscribe({
+        next: (response) => {
+          this.gmailSummary = response.data;
+          this.gmailMessages = response.data.emails || [];
+        },
+        error: () => {
+          this.gmailSummary = null;
+          this.gmailMessages = [];
+        },
+      });
   }
-
-  this.gmailLoading = true;
-
-  this.apiService
-    .getGoogleGmailSummary(this.selectedAccountId)
-    .pipe(finalize(() => (this.gmailLoading = false)))
-    .subscribe({
-      next: (response) => {
-        this.gmailSummary = response.data;
-
-        this.gmailMessages = response.data.emails || [];
-      },
-
-      error: () => {
-        this.gmailSummary = null;
-        this.gmailMessages = [];
-      },
-    });
-}
-
 
   getSenderName(from: string): string {
     if (!from) {
@@ -323,6 +320,10 @@ export class DashboardPage implements OnInit {
   }
 
   createGoal(): void {
-    this.toastService.info('Goals feature coming soon.');
+    this.router.navigateByUrl('/goals/add');
+  }
+
+  goToGoalDetails(goalId: string): void {
+    this.router.navigateByUrl(`/goals/${goalId}`);
   }
 }

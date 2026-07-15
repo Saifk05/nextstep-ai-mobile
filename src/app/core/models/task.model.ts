@@ -1,9 +1,16 @@
 export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH';
-export type TaskStatus = 'PENDING' | 'COMPLETED' | 'OVERDUE';
-export type CompletionType = 'SELF_CONFIRM' | 'PHOTO_PROOF';
+
+export type TaskStatus =
+  | 'PENDING'
+  | 'COMPLETED'
+  | 'MISSED';
+
+export type CompletionType =
+  | 'SELF_CONFIRM'
+  | 'PHOTO_PROOF';
 
 export interface Task {
-  id: string;
+  id?: string;
   _id?: string;
 
   title: string;
@@ -14,6 +21,7 @@ export interface Task {
   status: TaskStatus;
 
   dueDate?: string;
+  taskDate?: string;
   completedAt?: string;
 
   completionType: CompletionType;
@@ -21,6 +29,15 @@ export interface Task {
 
   proofImage?: string;
   proofImageUrl?: string;
+
+  goalId?: string;
+  goalPlanId?: string;
+
+  goalActionKey?: string;
+  goalActionType?: string;
+  goalActionFrequency?: string;
+
+  isGoalTask?: boolean;
 
   createdAt: string;
   updatedAt: string;
@@ -36,7 +53,8 @@ export interface CreateTaskRequest {
   minimumCompletionMinutes?: number;
 }
 
-export interface UpdateTaskRequest extends Partial<CreateTaskRequest> {
+export interface UpdateTaskRequest
+  extends Partial<CreateTaskRequest> {
   status?: TaskStatus;
   completionNote?: string;
   completedAt?: string;
@@ -47,7 +65,7 @@ export interface TaskSummary {
   totalTasks: number;
   completedTasks: number;
   pendingTasks: number;
-  overdueTasks?: number;
+  missedTasks?: number;
 }
 
 export interface ApiResponse<T> {

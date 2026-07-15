@@ -1,0 +1,250 @@
+<ion-content class="goal-details-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page">
+      @if (loading) {
+        <div class="loading-overlay">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Loading goal details...</p>
+        </div>
+      } @else if (errorMessage) {
+      <section class="state-card">
+        <h3>Unable to load goal</h3>
+        <p>{{ errorMessage }}</p>
+        <button type="button" class="primary-btn" (click)="loadGoalDetails()">
+          Retry
+        </button>
+      </section>
+    } @else if (goal) {
+      <section class="hero-card">
+        <button type="button" class="back-btn" (click)="goBack()">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+
+        <div>
+          <p class="eyebrow">GOAL DETAILS</p>
+          <h1>{{ goal.title }}</h1>
+          <span class="type-pill">
+            {{ formatCategory(goal.category) }} · {{ formatGoalType(goal.goalType) }}
+          </span>
+        </div>
+      </section>
+
+      @if (goal.metrics) {
+  <section class="section-card">
+
+    <div class="metrics-header">
+
+      <div class="section-title">
+        <h3>Goal Metrics</h3>
+        <p>Current progress from tasks and Gmail intelligence.</p>
+      </div>
+
+      @if (goal.goalType === 'JOB_SEARCH') {
+        <button
+          type="button"
+          class="metrics-sync-btn"
+          [disabled]="syncingGmail"
+          (click)="syncGmailIntelligence()"
+        >
+          <ion-icon name="sync-outline"></ion-icon>
+
+          @if (syncingGmail) {
+            Syncing...
+          } @else {
+            Sync Gmail
+          }
+        </button>
+      }
+
+    </div>
+
+    @if (syncMessage) {
+      <div class="metrics-sync-message">
+        {{ syncMessage }}
+      </div>
+    }
+
+    <div class="metrics-grid">
+      @for (metric of goalMetrics; track metric.label) {
+
+        <div
+          class="metric-card"
+          [class.highlight]="metric.label === 'Offers'"
+        >
+          <div class="metric-top">
+
+            <span>{{ metric.label }}</span>
+
+            <div class="metric-icon">
+              <ion-icon [name]="metric.icon"></ion-icon>
+            </div>
+
+          </div>
+
+          <strong>{{ metric.value }}</strong>
+
+        </div>
+
+      }
+    </div>
+
+  </section>
+}
+
+
+      @if (goal.plan) {
+        <section class="section-card">
+          <div class="section-title">
+            <h3>Action Plan</h3>
+            <p>One-time, daily and weekly execution steps</p>
+          </div>
+
+          @if (goal.plan.actions.length) {
+            <div class="action-block">
+              <h4>One-time Actions</h4>
+
+              <div class="clean-list">
+                @for (action of goal.plan.actions; track action._id || action.id || action.title || $index) {
+                  @if (action.frequency === 'ONCE') {
+                    <div class="clean-item">
+                      <span class="dot"></span>
+
+                      <div>
+                        <p>{{ action.title }}</p>
+
+                        @if (action.description) {
+                          <small>{{ action.description }}</small>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
+
+          <div class="action-block">
+            <h4>Daily Actions</h4>
+
+            @if (goal.plan.dailyActions.length) {
+              <div class="clean-list">
+                @for (action of goal.plan.dailyActions; track action._id || action.id || action.title || $index) {
+                  <div class="clean-item">
+                    <span class="dot"></span>
+
+                    <div>
+                      <p>{{ action.title }}</p>
+
+                      @if (action.description) {
+                        <small>{{ action.description }}</small>
+                      }
+
+                    @if (action.metadata?.defaultDailyTarget; as dailyTarget) {
+                      <small class="action-target target-count">
+                        🎯 Target: {{ dailyTarget }}/day
+                      </small>
+                    }
+
+                    @if (action.metadata?.defaultMinutes; as minutes) {
+                      <small class="action-target target-time">
+                        ⏱ {{ minutes }} mins/day
+                      </small>
+                    }
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="muted">No daily actions available.</p>
+            }
+          </div>
+
+          <div class="action-block">
+            <h4>Weekly Actions</h4>
+
+            @if (goal.plan.weeklyActions.length) {
+              <div class="clean-list">
+                @for (action of goal.plan.weeklyActions; track action._id || action.id || action.title || $index) {
+                  <div class="clean-item">
+                    <span class="dot"></span>
+
+                    <div>
+                      <p>{{ action.title }}</p>
+
+                      @if (action.description) {
+                        <small>{{ action.description }}</small>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="muted">No weekly actions available.</p>
+            }
+          </div>
+        </section>
+<!-- 
+        <section class="section-card">
+          <div class="section-title">
+            <h3>Milestones</h3>
+            <p>Important checkpoints</p>
+          </div>
+
+          @if (goal.plan.milestones.length) {
+            <div class="timeline">
+              @for (milestone of goal.plan.milestones; track milestone._id || milestone.id || milestone.title || $index) {
+                <div class="timeline-item">
+                  <div class="timeline-icon">
+                    <ion-icon name="flag-outline"></ion-icon>
+                  </div>
+
+                  <div>
+                    <p>{{ milestone.title }}</p>
+
+                    @if (milestone.description) {
+                      <small>{{ milestone.description }}</small>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="muted">No milestones available.</p>
+          }
+        </section> -->
+      }
+
+      <section class="section-card">
+        <div class="section-title">
+          <h3>Recent Activity</h3>
+          <p>Latest goal updates</p>
+        </div>
+
+        @if (activities.length) {
+          <div class="activity-list">
+            @for (activity of activities; track activity.id || $any(activity)._id || $index) {
+              <article class="activity-item">
+                <div class="activity-icon">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </div>
+
+                <div>
+                  <h4>{{ formatActivityType(activity.type) }}</h4>
+                  <p>{{ activity.message || 'Activity recorded for this goal.' }}</p>
+                  <small>{{ activity.createdAt | date: 'dd MMM yyyy, h:mm a' }}</small>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="muted">No activity yet.</p>
+        }
+      </section>
+    }
+  </div>
+
+  <app-footer></app-footer>
+</ion-content>

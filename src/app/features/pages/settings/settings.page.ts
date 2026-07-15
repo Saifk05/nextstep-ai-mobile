@@ -20,6 +20,7 @@ import {
   personOutline,
   locationOutline,
   notificationsOutline,
+  flagOutline,
   colorPaletteOutline,
   helpCircleOutline,
   informationCircleOutline,
@@ -35,7 +36,7 @@ import {
   addCircleOutline,
   shieldCheckmarkOutline,
   documentTextOutline,
-  
+  walletOutline,
   lockClosedOutline,
   chevronDownCircleOutline,
 } from 'ionicons/icons';
@@ -99,6 +100,7 @@ export class SettingsPage implements OnInit {
     addIcons({
       arrowBackOutline,
       personOutline,
+      flagOutline,
       locationOutline,
       notificationsOutline,
       colorPaletteOutline,
@@ -113,6 +115,7 @@ export class SettingsPage implements OnInit {
       linkOutline,
       mailOutline,
       trashOutline,
+      walletOutline,
       addCircleOutline,
       shieldCheckmarkOutline,
       documentTextOutline,
@@ -353,6 +356,14 @@ checkGoogleStatus(event?: RefresherCustomEvent): void {
     this.blurActiveElement(event);
 
     this.router.navigate(['/settings/profile'], {
+      replaceUrl: true,
+    });
+  }
+
+  goToGoals(event?: Event): void {
+    this.blurActiveElement(event);
+
+    this.router.navigate(['/goals'], {
       replaceUrl: true,
     });
   }

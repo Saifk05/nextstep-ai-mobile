@@ -24,6 +24,46 @@
     </section>
 
     <section class="summary-grid">
+      <!-- <button
+        type="button"
+        class="summary-card"
+        (click)="comingSoon('Productivity')"
+      >
+        <div class="icon-box blue">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+
+        <h3>Productivity</h3>
+        <p>{{ productivityScore }} Score</p>
+      </button> -->
+
+      <button
+        type="button"
+        class="summary-card"
+        (click)="comingSoon('Finance')"
+      >
+        <div class="icon-box blue">
+          <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+
+        <h3>Finance</h3>
+        <p>Expenses, credits & bills</p>
+      </button>
+
+      <button
+        type="button"
+        class="summary-card"
+        (click)="goToGoals($event)"
+      >
+        <div class="icon-box green">
+          <ion-icon name="flag-outline"></ion-icon>
+        </div>
+
+        <h3>Goals</h3>
+        <p>View goals and progress</p>
+      </button>
+    </section>
+    <!-- <section class="summary-grid">
       <button type="button" class="summary-card" (click)="comingSoon('Productivity')">
         <div class="icon-box blue">
           <ion-icon name="sparkles-outline"></ion-icon>
@@ -41,9 +81,9 @@
         <h3>Daily Goal</h3>
         <p>Coming soon</p>
       </button>
-    </section>
+    </section> -->
 
-    <section class="menu-section">
+    <!-- <section class="menu-section">
       <h2>Account</h2>
 
       <div class="menu-card">
@@ -62,7 +102,43 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
       </div>
-    </section>
+    </section> -->
+
+  <section class="menu-section">
+  <h2>Account</h2>
+
+  <div class="menu-card">
+    <button type="button" class="menu-item" (click)="goToProfile($event)">
+      <span class="left">
+        <span class="menu-icon">
+          <ion-icon name="person-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>My Profile</strong>
+          <small>View and update profile details</small>
+        </span>
+      </span>
+
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+
+    <!-- <button type="button" class="menu-item" (click)="goToGoals($event)">
+      <span class="left">
+        <span class="menu-icon green">
+          <ion-icon name="flag-outline"></ion-icon>
+        </span>
+
+        <span>
+          <strong>Goals</strong>
+          <small>Manage your active goals and plans</small>
+        </span>
+      </span>
+
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button> -->
+  </div>
+</section>  
 
     <section class="menu-section">
       <div class="section-title-row">
@@ -330,7 +406,7 @@
       <span>Logout</span>
     </button>
 
-    <p class="version">NextStep AI v1.0.0</p>
+    <p class="version">NextStep AI v1.0.1</p>
   </div>
 
   <app-popup

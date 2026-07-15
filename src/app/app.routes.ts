@@ -45,6 +45,7 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
+
   {
     path: 'tasks',
     loadComponent: () =>
@@ -77,6 +78,30 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
+
+  {
+    path: 'goals',
+    loadComponent: () =>
+      import('./features/pages/goals/goals.page').then((m) => m.GoalsPage),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'goals/add',
+    loadComponent: () =>
+      import('./features/pages/goals/add-goal/add-goal.page').then(
+        (m) => m.AddGoalPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'goals/:id',
+    loadComponent: () =>
+      import('./features/pages/goals/goal-details/goal-details.page').then(
+        (m) => m.GoalDetailsPage
+      ),
+    canActivate: [authGuard],
+  },
+
   {
     path: 'settings',
     loadComponent: () =>
@@ -103,9 +128,10 @@ export const routes: Routes = [
   },
   {
     path: 'settings/notifications',
-    loadComponent: () => import('./features/pages/settings/notifications/notifications.page').then( 
-      (m) => m.NotificationsPage
-    ),
+    loadComponent: () =>
+      import(
+        './features/pages/settings/notifications/notifications.page'
+      ).then((m) => m.NotificationsPage),
     canActivate: [authGuard],
   },
   {
@@ -120,6 +146,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login',
   },
-
-
 ];

@@ -208,10 +208,26 @@ body.dark-theme {
 
   /* Yellow theme */
 
-  --app-primary: #facc15;
+  /* Dark Mode */
 
-  --app-primary-dark: #eab308;
+ /* Dark Mode */
+/* Dark Mode */
+// --app-primary: #22d3ee;
+// --app-primary-dark: #06b6d4;
+ /* Dark Mode */
+// --app-primary: #fbbf24;
+// --app-primary-dark: #f59e0b;
 
+--app-primary: #22c55e;
+// --app-primary-dark: #16a34a;
+  // --app-primary: #04f734;
+
+  // --app-primary-dark: #08ea66;
+
+  
+  
+//   --app-primary: #00e65c;
+// --app-primary-dark: #00c853;
   --app-primary-contrast: #000000;
 
   --app-primary-soft: #1f1f1f;
@@ -237,4 +253,18 @@ body.dark-theme {
 
 .cdk-overlay-pane:has(.mat-datepicker-content) {
   transform: translateY(130px) !important;
+}
+
+:root {
+  --metric-1: #2563eb;
+  --metric-2: #10b981;
+  --metric-3: #f59e0b;
+  --metric-4: #8b5cf6;
+}
+
+body.dark-theme {
+  --metric-1: #04f734; // yellow
+  --metric-2: #08ea66; // yellow
+  --metric-3: #04f734; // yellow
+  --metric-4: #08ea66; // yellow
 }
