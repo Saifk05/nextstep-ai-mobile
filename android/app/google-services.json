@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "93550905418-cvut166iidcarmsukqfcu269mdsvqliu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nextstep.ai",
+            "certificate_hash": "5e41f4660af8bb28de4a0759cb969113c5147411"
+          }
+        },
+        {
           "client_id": "93550905418-l6u3rsfligeu68um7nift5icg01fe75r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

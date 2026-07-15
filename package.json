@@ -34,7 +34,6 @@
     "@capacitor/push-notifications": "^8.1.1",
     "@capacitor/status-bar": "8.0.2",
     "@capgo/capacitor-social-login": "^8.3.29",
-    "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
     "@ionic/angular": "^8.0.0",
     "firebase": "^12.15.0",
     "ionicons": "^7.0.0",

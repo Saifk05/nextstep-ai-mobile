@@ -15,21 +15,29 @@ import { SocialLogin } from '@capgo/capacitor-social-login';
   providedIn: 'root',
 })
 export class FirebaseService {
-  private auth = getAuth(firebaseApp);
+  private readonly auth = getAuth(firebaseApp);
+  private googleInitialized = false;
 
   async initializeGoogleLogin(): Promise<void> {
-    if (Capacitor.isNativePlatform()) {
-      await SocialLogin.initialize({
-        google: {
-          webClientId:
-            '93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com',
-        },
-      });
+    if (!Capacitor.isNativePlatform() || this.googleInitialized) {
+      return;
     }
+
+    await SocialLogin.initialize({
+      google: {
+        webClientId:
+          '93550905418-kat5mag54h6dfuuinggcgivie23np5jc.apps.googleusercontent.com',
+      },
+    });
+
+    this.googleInitialized = true;
+
+    console.log('Native Google login initialized');
   }
 
   async googleLogin(): Promise<string> {
     if (Capacitor.isNativePlatform()) {
+      await this.initializeGoogleLogin();
       return this.googleLoginAndroid();
     }
 
@@ -45,33 +53,42 @@ export class FirebaseService {
 
     const result = await signInWithPopup(this.auth, provider);
 
-    return await result.user.getIdToken();
+    return result.user.getIdToken();
   }
 
   private async googleLoginAndroid(): Promise<string> {
-    const result: any = await SocialLogin.login({
-      provider: 'google',
-      options: {},
-    });
+    try {
+      const result: any = await SocialLogin.login({
+        provider: 'google',
+        options: {
+          scopes: ['email', 'profile'],
+        },
+      });
 
-    const googleIdToken =
-      result?.result?.idToken ||
-      result?.result?.authentication?.idToken ||
-      result?.idToken;
+      console.log('Google native login result:', result);
 
-    if (!googleIdToken) {
-      console.error('Google native login result:', result);
-      throw new Error('Google ID token not found');
+      const googleIdToken =
+        result?.result?.idToken ??
+        result?.result?.authentication?.idToken ??
+        result?.idToken;
+
+      if (!googleIdToken) {
+        throw new Error('Google ID token not found in native login result');
+      }
+
+      const credential =
+        GoogleAuthProvider.credential(googleIdToken);
+
+      const firebaseResult = await signInWithCredential(
+        this.auth,
+        credential
+      );
+
+      return firebaseResult.user.getIdToken();
+    } catch (error) {
+      console.error('Native Google login failed:', error);
+      throw error;
     }
-
-    const credential = GoogleAuthProvider.credential(googleIdToken);
-
-    const firebaseResult = await signInWithCredential(
-      this.auth,
-      credential
-    );
-
-    return await firebaseResult.user.getIdToken();
   }
 
   async facebookLogin(): Promise<string> {
