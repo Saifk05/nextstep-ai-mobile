@@ -24,26 +24,30 @@ export type GoalStatus =
 
 export type ActivityType =
   | 'GOAL_CREATED'
-  | 'AI_PLAN_GENERATED'
   | 'TEMPLATE_SELECTED'
+  | 'AI_PLAN_GENERATED'
+  | 'AI_PLAN_REGENERATED'
   | 'GOAL_UPDATED'
   | 'GOAL_STATUS_UPDATED'
   | 'GOAL_PROGRESS_UPDATED'
+  | 'GOAL_TASKS_CREATED'
+  | 'GOAL_TASK_COMPLETED'
   | 'PLAN_ITEM_COMPLETED'
   | 'PLAN_ITEM_UNCOMPLETED'
   | 'MILESTONE_COMPLETED'
   | 'MILESTONE_UNCOMPLETED'
   | 'RECRUITER_ADDED'
   | 'RECRUITER_UPDATED'
-  | 'EMAIL_SENT_DETECTED'
   | 'APPLICATION_DETECTED'
+  | 'EMAIL_SENT_DETECTED'
+  | 'COLD_EMAIL_DETECTED'
+  | 'EMAIL_BOUNCED'
   | 'REPLY_DETECTED'
   | 'INTERVIEW_DETECTED'
   | 'REJECTION_DETECTED'
   | 'OFFER_DETECTED'
-  | 'NO_RESPONSE_DETECTED'
-  | 'TASK_COMPLETED'
-  | 'FOLLOW_UP_TASK_CREATED';
+  | 'FOLLOW_UP_TASK_CREATED'
+  | 'NO_RESPONSE_DETECTED';
 
 export type GoalQuestionType =
   | 'TEXT'
@@ -51,14 +55,23 @@ export type GoalQuestionType =
   | 'SELECT'
   | 'NUMBER'
   | 'DATE'
-  | 'BOOLEAN';
+  | 'BOOLEAN'
+  | 'text'
+  | 'textarea'
+  | 'select'
+  | 'number'
+  | 'date'
+  | 'boolean';
 
 export type GoalApplicationStatus =
+  | 'OUTREACH_SENT'
   | 'APPLIED'
   | 'REPLIED'
   | 'INTERVIEW'
   | 'OFFER'
-  | 'REJECTED';
+  | 'REJECTED'
+  | 'NO_RESPONSE'
+  | 'BOUNCED';
 
 export interface GoalSetupQuestion {
   key: string;
@@ -74,20 +87,69 @@ export interface GoalTemplate {
   slug: string;
   category: GoalCategory;
   goalType: GoalType;
+
   title: string;
   description: string;
+
   version: number;
+  isActive?: boolean;
+
   setupQuestions: GoalSetupQuestion[];
+  defaultMetrics?: GoalMetrics;
 }
 
 export interface GoalMetrics {
-  emailsSent: number;
-  replies: number;
-  interviews: number;
-  offers: number;
-  rejections: number;
-  followUpsDue: number;
-  applicationsSubmitted: number;
+  // Job-search metrics
+  emailsSent?: number;
+  replies?: number;
+  interviews?: number;
+  offers?: number;
+  rejections?: number;
+  followUpsDue?: number;
+  applicationsSubmitted?: number;
+
+  // Study metrics
+  studyMinutes?: number;
+  practiceMinutes?: number;
+  conceptsCompleted?: number;
+  codingSessionsCompleted?: number;
+  projectFeaturesCompleted?: number;
+  daysCompletedWithoutAI?: number;
+
+  // Fitness metrics
+  currentWeight?: number;
+  weightLost?: number;
+  workoutsCompleted?: number;
+  stepsCompleted?: number;
+  nutritionDaysTracked?: number;
+  waterGoalsCompleted?: number;
+
+  // Finance metrics
+  amountSaved?: number;
+  targetAmount?: number;
+  expensesTracked?: number;
+  noSpendDays?: number;
+  monthlyReviewsCompleted?: number;
+
+  // Business metrics
+  customerInterviewsCompleted?: number;
+  leadsContacted?: number;
+  productFeaturesCompleted?: number;
+  marketingExperimentsCompleted?: number;
+  customersAcquired?: number;
+  revenueGenerated?: number;
+
+  // Personal-development metrics
+  habitDaysCompleted?: number;
+  focusSessionsCompleted?: number;
+  reflectionEntriesCompleted?: number;
+  learningSessionsCompleted?: number;
+  currentStreak?: number;
+
+  // Shared metrics
+  weeklyReviewsCompleted?: number;
+
+  [key: string]: number | undefined;
 }
 
 export interface GoalApplication {
@@ -112,16 +174,27 @@ export interface GoalApplication {
 }
 
 export interface GoalGmailSyncResponse {
+  scannedEmails?: number;
+  relevantEmails?: number;
+
   detectedApplications: number;
   detectedReplies: number;
   detectedInterviews: number;
   detectedOffers: number;
   detectedRejections: number;
+
+  detectedColdEmails?: number;
+  detectedBounces?: number;
+  detectedNoResponses?: number;
 }
 
 export interface GoalPlanItemMetadata {
   defaultDailyTarget?: number;
+  defaultWeeklyTarget?: number;
   defaultMinutes?: number;
+  setupAnswerKey?: string;
+  unit?: string;
+
   [key: string]: any;
 }
 
@@ -140,7 +213,7 @@ export interface GoalPlanItem {
 
   metadata?: GoalPlanItemMetadata;
 
-  completed: boolean;
+  completed?: boolean;
   completedAt?: string;
 }
 
@@ -151,9 +224,9 @@ export interface GoalPlan {
 
   actions?: GoalPlanItem[];
 
-  dailyActions: GoalPlanItem[];
-  weeklyActions: GoalPlanItem[];
-  milestones: GoalPlanItem[];
+  dailyActions?: GoalPlanItem[];
+  weeklyActions?: GoalPlanItem[];
+  milestones?: GoalPlanItem[];
 }
 
 export interface GoalActivity {
